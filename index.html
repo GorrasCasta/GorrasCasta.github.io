@@ -16,7 +16,7 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <style>
 :root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--acc2:#ffb066;--ok:#3ecf8e}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -351,6 +351,7 @@ const base = () => DATA.filter(d=> (estilo==="todos"||d.e===estilo) && (size ? h
 const stockAll = () => DATA.filter(d=> STOCK_SIRM[d.c] && (estilo==="todos"||d.e===estilo));
 const stTallas = d => { const s = STOCK_SIRM[d.c]; return !s ? [] : Array.isArray(s) ? s : (isUni(d)?[UNI]:TALLAS.filter(t=>d.f[t])); };
 const sq = (d,t) => d.f[t] && !(d.w||[]).includes(t);
+const th = p => p ? p.replace("img/","t/") : p;
 const foto = d => (sq(d,size) && d.f[size]) || d.f[ALLT.find(t=>sq(d,t))] || d.f[size] || d.f[ALLT.find(t=>d.f[t])];
 
 /* ---------- Catálogo ---------- */
@@ -370,11 +371,18 @@ function render(){
   $("#clear").hidden = (col==="todo" && !color && !q && estilo==="todos");
   const g = $("#grid"); g.innerHTML = "";
   if(!list.length){ g.innerHTML = `<div class="empty">${col==="fav"?"Aún no marcas favoritas. Toca ♡ en las gorras que te gusten.":"No hay modelos con esos filtros."}</div>`; return; }
+  shown = 0; drawMore();
+}
+let shown = 0;
+const more = document.createElement("div"); more.style.cssText="grid-column:1/-1;height:1px";
+const io = ("IntersectionObserver" in window) ? new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)) drawMore(); },{rootMargin:"800px"}) : null;
+function drawMore(){
+  const g = $("#grid"); if(more.parentNode) more.remove();
   const frag = document.createDocumentFragment();
-  list.forEach(d=>{
+  list.slice(shown, shown+24).forEach(d=>{
     const ts = isUni(d)?[UNI]:TALLAS.filter(t=>has(d,t));
     const c = document.createElement("article"); c.className="card";
-    c.innerHTML = `<div class="ph"><img loading="lazy" src="${foto(d)}" alt="">${(col==="sirm"||enSirm(d,size))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
+    c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt="">${(col==="sirm"||enSirm(d,size))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
       ${d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
       <button class="fav" aria-label="Favorita" aria-pressed="${favs.has(d.id)}">${favs.has(d.id)?"♥":"♡"}</button>
       <div class="tx"><span class="etag">${d.e}</span><h3></h3><div class="row"><span class="sz">${d.c} · ${col==="sirm"?"⚡ "+stTallas(d).map(t=>t===UNI?"Ajustable":"T. "+t).join(", "):isUni(d)?"Ajustable":size?"T. "+size:ts.length+" tallas"}</span><button class="add">+ Agregar</button></div></div>`;
@@ -387,9 +395,10 @@ function render(){
       if(tt){ addBag(d.id,tt,1); const b=e.currentTarget; b.textContent="✓ En bolsa"; b.classList.add("done"); setTimeout(()=>{b.textContent="+ Agregar";b.classList.remove("done")},1300); }
       else openPD(d);
     };
-    frag.appendChild(c);
+    frag.appendChild(c); shown++;
   });
   g.appendChild(frag);
+  if(shown < list.length){ g.appendChild(more); if(io) io.observe(more); else setTimeout(drawMore,50); }
 }
 function toggleFav(id){ favs.has(id)?favs.delete(id):favs.add(id); store.set("favs",[...favs]); }
 
@@ -411,7 +420,8 @@ function openPD(d){
   const ss = STOCK_SIRM[d.c]; $("#psirm").hidden = !ss; if(ss) $("#psirmt").textContent = ss==="todas"||ss===UNI?(isUni(d)?"única":"todas sus tallas"):[].concat(ss).join(", ");
   updPD(); openSheet("#pd");
 }
-function updPD(){ $("#pped").hidden = !!(curT && enSirm(cur,curT)); $("#pimg").src = cur.f[curT] || foto(cur); $("#pimg").alt = cur.n; $("#padd").textContent = curT ? "Agregar a la bolsa" : "Elige una talla"; }
+$("#pimg").onerror = function(){ if(cur && !this.src.includes("/t/")) this.src = th(cur.f[curT]||foto(cur)); };
+function updPD(){ $("#pped").hidden = !!(curT && enSirm(cur,curT)); $("#pimg").src = th(cur.f[curT] || foto(cur)); const big = cur.f[curT] || foto(cur); const pre = new Image(); pre.onload = ()=>{ if($("#pimg").src.endsWith(th(big))) $("#pimg").src = big; }; pre.src = big; $("#pimg").alt = cur.n; $("#padd").textContent = curT ? "Agregar a la bolsa" : "Elige una talla"; }
 $("#qm").onclick = ()=>{ curQ=Math.max(1,curQ-1); $("#qv").textContent=curQ; };
 $("#qp").onclick = ()=>{ curQ=Math.min(50,curQ+1); $("#qv").textContent=curQ; };
 $("#padd").onclick = ()=>{ if(!curT){ toast("Primero elige una talla"); return; } addBag(cur.id,curT,curQ); closeAll(); };
@@ -449,7 +459,7 @@ function drawBag(){
   if(!bag.length){ L.innerHTML = `<p class="note" style="font-size:14px;padding:20px 0">Tu bolsa está vacía. Agrega gorras desde el catálogo.</p>`; S.innerHTML=""; return; }
   bag.forEach((it,i)=>{
     const d = byId(it.id); const r = document.createElement("div"); r.className="line";
-    r.innerHTML = `<img src="${d.f[it.t]||foto(d)}" alt=""><div class="t"><b></b><span>${d.c} · ${d.e} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${enSirm(d,it.t)?"⚡ Inmediata SIRM":"📦 4 a 7 días"}</span></div>
+    r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${d.e} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${enSirm(d,it.t)?"⚡ Inmediata SIRM":"📦 4 a 7 días"}</span></div>
       <div class="q"><button aria-label="Menos">−</button><b>${it.q}</b><button aria-label="Más">+</button></div>`;
     r.querySelector(".t b").textContent = d.n;
     const [m,p] = r.querySelectorAll(".q button");
@@ -493,9 +503,9 @@ $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v1";
-const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(f); if(size && d.f[size]) s.add(d.f[size]); if(!size) Object.values(d.f).forEach(x=>s.add(x)); }); return [...s]; };
-function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.065))} MB. Recomendado con Wi-Fi.`; }
+const CN = "gc-v2";
+const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
+function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
   const b=$("#offbtn"), L=offList(); let ok=0; b.disabled=true;
   try{ const c = await caches.open(CN);
