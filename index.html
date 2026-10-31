@@ -378,6 +378,11 @@ function render(){
 let shown = 0;
 const more = document.createElement("div"); more.style.cssText="grid-column:1/-1;height:1px";
 const io = ("IntersectionObserver" in window) ? new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)) drawMore(); },{rootMargin:"800px"}) : null;
+const szTxt = (d,ts) => { const st = stTallas(d), lst = st.map(t=>t===UNI?"Ajustable":"T. "+t).join(", ");
+  if(col==="sirm") return `${d.c} · ⚡ ${lst}`;
+  if(isUni(d)) return `${d.c} · ${st.length?"⚡ ":""}Ajustable`;
+  if(size) return `${d.c} · ${enSirm(d,size)?"⚡ ":""}T. ${size}`;
+  return st.length ? `${d.c} · ⚡ ${lst}` : `${d.c} · ${ts.length} tallas`; };
 function drawMore(){
   const g = $("#grid"); if(more.parentNode) more.remove();
   const frag = document.createDocumentFragment();
@@ -387,7 +392,7 @@ function drawMore(){
     c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt="">${(col==="sirm"||enSirm(d,size))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
       ${d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
       <button class="fav" aria-label="Favorita" aria-pressed="${favs.has(d.id)}">${favs.has(d.id)?"♥":"♡"}</button>
-      <div class="tx"><span class="etag">${d.e}</span><h3></h3><div class="row"><span class="sz">${d.c} · ${col==="sirm"?"⚡ "+stTallas(d).map(t=>t===UNI?"Ajustable":"T. "+t).join(", "):isUni(d)?"Ajustable":size?"T. "+size:ts.length+" tallas"}</span><button class="add">+ Agregar</button></div></div>`;
+      <div class="tx"><span class="etag">${d.e}</span><h3></h3><div class="row"><span class="sz">${szTxt(d,ts)}</span><button class="add">+ Agregar</button></div></div>`;
     c.querySelector("h3").textContent = d.n; c.querySelector("img").alt = d.n;
     c.querySelector(".ph").onclick = ()=>openPD(d);
     c.querySelector("h3").onclick = ()=>openPD(d);
