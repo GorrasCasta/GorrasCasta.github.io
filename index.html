@@ -13,6 +13,8 @@
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d0d0d">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -50,6 +52,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .sirmbtn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:16px;background:#0c2219;border:1px solid #1d5a40;color:#7fe0b4;border-radius:14px;padding:13px 15px;text-align:left}
 .sirmbtn b{font-size:15px;color:#bff3da}
 .sirmbtn span{font-size:12px}
+.offbtn{display:flex;align-items:center;gap:10px;width:100%;margin-top:10px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 15px;text-align:left;color:var(--ink)}
+.offbtn b{font-size:14px;display:block}.offbtn span{font-size:12px;color:var(--mute)}
+.offbar{position:sticky;top:58px;z-index:19;background:#3a2a05;color:#ffd27a;font-size:13px;font-weight:600;padding:8px 16px;text-align:center}
 
 /* Controls */
 .controls{padding:18px 0 4px;display:flex;flex-direction:column;gap:12px}
@@ -184,6 +189,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   </div>
 </header>
 
+<div class="offbar" id="offbar" hidden>📴 Sin internet: estás viendo el catálogo guardado. Para enviar tu pedido por WhatsApp necesitas conexión.</div>
 <main class="wrap">
   <section class="hero">
     <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
@@ -198,6 +204,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   </section>
 
   <button class="sirmbtn" id="sirmbtn" hidden><b>⚡ Entrega inmediata en SIRM</b><span id="sirmtxt"></span></button>
+  <button class="offbtn" id="offbtn" hidden><span style="font-size:22px">📥</span><div><b id="offt">Guardar catálogo para verlo sin internet</b><span id="offs"></span></div></button>
   <section class="controls">
     <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Equipo, color o número (ej. dodgers, #023)" autocomplete="off"></label>
     <div class="tabs" id="estilos"></div>
@@ -306,7 +313,7 @@ function buildGate(){
   $("#pill").onclick = ()=>{ $("#gate").hidden = false; };
   $("#gate").hidden = !!store.get("visto", false);
 }
-function setSize(t){ size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
+let setSize = function(t){ size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
 
 /* ---------- Filtros ---------- */
 const ESTILOS = ["todos","59FIFTY cerrada","9FIFTY snapback","9FORTY curva"];
@@ -484,6 +491,27 @@ buildGate(); buildFilters();
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
+
+/* ---------- Sin internet ---------- */
+const CN = "gc-v1";
+const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(f); if(size && d.f[size]) s.add(d.f[size]); if(!size) Object.values(d.f).forEach(x=>s.add(x)); }); return [...s]; };
+function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.065))} MB. Recomendado con Wi-Fi.`; }
+async function saveOffline(){
+  const b=$("#offbtn"), L=offList(); let ok=0; b.disabled=true;
+  try{ const c = await caches.open(CN);
+    for(let i=0;i<L.length;i+=6){ await Promise.all(L.slice(i,i+6).map(u=>c.match(u).then(h=>h||c.add(u)).then(()=>ok++).catch(()=>{}))); $("#offt").textContent=`Guardando… ${Math.round(Math.min(i+6,L.length)/L.length*100)}%`; }
+    $("#offt").textContent = ok>=L.length ? "✓ Catálogo guardado. Ya lo puedes ver sin internet" : `Se guardaron ${ok} de ${L.length} fotos. Toca para reintentar`;
+    toast("Listo, ya lo puedes ver sin internet");
+  }catch(e){ $("#offt").textContent="No se pudo guardar en este navegador"; }
+  b.disabled=false;
+}
+if("serviceWorker" in navigator && "caches" in window && (location.protocol==="https:"||location.hostname==="localhost")){
+  try{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }catch(e){}
+  $("#offbtn").hidden=false; offLabel(); $("#offbtn").onclick=saveOffline;
+  const _ss=setSize; setSize=function(t){ _ss(t); $("#offt").textContent="Guardar catálogo para verlo sin internet"; offLabel(); };
+}
+const net=()=>{ $("#offbar").hidden = navigator.onLine; };
+addEventListener("online",net); addEventListener("offline",net); net();
 </script>
 </body>
 </html>
