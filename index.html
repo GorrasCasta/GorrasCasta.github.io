@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gorras Casta · Catálogo de gorras New Era AA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--acc2:#ffb066;--ok:#3ecf8e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:Archivo,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+.wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+.display{font-family:"Archivo Black",Impact,sans-serif;letter-spacing:-.01em;text-transform:uppercase}
+
+/* Top bar */
+.top{position:sticky;top:0;z-index:20;background:rgba(13,13,13,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:8px;height:58px}
+.brand{font-family:"Archivo Black";font-size:17px;line-height:1;text-transform:uppercase;white-space:nowrap}
+.brand small{display:block;font-family:Archivo;font-size:9px;letter-spacing:.12em;line-height:1.25;color:var(--mute);margin-top:3px;font-weight:600;white-space:nowrap}
+.sp{flex:1}
+.sizepill{border:1px solid var(--acc);color:var(--acc);border-radius:999px;padding:6px 10px;font-weight:700;font-size:12px;white-space:nowrap}
+.bagbtn{position:relative;background:var(--acc);color:#111;border-radius:12px;padding:8px 12px;font-weight:700;font-size:14px;display:flex;gap:6px;align-items:center}
+.bagbtn b{background:#111;color:var(--acc);border-radius:999px;min-width:20px;height:20px;display:inline-grid;place-items:center;font-size:12px;padding:0 5px}
+
+/* Hero */
+.hero{padding:26px 0 8px}
+.hero h1{font-size:clamp(30px,8vw,56px);line-height:.95}
+.hero h1 em{font-style:normal;color:var(--acc)}
+.hero p{color:var(--mute);margin-top:10px;font-size:15px;max-width:520px}
+.deals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;max-width:520px}
+.deal{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 10px;text-align:center}
+.deal .q{font-size:12px;color:var(--mute);font-weight:600}
+.deal .p{font-family:"Archivo Black";font-size:22px;margin-top:2px}
+.deal{color:var(--ink);width:100%}
+.deal.hot{border-color:var(--acc);background:#22160c}
+.deal.hot .p{color:var(--acc)}
+.dealhint{font-size:13px;color:var(--acc2);font-weight:600;margin-top:10px;min-height:18px}
+.fine{font-size:12px;color:var(--mute);margin-top:8px}
+.sirmbtn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:16px;background:#0c2219;border:1px solid #1d5a40;color:#7fe0b4;border-radius:14px;padding:13px 15px;text-align:left}
+.sirmbtn b{font-size:15px;color:#bff3da}
+.sirmbtn span{font-size:12px}
+
+/* Controls */
+.controls{padding:18px 0 4px;display:flex;flex-direction:column;gap:12px}
+.search{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:0 14px}
+.search input{flex:1;background:none;border:none;color:var(--ink);font:inherit;font-size:16px;padding:13px 0;outline:none}
+.search input::placeholder{color:#6d6860}
+.rail{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.rail::-webkit-scrollbar{display:none}
+.col{flex:none;border-radius:14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:14px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-width:104px}
+.col span{font-size:11px;color:var(--mute);font-weight:600}
+.col[aria-pressed=true]{background:var(--acc);color:#111;border-color:var(--acc)}
+.col[aria-pressed=true] span{color:#3a1d05}
+.tabs{display:flex;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;overflow-x:auto;scrollbar-width:none}
+.tabs button{flex:1;white-space:nowrap;padding:9px 10px;border-radius:10px;font-weight:700;font-size:13px;color:var(--mute)}
+.tabs button small{display:block;font-size:10px;font-weight:600;opacity:.8}
+.tabs button[aria-pressed=true]{background:var(--ink);color:#111}
+.etag{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--acc);text-transform:uppercase}
+.dots{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.dot{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 10px 5px 6px;font-size:13px;font-weight:600;color:var(--mute)}
+.dot i{width:16px;height:16px;border-radius:50%;border:1px solid #444}
+.dot[aria-pressed=true]{border-color:var(--ink);color:var(--ink)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--mute);padding:10px 0 4px}
+.meta button{color:var(--acc);font-weight:700;font-size:13px}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 0 120px}
+@media(min-width:720px){.grid{grid-template-columns:repeat(3,1fr);gap:14px}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.card .ph{aspect-ratio:1/1;background:#111;cursor:pointer;position:relative}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
+.card .tx{padding:10px 10px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card h3{font-size:13px;font-weight:600;line-height:1.3;cursor:pointer}
+.card .row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px}
+.card .sz{font-size:11px;color:var(--mute);font-weight:600}
+.add{background:var(--ink);color:#111;border-radius:10px;font-weight:700;font-size:13px;padding:7px 10px;white-space:nowrap}
+.add.done{background:var(--ok)}
+.fav{position:absolute;top:8px;right:8px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center;font-size:17px;color:#fff}
+.fav[aria-pressed=true]{color:var(--acc)}
+.now{position:absolute;bottom:8px;left:8px;background:var(--ok);color:#06241a;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 7px;border-radius:6px}
+.tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.65);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 7px;border-radius:6px}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:60px 10px}
+
+/* Size picker (entrada) */
+.gate{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px}
+.gate[hidden]{display:none}
+.gate .box{max-width:440px;width:100%}
+.gate small{color:var(--acc);font-weight:700;letter-spacing:.2em;font-size:11px}
+.gate h2{font-size:clamp(34px,9vw,48px);line-height:.95;margin:10px 0 8px}
+.gate p{color:var(--mute);font-size:15px}
+.sizes{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px}
+.sizes button{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 6px;text-align:center}
+.sizes button b{display:block;font-family:"Archivo Black";font-size:24px}
+.sizes button span{font-size:11px;color:var(--mute);font-weight:600}
+.sizes button:hover,.sizes button:focus-visible{border-color:var(--acc)}
+.gate .all{margin-top:14px;width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);font-weight:700;color:var(--mute)}
+
+/* Sheets */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:45;background:var(--panel);border-radius:22px 22px 0 0;max-height:92vh;overflow:auto;transform:translateY(105%);transition:transform .25s ease;max-width:560px;margin:0 auto;border:1px solid var(--line);border-bottom:none}
+.sheet.on{transform:none}
+.grab{width:44px;height:5px;border-radius:9px;background:#444;margin:10px auto 4px}
+.sheet .in{padding:8px 18px 22px}
+.sheet .x{position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:50%;background:var(--panel2);font-size:18px}
+.pimg{border-radius:16px;overflow:hidden;background:#111;margin-top:8px;display:flex;justify-content:center}
+.pimg img{width:100%;height:auto;max-height:62vh;object-fit:contain;display:block}
+.sheet h2{font-size:22px;line-height:1.1;margin:14px 0 4px}
+.lbl{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:16px 0 8px}
+.szs{display:flex;flex-wrap:wrap;gap:8px}
+.szs button{border:1px solid var(--line);border-radius:10px;padding:9px 13px;font-weight:700}
+.szs button[aria-pressed=true]{background:var(--ink);color:#111;border-color:var(--ink)}
+.qty{display:flex;align-items:center;gap:14px}
+.qty button{width:40px;height:40px;border-radius:12px;background:var(--panel2);font-size:20px;font-weight:700}
+.qty b{font-size:20px;min-width:24px;text-align:center}
+.cta{display:block;width:100%;text-align:center;background:var(--acc);color:#111;font-weight:800;font-size:16px;padding:15px;border-radius:14px;margin-top:20px;text-decoration:none}
+.cta.alt{background:var(--panel2);color:var(--ink);margin-top:10px;font-weight:700}
+
+/* Bag */
+.line{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.line img{width:58px;height:58px;border-radius:10px;object-fit:cover;flex:none}
+.line .t{flex:1;min-width:0}
+.line .t b{display:block;font-size:13px;line-height:1.25}
+.line .t span{font-size:12px;color:var(--mute)}
+.line .q{display:flex;align-items:center;gap:8px}
+.line .q button{width:28px;height:28px;border-radius:8px;background:var(--panel2);font-weight:700}
+.sum{background:var(--panel2);border-radius:16px;padding:14px;margin-top:16px}
+.sum .r{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}
+.sum .r.big{font-family:"Archivo Black";font-size:20px;padding-top:8px}
+.sum .r.save{color:var(--ok);font-weight:700}
+.meter{height:8px;background:#333;border-radius:9px;overflow:hidden;margin:12px 0 6px}
+.meter i{display:block;height:100%;background:var(--acc);border-radius:9px;transition:width .3s}
+.hint{font-size:13px;color:var(--acc2);font-weight:600}
+.code{font-size:12px;color:var(--acc);font-weight:700;letter-spacing:.06em}
+.snap{background:#2a1a0c;border:1px solid #5a3410;color:var(--acc2);border-radius:12px;padding:11px 13px;font-size:13px;line-height:1.45;margin-top:14px}
+.snap b{color:var(--ink)}
+.note{font-size:12px;color:var(--mute);margin-top:10px;line-height:1.45}
+
+/* Info */
+.info{border-top:1px solid var(--line);padding:26px 0 120px;display:grid;gap:12px}
+@media(min-width:720px){.info{grid-template-columns:repeat(2,1fr)}}
+.info div{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px}
+.info h4{font-size:14px;margin-bottom:6px}
+.info p{font-size:13px;color:var(--mute);line-height:1.5}
+
+/* Floating bag bar (mobile) */
+.fbar{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;background:var(--acc);color:#111;border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:560px;margin:0 auto}
+.fbar[hidden]{display:none}
+.toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+
+<!-- Paso 1: talla -->
+<section class="gate" id="gate">
+  <div class="box">
+    <small>ANTES DE EMPEZAR</small>
+    <h2 class="display">¿Qué talla <span style="color:var(--acc)">usas?</span></h2>
+    <p>Te mostramos las gorras cerradas de tu medida. Las de broche y ajustables te quedan siempre y también las verás. Puedes cambiar tu talla cuando quieras.</p>
+    <div class="sizes" id="gsizes"></div>
+    <button class="all" id="gall">No sé mi talla · ver todas</button>
+  </div>
+</section>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand">Gorras Casta<small>NEW ERA AA<br>OBREGÓN · SIRM</small></div>
+    <div class="sp"></div>
+    <button class="sizepill" id="pill">Talla: todas</button>
+    <button class="bagbtn" id="bagbtn">Bolsa <b id="bagn">0</b></button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
+    <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp. Mientras más llevas, menos pagas por pieza.</p>
+    <div class="deals">
+      <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$400</div></button>
+      <button class="deal" data-n="2"><div class="q">2 gorras</div><div class="p">$750</div></button>
+      <button class="deal" data-n="3"><div class="q">3 gorras</div><div class="p">$1,000</div></button>
+    </div>
+    <div class="dealhint" id="dealhint">Toca una opción para ver cómo aplica.</div>
+    <div class="fine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Válida hasta el 2 de noviembre de 2026. Desde 6 piezas aplica precio de mayoreo.</div>
+  </section>
+
+  <button class="sirmbtn" id="sirmbtn" hidden><b>⚡ Entrega inmediata en SIRM</b><span id="sirmtxt"></span></button>
+  <section class="controls">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Equipo, color o número (ej. dodgers, #023)" autocomplete="off"></label>
+    <div class="tabs" id="estilos"></div>
+    <div class="rail" id="cols"></div>
+    <div class="dots" id="colors"></div>
+  </section>
+  <div class="meta"><span id="count"></span><button id="clear" hidden>Quitar filtros</button></div>
+  <section class="grid" id="grid"></section>
+
+  <section class="info">
+    <div><h4>Cómo pedir</h4><p>1. Toca <b>+ Agregar</b> en cada gorra y <b>toma captura</b> de las que elijas. 2. Revisa tu bolsa y presiona <b>Enviar por WhatsApp</b>. 3. Manda tus capturas en el mismo chat. Te confirmamos existencia, total y entrega.</p></div>
+    <div><h4>Mayoreo</h4><p>Desde 6 piezas, sumando cualquier modelo y talla. El precio por pieza baja en 6, 12 y 24 piezas y se confirma por WhatsApp.</p></div>
+    <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> el resto del catálogo llega en 4 a 7 días.</p></div>
+    <div><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
+    <div><h4>Planchado y hormado</h4><p>Próximamente. En mayoreo se cotiza aparte si lo pides.</p></div>
+  </section>
+</main>
+
+<button class="fbar" id="fbar" hidden><span id="fbtxt"></span><span>Ver bolsa →</span></button>
+<div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+
+<!-- Ficha de gorra -->
+<section class="sheet" id="pd" aria-modal="true" role="dialog">
+  <div class="grab"></div><button class="x" data-close>×</button>
+  <div class="in">
+    <div class="pimg"><img id="pimg" alt=""></div>
+    <h2 id="pname"></h2><div class="code" id="pcode"></div>
+    <div class="snap">📸 <b>Toma captura de esta pantalla.</b> Al enviar tu pedido por WhatsApp, mándanos también las capturas de las gorras que elegiste.</div>
+    <div class="snap" id="psirm" style="background:#0c2219;border-color:#1d5a40;color:#7fe0b4" hidden>⚡ <b>Entrega inmediata en SIRM</b> en talla <span id="psirmt"></span>. Entrega a domicilio en San Ignacio Río Muerto después de las 3 pm.</div>
+    <div class="snap" id="pped" style="background:var(--panel2);border-color:var(--line);color:var(--mute)">📦 <b>Sobre pedido:</b> entrega de 4 a 7 días. Pagas 50% para apartar y el resto contra entrega.</div>
+    <div class="lbl">Tallas disponibles</div><div class="szs" id="pszs"></div>
+    <div class="lbl">Cantidad</div>
+    <div class="qty"><button id="qm" aria-label="Menos">−</button><b id="qv">1</b><button id="qp" aria-label="Más">+</button></div>
+    <button class="cta" id="padd">Agregar a la bolsa</button>
+  </div>
+</section>
+
+<!-- Bolsa -->
+<section class="sheet" id="bag" aria-modal="true" role="dialog">
+  <div class="grab"></div><button class="x" data-close>×</button>
+  <div class="in">
+    <h2 class="display" style="font-size:26px">Tu bolsa</h2>
+    <div id="lines"></div>
+    <div id="sumbox"></div>
+  </div>
+</section>
+
+<script>
+/* ===== Ajustes de la tienda (cambia aquí) ===== */
+const WHATSAPP = "526624248769";          // número con lada, ej. "5216441234567"
+const PROMO = {1:400, 2:750, 3:1000};
+const MAYOREO = [ {min:24, precio:270}, {min:12, precio:295}, {min:6, precio:320} ]; // por pieza, se confirma por WhatsApp
+const AGOTADOS = {};          // ej. {"#023":["7 3/8"], "#041":"todas"}
+const OCULTOS = [];           // modelos que no se muestran, ej. ["#010"]
+const STOCK_SIRM = {"#001":["7","7 1/2"],"#014":["7"],"#077":["7","7 5/8"],"#102":["7","7 3/8"],"#110":["7","7 1/8"],"#139":["7"],"#009":["7 1/8"],"#018":["7 1/8"],"#072":["7 1/8","7 1/4"],"#140":["7 1/8"],"#075":["7 1/4"],"#003":["7 1/4","7 1/2"],"#101":["7 1/4","7 3/8"],"#007":["7 1/4","7 3/8"],"#021":["7 1/2"],"#042":["7 1/2"],"#013":["7 1/2","7 3/8"],"#098":["7 1/2"],"#006":["7 3/8"],"#054":["7 3/8"],"#078":["7 5/8"],"#015":["7 5/8"],"#087":["7 5/8"],"#008":["7 5/8"],"#027":["7 5/8"],"#124":"Única","#134":"Única","#138":"Única","#141":"Única"};        // entrega inmediata en SIRM, ej. {"#023":["7 1/4","7 3/8"], "#120":"Única"}
+/* ============================================== */
+
+const DATA_ALL = [{"id": "dodgers-jackie-robinson-42", "n": "Dodgers Jackie Robinson 42", "l": "MLB", "f": {"7": "img/7_dodgers-jackie-robinson-42.jpg", "7 1/8": "img/7-1-8_dodgers-jackie-robinson-42.jpg", "7 1/2": "img/7-1-2_dodgers-jackie-robinson-42.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "cleveland-indians-world-series", "n": "Cleveland Indians World Series", "l": "MLB", "f": {"7": "img/7_cleveland-indians-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "seattle-mariners-40-aniversario", "n": "Seattle Mariners 40 Aniversario", "l": "MLB", "f": {"7": "img/7_seattle-mariners-40-aniversario.jpg", "7 1/8": "img/7-1-8_seattle-mariners-40-aniversario.jpg", "7 1/4": "img/7-1-4_seattle-mariners-40-aniversario.jpg", "7 3/8": "img/7-3-8_seattle-mariners-40-aniversario.jpg", "7 1/2": "img/7-1-2_seattle-mariners-40-aniversario.jpg", "7 5/8": "img/7-5-8_seattle-mariners-40-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-world-series-1981", "n": "LA Dodgers World Series 1981", "l": "MLB", "f": {"7": "img/7_la-dodgers-world-series-1981.jpg", "7 1/8": "img/7-1-8_la-dodgers-world-series-1981.jpg", "7 1/4": "img/7-1-4_la-dodgers-world-series-1981.jpg", "7 3/8": "img/7-3-8_la-dodgers-world-series-1981.jpg", "7 1/2": "img/7-1-2_la-dodgers-world-series-1981.jpg", "7 5/8": "img/7-5-8_la-dodgers-world-series-1981.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-looney-tunes", "n": "LA Dodgers Looney Tunes", "l": "MLB", "f": {"7": "img/7_la-dodgers-looney-tunes.jpg", "7 5/8": "img/7-5-8_la-dodgers-looney-tunes.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "mexico-paper-planes", "n": "México Paper Planes", "l": "México / LMB", "f": {"7": "img/7_mexico-paper-planes.jpg", "7 1/8": "img/7-1-8_mexico-paper-planes.jpg", "7 1/4": "img/7-1-4_mexico-paper-planes.jpg", "7 3/8": "img/7-3-8_mexico-paper-planes.jpg", "7 1/2": "img/7-1-2_mexico-paper-planes.jpg", "7 5/8": "img/7-5-8_mexico-paper-planes.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "arizona-diamondbacks-world-series-2001", "n": "Arizona Diamondbacks World Series 2001", "l": "MLB", "f": {"7": "img/7_arizona-diamondbacks-world-series-2001.jpg", "7 1/8": "img/7-1-8_arizona-diamondbacks-world-series-2001.jpg", "7 1/4": "img/7-1-4_arizona-diamondbacks-world-series-2001.jpg", "7 3/8": "img/7-3-8_arizona-diamondbacks-world-series-2001.jpg", "7 1/2": "img/7-1-2_arizona-diamondbacks-world-series-2001.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "cleveland-indians-negra-roja-world-series", "n": "Cleveland Indians Negra Roja World Series", "l": "MLB", "f": {"7": "img/7_cleveland-indians-negra-roja-world-series.jpg", "7 1/2": "img/7-1-2_cleveland-indians-negra-roja-world-series.jpg", "7 5/8": "img/7-5-8_cleveland-indians-negra-roja-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "cleveland-indians-azul-marino-world-series", "n": "Cleveland Indians Azul Marino World Series", "l": "MLB", "f": {"7": "img/7_cleveland-indians-azul-marino-world-series.jpg", "7 1/8": "img/7-1-8_cleveland-indians-azul-marino-world-series.jpg", "7 1/4": "img/7-1-4_cleveland-indians-azul-marino-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-negra", "n": "LA Dodgers Negra", "l": "MLB", "f": {"7": "img/7_la-dodgers-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-los-angeles-all-star-1980", "n": "LA Dodgers Los Angeles All Star 1980", "l": "MLB", "f": {"7": "img/7_la-dodgers-los-angeles-all-star-1980.jpg", "7 5/8": "img/7-5-8_la-dodgers-los-angeles-all-star-1980.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "anaheim-angels-50-aniversario", "n": "Anaheim Angels 50 Aniversario", "l": "MLB", "f": {"7": "img/7_anaheim-angels-50-aniversario.jpg", "7 5/8": "img/7-5-8_anaheim-angels-50-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-world-series", "n": "San Diego Padres World Series", "l": "MLB", "f": {"7": "img/7_san-diego-padres-world-series.jpg", "7 5/8": "img/7-5-8_san-diego-padres-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "dodgers-D-gris", "n": "Dodgers D Gris", "l": "MLB", "f": {"7": "img/7_dodgers-D-gris.jpg", "7 5/8": "img/7-5-8_dodgers-D-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "diablos-rojos-mexico-LMB", "n": "Diablos Rojos México LMB", "l": "México / LMB", "f": {"7": "img/7_diablos-rojos-mexico-LMB.jpg", "7 5/8": "img/7-5-8_diablos-rojos-mexico-LMB.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "chicago-cubs-all-star-1990", "n": "Chicago Cubs All Star 1990", "l": "MLB", "f": {"7": "img/7_chicago-cubs-all-star-1990.jpg", "7 1/8": "img/7-1-8_chicago-cubs-all-star-1990.jpg", "7 1/4": "img/7-1-4_chicago-cubs-all-star-1990.jpg", "7 3/8": "img/7-3-8_chicago-cubs-all-star-1990.jpg", "7 1/2": "img/7-1-2_chicago-cubs-all-star-1990.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "san-francisco-giants-crema-cafe", "n": "San Francisco Giants Crema Café", "l": "MLB", "f": {"7": "img/7_san-francisco-giants-crema-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-60-aniversario", "n": "LA Dodgers 60 Aniversario", "l": "MLB", "f": {"7": "img/7_la-dodgers-60-aniversario.jpg", "7 1/8": "img/7-1-8_la-dodgers-60-aniversario.jpg", "7 1/4": "img/7-1-4_la-dodgers-60-aniversario.jpg", "7 3/8": "img/7-3-8_la-dodgers-60-aniversario.jpg", "7 1/2": "img/7-1-2_la-dodgers-60-aniversario.jpg", "7 5/8": "img/7-5-8_la-dodgers-60-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "atlanta-braves-30-aniversario", "n": "Atlanta Braves 30 Aniversario", "l": "MLB", "f": {"7": "img/7_atlanta-braves-30-aniversario.jpg", "7 1/8": "img/7-1-8_atlanta-braves-30-aniversario.jpg", "7 1/4": "img/7-1-4_atlanta-braves-30-aniversario.jpg", "7 3/8": "img/7-3-8_atlanta-braves-30-aniversario.jpg", "7 1/2": "img/7-1-2_atlanta-braves-30-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "mexico-azul-negra", "n": "México Azul Negra", "l": "México / LMB", "f": {"7": "img/7_mexico-azul-negra.jpg", "7 1/8": "img/7-1-8_mexico-azul-negra.jpg", "7 1/2": "img/7-1-2_mexico-azul-negra.jpg", "7 5/8": "img/7-5-8_mexico-azul-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "guerreros-de-oaxaca-LMB", "n": "Guerreros De Oaxaca LMB", "l": "México / LMB", "f": {"7": "img/7_guerreros-de-oaxaca-LMB.jpg", "7 1/8": "img/7-1-8_guerreros-de-oaxaca-LMB.jpg", "7 1/4": "img/7-1-4_guerreros-de-oaxaca-LMB.jpg", "7 3/8": "img/7-3-8_guerreros-de-oaxaca-LMB.jpg", "7 1/2": "img/7-1-2_guerreros-de-oaxaca-LMB.jpg", "7 5/8": "img/7-5-8_guerreros-de-oaxaca-LMB.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "ny-yankees-gotica-negra", "n": "NY Yankees Gotica Negra", "l": "MLB", "f": {"7": "img/7_ny-yankees-gotica-negra.jpg", "7 1/8": "img/7-1-8_ny-yankees-gotica-negra.jpg", "7 1/2": "img/7-1-2_ny-yankees-gotica-negra.jpg", "7 5/8": "img/7-5-8_ny-yankees-gotica-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "cleveland-indians-gold-24k-negra", "n": "Cleveland Indians Gold 24K Negra", "l": "MLB", "f": {"7": "img/7_cleveland-indians-gold-24k-negra.jpg", "7 1/8": "img/7-1-8_cleveland-indians-gold-24k-negra.jpg", "7 1/4": "img/7-1-4_cleveland-indians-gold-24k-negra.jpg", "7 3/8": "img/7-3-8_cleveland-indians-gold-24k-negra.jpg", "7 1/2": "img/7-1-2_cleveland-indians-gold-24k-negra.jpg", "7 5/8": "img/7-5-8_cleveland-indians-gold-24k-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "cleveland-indians-chief-wahoo-gris", "n": "Cleveland Indians Chief Wahoo Gris", "l": "MLB", "f": {"7": "img/7_cleveland-indians-chief-wahoo-gris.jpg", "7 1/4": "img/7-1-4_cleveland-indians-chief-wahoo-gris.jpg", "7 5/8": "img/7-5-8_cleveland-indians-chief-wahoo-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "mexico-beige-negra", "n": "México Beige Negra", "l": "México / LMB", "f": {"7": "img/7_mexico-beige-negra.jpg", "7 5/8": "img/7-5-8_mexico-beige-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "houston-astros-45-aniversario", "n": "Houston Astros 45 Aniversario", "l": "MLB", "f": {"7": "img/7_houston-astros-45-aniversario.jpg", "7 1/8": "img/7-1-8_houston-astros-45-aniversario.jpg", "7 1/2": "img/7-1-2_houston-astros-45-aniversario.jpg", "7 5/8": "img/7-5-8_houston-astros-45-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-mets-subway-series", "n": "New York Mets Subway Series", "l": "MLB", "f": {"7": "img/7_new-york-mets-subway-series.jpg", "7 1/2": "img/7-1-2_new-york-mets-subway-series.jpg", "7 5/8": "img/7-5-8_new-york-mets-subway-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-crema", "n": "San Diego Padres Crema", "l": "MLB", "f": {"7": "img/7_san-diego-padres-crema.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "chicago-white-sox-crema-negra", "n": "Chicago White Sox Crema Negra", "l": "MLB", "f": {"7": "img/7_chicago-white-sox-crema-negra.jpg", "7 3/8": "img/7-3-8_chicago-white-sox-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "colorado-rockies-25-aniversario", "n": "Colorado Rockies 25 Aniversario", "l": "MLB", "f": {"7": "img/7_colorado-rockies-25-aniversario.jpg", "7 1/8": "img/7-1-8_colorado-rockies-25-aniversario.jpg", "7 3/8": "img/7-3-8_colorado-rockies-25-aniversario.jpg", "7 1/2": "img/7-1-2_colorado-rockies-25-aniversario.jpg", "7 5/8": "img/7-5-8_colorado-rockies-25-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-roja-world-series", "n": "New York Yankees Roja World Series", "l": "MLB", "f": {"7": "img/7_new-york-yankees-roja-world-series.jpg", "7 5/8": "img/7-5-8_new-york-yankees-roja-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "brooklyn-dodgers-jackie-robinson-day", "n": "Brooklyn Dodgers Jackie Robinson Day", "l": "MLB", "f": {"7": "img/7_brooklyn-dodgers-jackie-robinson-day.jpg", "7 1/8": "img/7-1-8_brooklyn-dodgers-jackie-robinson-day.jpg", "7 1/2": "img/7-1-2_brooklyn-dodgers-jackie-robinson-day.jpg", "7 5/8": "img/7-5-8_brooklyn-dodgers-jackie-robinson-day.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "boston-all-star-1999-cafe", "n": "Boston All Star 1999 Café", "l": "MLB", "f": {"7": "img/7_boston-all-star-1999-cafe.jpg", "7 1/8": "img/7-1-8_boston-all-star-1999-cafe.jpg", "7 1/4": "img/7-1-4_boston-all-star-1999-cafe.jpg", "7 3/8": "img/7-3-8_boston-all-star-1999-cafe.jpg", "7 1/2": "img/7-1-2_boston-all-star-1999-cafe.jpg", "7 5/8": "img/7-5-8_boston-all-star-1999-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-verde", "n": "New York Yankees Verde", "l": "MLB", "f": {"7": "img/7_new-york-yankees-verde.jpg", "7 1/8": "img/7-1-8_new-york-yankees-verde.jpg", "7 1/2": "img/7-1-2_new-york-yankees-verde.jpg", "7 5/8": "img/7-5-8_new-york-yankees-verde.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "san-diego-padres-gris", "n": "San Diego Padres Gris", "l": "MLB", "f": {"7": "img/7_san-diego-padres-gris.jpg", "7 1/8": "img/7-1-8_san-diego-padres-gris.jpg", "7 3/8": "img/7-3-8_san-diego-padres-gris.jpg", "7 1/2": "img/7-1-2_san-diego-padres-gris.jpg", "7 5/8": "img/7-5-8_san-diego-padres-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "pittsburgh-pirates-negra", "n": "Pittsburgh Pirates Negra", "l": "MLB", "f": {"7": "img/7_pittsburgh-pirates-negra.jpg", "7 5/8": "img/7-5-8_pittsburgh-pirates-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "mexico-BXR-negra", "n": "México BXR Negra", "l": "México / LMB", "f": {"7": "img/7_mexico-BXR-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "colorado-rockies-negra-morada", "n": "Colorado Rockies Negra Morada", "l": "MLB", "f": {"7": "img/7_colorado-rockies-negra-morada.jpg", "7 1/8": "img/7-1-8_colorado-rockies-negra-morada.jpg", "7 5/8": "img/7-5-8_colorado-rockies-negra-morada.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "chicago-cubs-be-alert-foul-balls", "n": "Chicago Cubs Be Alert Foul Balls", "l": "MLB", "f": {"7": "img/7_chicago-cubs-be-alert-foul-balls.jpg", "7 1/8": "img/7-1-8_chicago-cubs-be-alert-foul-balls.jpg", "7 1/2": "img/7-1-2_chicago-cubs-be-alert-foul-balls.jpg", "7 5/8": "img/7-5-8_chicago-cubs-be-alert-foul-balls.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-1999-world-series-negra", "n": "New York Yankees 1999 World Series Negra", "l": "MLB", "f": {"7": "img/7_new-york-yankees-1999-world-series-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-negra-colores-mexico", "n": "LA Dodgers Negra Colores México", "l": "MLB", "f": {"7": "img/7_la-dodgers-negra-colores-mexico.jpg", "7 1/8": "img/7-1-8_la-dodgers-negra-colores-mexico.jpg", "7 1/4": "img/7-1-4_la-dodgers-negra-colores-mexico.jpg", "7 3/8": "img/7-3-8_la-dodgers-negra-colores-mexico.jpg", "7 1/2": "img/7-1-2_la-dodgers-negra-colores-mexico.jpg", "7 5/8": "img/7-5-8_la-dodgers-negra-colores-mexico.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "brooklyn-dodgers-42-negra", "n": "Brooklyn Dodgers 42 Negra", "l": "MLB", "f": {"7": "img/7_brooklyn-dodgers-42-negra.jpg", "7 1/8": "img/7-1-8_brooklyn-dodgers-42-negra.jpg", "7 3/8": "img/7-3-8_brooklyn-dodgers-42-negra.jpg", "7 1/2": "img/7-1-2_brooklyn-dodgers-42-negra.jpg", "7 5/8": "img/7-5-8_brooklyn-dodgers-42-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-60-aniversario-negra-neon", "n": "LA Dodgers 60 Aniversario Negra Neon", "l": "MLB", "f": {"7": "img/7_la-dodgers-60-aniversario-negra-neon.jpg", "7 1/8": "img/7-1-8_la-dodgers-60-aniversario-negra-neon.jpg", "7 3/8": "img/7-3-8_la-dodgers-60-aniversario-negra-neon.jpg", "7 1/2": "img/7-1-2_la-dodgers-60-aniversario-negra-neon.jpg", "7 5/8": "img/7-5-8_la-dodgers-60-aniversario-negra-neon.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "chicago-white-sox-negra-parches", "n": "Chicago White Sox Negra Parches", "l": "MLB", "f": {"7": "img/7_chicago-white-sox-negra-parches.jpg", "7 5/8": "img/7-5-8_chicago-white-sox-negra-parches.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-mets-negra", "n": "New York Mets Negra", "l": "MLB", "f": {"7": "img/7_new-york-mets-negra.jpg", "7 1/8": "img/7-1-8_new-york-mets-negra.jpg", "7 5/8": "img/7-5-8_new-york-mets-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "toronto-blue-jays-lost-and-found", "n": "Toronto Blue Jays Lost And Found", "l": "MLB", "f": {"7": "img/7_toronto-blue-jays-lost-and-found.jpg", "7 1/8": "img/7-1-8_toronto-blue-jays-lost-and-found.jpg", "7 5/8": "img/7-5-8_toronto-blue-jays-lost-and-found.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-gris-world-series-2025", "n": "LA Dodgers Gris World Series 2025", "l": "MLB", "f": {"7": "img/7_la-dodgers-gris-world-series-2025.jpg", "7 1/8": "img/7-1-8_la-dodgers-gris-world-series-2025.jpg", "7 5/8": "img/7-5-8_la-dodgers-gris-world-series-2025.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "chicago-white-sox-southside-azul", "n": "Chicago White Sox Southside Azul", "l": "MLB", "f": {"7": "img/7_chicago-white-sox-southside-azul.jpg", "7 1/2": "img/7-1-2_chicago-white-sox-southside-azul.jpg", "7 5/8": "img/7-5-8_chicago-white-sox-southside-azul.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "houston-astros-astrodome-crema", "n": "Houston Astros Astrodome Crema", "l": "MLB", "f": {"7": "img/7_houston-astros-astrodome-crema.jpg", "7 1/8": "img/7-1-8_houston-astros-astrodome-crema.jpg", "7 3/8": "img/7-3-8_houston-astros-astrodome-crema.jpg", "7 5/8": "img/7-5-8_houston-astros-astrodome-crema.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "toronto-blue-jays-40-temporada-crema-negra", "n": "Toronto Blue Jays 40 Temporada Crema Negra", "l": "MLB", "f": {"7": "img/7_toronto-blue-jays-40-temporada-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "pittsburgh-pirates-all-star-crema-negra", "n": "Pittsburgh Pirates All Star Crema Negra", "l": "MLB", "f": {"7": "img/7_pittsburgh-pirates-all-star-crema-negra.jpg", "7 1/8": "img/7-1-8_pittsburgh-pirates-all-star-crema-negra.jpg", "7 1/2": "img/7-1-2_pittsburgh-pirates-all-star-crema-negra.jpg", "7 5/8": "img/7-5-8_pittsburgh-pirates-all-star-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-champions-2000-crema-azul", "n": "New York Yankees Champions 2000 Crema Azul", "l": "MLB", "f": {"7": "img/7_new-york-yankees-champions-2000-crema-azul.jpg", "7 1/8": "img/7-1-8_new-york-yankees-champions-2000-crema-azul.jpg", "7 5/8": "img/7-5-8_new-york-yankees-champions-2000-crema-azul.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "texas-rangers-crema-azul-dorado", "n": "Texas Rangers Crema Azul Dorado", "l": "MLB", "f": {"7": "img/7_texas-rangers-crema-azul-dorado.jpg", "7 1/8": "img/7-1-8_texas-rangers-crema-azul-dorado.jpg", "7 1/4": "img/7-1-4_texas-rangers-crema-azul-dorado.jpg", "7 3/8": "img/7-3-8_texas-rangers-crema-azul-dorado.jpg", "7 1/2": "img/7-1-2_texas-rangers-crema-azul-dorado.jpg", "7 5/8": "img/7-5-8_texas-rangers-crema-azul-dorado.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "san-diego-padres-1969-1999-crema-azul", "n": "San Diego Padres 1969 1999 Crema Azul", "l": "MLB", "f": {"7": "img/7_san-diego-padres-1969-1999-crema-azul.jpg", "7 3/8": "img/7-3-8_san-diego-padres-1969-1999-crema-azul.jpg", "7 5/8": "img/7-5-8_san-diego-padres-1969-1999-crema-azul.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-1988-world-series-crema-roja", "n": "LA Dodgers 1988 World Series Crema Roja", "l": "MLB", "f": {"7": "img/7_la-dodgers-1988-world-series-crema-roja.jpg", "7 1/8": "img/7-1-8_la-dodgers-1988-world-series-crema-roja.jpg", "7 1/4": "img/7-1-4_la-dodgers-1988-world-series-crema-roja.jpg", "7 3/8": "img/7-3-8_la-dodgers-1988-world-series-crema-roja.jpg", "7 1/2": "img/7-1-2_la-dodgers-1988-world-series-crema-roja.jpg", "7 5/8": "img/7-5-8_la-dodgers-1988-world-series-crema-roja.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-cupidos-blanca-rosa", "n": "LA Dodgers Cupidos Blanca Rosa", "l": "MLB", "f": {"7": "img/7_la-dodgers-cupidos-blanca-rosa.jpg", "7 1/8": "img/7-1-8_la-dodgers-cupidos-blanca-rosa.jpg", "7 1/4": "img/7-1-4_la-dodgers-cupidos-blanca-rosa.jpg", "7 3/8": "img/7-3-8_la-dodgers-cupidos-blanca-rosa.jpg", "7 1/2": "img/7-1-2_la-dodgers-cupidos-blanca-rosa.jpg", "7 5/8": "img/7-5-8_la-dodgers-cupidos-blanca-rosa.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-crema-roja-mascota", "n": "LA Dodgers Crema Roja Mascota", "l": "MLB", "f": {"7": "img/7_la-dodgers-crema-roja-mascota.jpg", "7 1/8": "img/7-1-8_la-dodgers-crema-roja-mascota.jpg", "7 1/4": "img/7-1-4_la-dodgers-crema-roja-mascota.jpg", "7 3/8": "img/7-3-8_la-dodgers-crema-roja-mascota.jpg", "7 1/2": "img/7-1-2_la-dodgers-crema-roja-mascota.jpg", "7 5/8": "img/7-5-8_la-dodgers-crema-roja-mascota.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "anaheim-angels-50-aniversario-crema-azul-marino", "n": "Anaheim Angels 50 Aniversario Crema Azul Marino", "l": "MLB", "f": {"7": "img/7_anaheim-angels-50-aniversario-crema-azul-marino.jpg", "7 1/8": "img/7-1-8_anaheim-angels-50-aniversario-crema-azul-marino.jpg", "7 3/8": "img/7-3-8_anaheim-angels-50-aniversario-crema-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-world-series-blanca-bronce-pana", "n": "New York Yankees World Series Blanca Bronce Pana", "l": "MLB", "f": {"7": "img/7_new-york-yankees-world-series-blanca-bronce-pana.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "boston-red-sox-all-star-1961-blanca-cafe", "n": "Boston Red Sox All Star 1961 Blanca Café", "l": "MLB", "f": {"7": "img/7_boston-red-sox-all-star-1961-blanca-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-subway-series-crema-negra", "n": "New York Yankees Subway Series Crema Negra", "l": "MLB", "f": {"7": "img/7_new-york-yankees-subway-series-crema-negra.jpg", "7 1/8": "img/7-1-8_new-york-yankees-subway-series-crema-negra.jpg", "7 5/8": "img/7-5-8_new-york-yankees-subway-series-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "detroit-tigers-blanca-azul-marino", "n": "Detroit Tigers Blanca Azul Marino", "l": "MLB", "f": {"7": "img/7_detroit-tigers-blanca-azul-marino.jpg", "7 5/8": "img/7-5-8_detroit-tigers-blanca-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-ohtani-crema-negra", "n": "LA Dodgers Ohtani Crema Negra", "l": "MLB", "f": {"7": "img/7_la-dodgers-ohtani-crema-negra.jpg", "7 1/8": "img/7-1-8_la-dodgers-ohtani-crema-negra.jpg", "7 1/4": "img/7-1-4_la-dodgers-ohtani-crema-negra.jpg", "7 3/8": "img/7-3-8_la-dodgers-ohtani-crema-negra.jpg", "7 1/2": "img/7-1-2_la-dodgers-ohtani-crema-negra.jpg", "7 5/8": "img/7-5-8_la-dodgers-ohtani-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "new-york-yankees-blanca", "n": "New York Yankees Blanca", "l": "MLB", "f": {"7": "img/7_new-york-yankees-blanca.jpg", "7 1/8": "img/7-1-8_new-york-yankees-blanca.jpg", "7 1/4": "img/7-1-4_new-york-yankees-blanca.jpg", "7 3/8": "img/7-3-8_new-york-yankees-blanca.jpg", "7 1/2": "img/7-1-2_new-york-yankees-blanca.jpg", "7 5/8": "img/7-5-8_new-york-yankees-blanca.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8"]}, {"id": "la-dodgers-rosas-azules-crema-negra", "n": "LA Dodgers Rosas Azules Crema Negra", "l": "MLB", "f": {"7": "img/7_la-dodgers-rosas-azules-crema-negra.jpg", "7 5/8": "img/7-5-8_la-dodgers-rosas-azules-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "boston-red-sox-cherubs-world-series-1947", "n": "Boston Red Sox Cherubs World Series 1947", "l": "MLB", "f": {"7": "img/7_boston-red-sox-cherubs-world-series-1947.jpg", "7 1/8": "img/7-1-8_boston-red-sox-cherubs-world-series-1947.jpg", "7 1/4": "img/7-1-4_boston-red-sox-cherubs-world-series-1947.jpg", "7 3/8": "img/7-3-8_boston-red-sox-cherubs-world-series-1947.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "arizona-diamondbacks-cherubs-20-aniversario", "n": "Arizona Diamondbacks Cherubs 20 Aniversario", "l": "MLB", "f": {"7": "img/7_arizona-diamondbacks-cherubs-20-aniversario.jpg", "7 1/8": "img/7-1-8_arizona-diamondbacks-cherubs-20-aniversario.jpg", "7 1/4": "img/7-1-4_arizona-diamondbacks-cherubs-20-aniversario.jpg", "7 3/8": "img/7-3-8_arizona-diamondbacks-cherubs-20-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "oakland-athletics-cherubs-crema-camel", "n": "Oakland Athletics Cherubs Crema Camel", "l": "MLB", "f": {"7": "img/7_oakland-athletics-cherubs-crema-camel.jpg", "7 1/8": "img/7-1-8_oakland-athletics-cherubs-crema-camel.jpg", "7 1/4": "img/7-1-4_oakland-athletics-cherubs-crema-camel.jpg", "7 3/8": "img/7-3-8_oakland-athletics-cherubs-crema-camel.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-ucla-crema-azul-cielo", "n": "LA Dodgers UCLA Crema Azul Cielo", "l": "MLB", "f": {"7": "img/7_la-dodgers-ucla-crema-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-all-star-1969-crema-negra", "n": "New York Yankees All Star 1969 Crema Negra", "l": "MLB", "f": {"7": "img/7_new-york-yankees-all-star-1969-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-ohtani-anime-crema-negra", "n": "LA Dodgers Ohtani Anime Crema Negra", "l": "MLB", "f": {"7": "img/7_la-dodgers-ohtani-anime-crema-negra.jpg", "7 1/8": "img/7-1-8_la-dodgers-ohtani-anime-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-50-aniversario-crema-roja", "n": "LA Dodgers 50 Aniversario Crema Roja", "l": "MLB", "f": {"7": "img/7_la-dodgers-50-aniversario-crema-roja.jpg", "7 1/8": "img/7-1-8_la-dodgers-50-aniversario-crema-roja.jpg", "7 1/4": "img/7-1-4_la-dodgers-50-aniversario-crema-roja.jpg", "7 3/8": "img/7-3-8_la-dodgers-50-aniversario-crema-roja.jpg", "7 1/2": "img/7-1-2_la-dodgers-50-aniversario-crema-roja.jpg", "7 5/8": "img/7-5-8_la-dodgers-50-aniversario-crema-roja.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-world-series-crema-plata-rojo", "n": "New York Yankees World Series Crema Plata Rojo", "l": "MLB", "f": {"7": "img/7_new-york-yankees-world-series-crema-plata-rojo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "houston-astros-cacti-park-crema-cafe", "n": "Houston Astros Cacti Park Crema Café", "l": "MLB", "f": {"7": "img/7_houston-astros-cacti-park-crema-cafe.jpg", "7 1/8": "img/7-1-8_houston-astros-cacti-park-crema-cafe.jpg", "7 5/8": "img/7-5-8_houston-astros-cacti-park-crema-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-olimpicos-1984-crema-azul-marino", "n": "LA Dodgers Olímpicos 1984 Crema Azul Marino", "l": "MLB", "f": {"7": "img/7_la-dodgers-olimpicos-1984-crema-azul-marino.jpg", "7 1/8": "img/7-1-8_la-dodgers-olimpicos-1984-crema-azul-marino.jpg", "7 1/4": "img/7-1-4_la-dodgers-olimpicos-1984-crema-azul-marino.jpg", "7 3/8": "img/7-3-8_la-dodgers-olimpicos-1984-crema-azul-marino.jpg", "7 5/8": "img/7-5-8_la-dodgers-olimpicos-1984-crema-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-era-graffiti-crema-camel", "n": "New Era Graffiti Crema Camel", "l": "New Era", "f": {"7": "img/7_new-era-graffiti-crema-camel.jpg", "7 1/2": "img/7-1-2_new-era-graffiti-crema-camel.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-los-angeles-arco-blanca-cafe", "n": "LA Dodgers Los Angeles Arco Blanca Café", "l": "MLB", "f": {"7": "img/7_la-dodgers-los-angeles-arco-blanca-cafe.jpg", "7 3/8": "img/7-3-8_la-dodgers-los-angeles-arco-blanca-cafe.jpg", "7 5/8": "img/7-5-8_la-dodgers-los-angeles-arco-blanca-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-rosas-esqueleto-crema-negra", "n": "New York Yankees Rosas Esqueleto Crema Negra", "l": "MLB", "f": {"7": "img/7_new-york-yankees-rosas-esqueleto-crema-negra.jpg", "7 5/8": "img/7-5-8_new-york-yankees-rosas-esqueleto-crema-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-1969-1999-crema-cafe", "n": "San Diego Padres 1969 1999 Crema Café", "l": "MLB", "f": {"7": "img/7_san-diego-padres-1969-1999-crema-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "boston-red-sox-all-star-1942-crema-azul-marino", "n": "Boston Red Sox All Star 1942 Crema Azul Marino", "l": "MLB", "f": {"7": "img/7_boston-red-sox-all-star-1942-crema-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-25-aniversario-azul-cielo", "n": "San Diego Padres 25 Aniversario Azul Cielo", "l": "MLB", "f": {"7": "img/7_san-diego-padres-25-aniversario-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "texas-rangers-all-star-azul-cielo-gris", "n": "Texas Rangers All Star Azul Cielo Gris", "l": "MLB", "f": {"7": "img/7_texas-rangers-all-star-azul-cielo-gris.jpg", "7 1/8": "img/7-1-8_texas-rangers-all-star-azul-cielo-gris.jpg", "7 1/4": "img/7-1-4_texas-rangers-all-star-azul-cielo-gris.jpg", "7 3/8": "img/7-3-8_texas-rangers-all-star-azul-cielo-gris.jpg", "7 1/2": "img/7-1-2_texas-rangers-all-star-azul-cielo-gris.jpg", "7 5/8": "img/7-5-8_texas-rangers-all-star-azul-cielo-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "pittsburgh-pirates-all-star-azul-cielo-gris", "n": "Pittsburgh Pirates All Star Azul Cielo Gris", "l": "MLB", "f": {"7": "img/7_pittsburgh-pirates-all-star-azul-cielo-gris.jpg", "7 1/8": "img/7-1-8_pittsburgh-pirates-all-star-azul-cielo-gris.jpg", "7 1/4": "img/7-1-4_pittsburgh-pirates-all-star-azul-cielo-gris.jpg", "7 3/8": "img/7-3-8_pittsburgh-pirates-all-star-azul-cielo-gris.jpg", "7 1/2": "img/7-1-2_pittsburgh-pirates-all-star-azul-cielo-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8", "7 1/4", "7 3/8", "7 1/2"]}, {"id": "anaheim-angels-40-temporada-azul-cielo-gris", "n": "Anaheim Angels 40 Temporada Azul Cielo Gris", "l": "MLB", "f": {"7": "img/7_anaheim-angels-40-temporada-azul-cielo-gris.jpg", "7 1/8": "img/7-1-8_anaheim-angels-40-temporada-azul-cielo-gris.jpg", "7 1/4": "img/7-1-4_anaheim-angels-40-temporada-azul-cielo-gris.jpg", "7 3/8": "img/7-3-8_anaheim-angels-40-temporada-azul-cielo-gris.jpg", "7 1/2": "img/7-1-2_anaheim-angels-40-temporada-azul-cielo-gris.jpg", "7 5/8": "img/7-5-8_anaheim-angels-40-temporada-azul-cielo-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "detroit-tigers-all-star-azul-cielo-cafe", "n": "Detroit Tigers All Star Azul Cielo Café", "l": "MLB", "f": {"7": "img/7_detroit-tigers-all-star-azul-cielo-cafe.jpg", "7 1/8": "img/7-1-8_detroit-tigers-all-star-azul-cielo-cafe.jpg", "7 1/4": "img/7-1-4_detroit-tigers-all-star-azul-cielo-cafe.jpg", "7 3/8": "img/7-3-8_detroit-tigers-all-star-azul-cielo-cafe.jpg", "7 1/2": "img/7-1-2_detroit-tigers-all-star-azul-cielo-cafe.jpg", "7 5/8": "img/7-5-8_detroit-tigers-all-star-azul-cielo-cafe.jpg"}, "e": "59FIFTY cerrada", "w": ["7", "7 1/8", "7 1/4", "7 3/8", "7 1/2", "7 5/8"]}, {"id": "la-dodgers-dodger-stadium-50-azul-cielo", "n": "LA Dodgers Dodger Stadium 50 Azul Cielo", "l": "MLB", "f": {"7": "img/7_la-dodgers-dodger-stadium-50-azul-cielo.jpg", "7 1/8": "img/7-1-8_la-dodgers-dodger-stadium-50-azul-cielo.jpg", "7 1/4": "img/7-1-4_la-dodgers-dodger-stadium-50-azul-cielo.jpg", "7 3/8": "img/7-3-8_la-dodgers-dodger-stadium-50-azul-cielo.jpg", "7 1/2": "img/7-1-2_la-dodgers-dodger-stadium-50-azul-cielo.jpg", "7 5/8": "img/7-5-8_la-dodgers-dodger-stadium-50-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "boston-red-sox-all-star-1999-azul-cielo-gris", "n": "Boston Red Sox All Star 1999 Azul Cielo Gris", "l": "MLB", "f": {"7": "img/7_boston-red-sox-all-star-1999-azul-cielo-gris.jpg", "7 1/8": "img/7-1-8_boston-red-sox-all-star-1999-azul-cielo-gris.jpg", "7 1/4": "img/7-1-4_boston-red-sox-all-star-1999-azul-cielo-gris.jpg", "7 3/8": "img/7-3-8_boston-red-sox-all-star-1999-azul-cielo-gris.jpg", "7 1/2": "img/7-1-2_boston-red-sox-all-star-1999-azul-cielo-gris.jpg", "7 5/8": "img/7-5-8_boston-red-sox-all-star-1999-azul-cielo-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-cupidos-azul-cielo", "n": "New York Yankees Cupidos Azul Cielo", "l": "MLB", "f": {"7": "img/7_new-york-yankees-cupidos-azul-cielo.jpg", "7 1/8": "img/7-1-8_new-york-yankees-cupidos-azul-cielo.jpg", "7 1/4": "img/7-1-4_new-york-yankees-cupidos-azul-cielo.jpg", "7 3/8": "img/7-3-8_new-york-yankees-cupidos-azul-cielo.jpg", "7 1/2": "img/7-1-2_new-york-yankees-cupidos-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "toronto-blue-jays-azul-blanca", "n": "Toronto Blue Jays Azul Blanca", "l": "MLB", "f": {"7": "img/7_toronto-blue-jays-azul-blanca.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "la-dodgers-verde-negra-60-aniversario", "n": "LA Dodgers Verde Negra 60 Aniversario", "l": "MLB", "f": {"7": "img/7_la-dodgers-verde-negra-60-aniversario.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "chicago-bulls-camel-negra", "n": "Chicago Bulls Camel Negra", "l": "NBA", "f": {"7": "img/7_chicago-bulls-camel-negra.jpg", "7 1/8": "img/7-1-8_chicago-bulls-camel-negra.jpg", "7 1/4": "img/7-1-4_chicago-bulls-camel-negra.jpg", "7 5/8": "img/7-5-8_chicago-bulls-camel-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-cafe-letras", "n": "San Diego Padres Café Letras", "l": "MLB", "f": {"7": "img/7_san-diego-padres-cafe-letras.jpg", "7 1/8": "img/7-1-8_san-diego-padres-cafe-letras.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-cafe-logo-amarillo", "n": "San Diego Padres Café Logo Amarillo", "l": "MLB", "f": {"7": "img/7_san-diego-padres-cafe-logo-amarillo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "san-diego-padres-aniversario-cafe-negra", "n": "San Diego Padres Aniversario Café Negra", "l": "MLB", "f": {"7": "img/7_san-diego-padres-aniversario-cafe-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "houston-astros-35-great-years-gris-negra", "n": "Houston Astros 35 Great Years Gris Negra", "l": "MLB", "f": {"7": "img/7_houston-astros-35-great-years-gris-negra.jpg", "7 1/8": "img/7-1-8_houston-astros-35-great-years-gris-negra.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "houston-astros-45-aniversario-gris", "n": "Houston Astros 45 Aniversario Gris", "l": "MLB", "f": {"7": "img/7_houston-astros-45-aniversario-gris.jpg", "7 1/8": "img/7-1-8_houston-astros-45-aniversario-gris.jpg", "7 5/8": "img/7-5-8_houston-astros-45-aniversario-gris.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "anaheim-angels-35-aniversario-roja-morada", "n": "Anaheim Angels 35 Aniversario Roja Morada", "l": "MLB", "f": {"7": "img/7_anaheim-angels-35-aniversario-roja-morada.jpg", "7 1/8": "img/7-1-8_anaheim-angels-35-aniversario-roja-morada.jpg", "7 5/8": "img/7-5-8_anaheim-angels-35-aniversario-roja-morada.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "philadelphia-phillies-azul-marino-azul-cielo", "n": "Philadelphia Phillies Azul Marino Azul Cielo", "l": "MLB", "f": {"7": "img/7_philadelphia-phillies-azul-marino-azul-cielo.jpg", "7 1/8": "img/7-1-8_philadelphia-phillies-azul-marino-azul-cielo.jpg", "7 1/4": "img/7-1-4_philadelphia-phillies-azul-marino-azul-cielo.jpg", "7 3/8": "img/7-3-8_philadelphia-phillies-azul-marino-azul-cielo.jpg", "7 1/2": "img/7-1-2_philadelphia-phillies-azul-marino-azul-cielo.jpg", "7 5/8": "img/7-5-8_philadelphia-phillies-azul-marino-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "new-york-yankees-negra-parches", "n": "New York Yankees Negra Parches", "l": "MLB", "f": {"7": "img/7_new-york-yankees-negra-parches.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "cleveland-guardians-azul-marino", "n": "Cleveland Guardians Azul Marino", "l": "MLB", "f": {"7": "img/7_cleveland-guardians-azul-marino.jpg", "7 1/8": "img/7-1-8_cleveland-guardians-azul-marino.jpg", "7 3/8": "img/7-3-8_cleveland-guardians-azul-marino.jpg", "7 1/2": "img/7-1-2_cleveland-guardians-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7"]}, {"id": "chicago-cubs-all-star-1990-negra-azul-cielo", "n": "Chicago Cubs All Star 1990 Negra Azul Cielo", "l": "MLB", "f": {"7 1/8": "img/7-1-8_chicago-cubs-all-star-1990-negra-azul-cielo.jpg", "7 3/8": "img/7-3-8_chicago-cubs-all-star-1990-negra-azul-cielo.jpg", "7 1/2": "img/7-1-2_chicago-cubs-all-star-1990-negra-azul-cielo.jpg", "7 5/8": "img/7-5-8_chicago-cubs-all-star-1990-negra-azul-cielo.jpg"}, "e": "59FIFTY cerrada", "w": ["7 1/8"]}, {"id": "cleveland-indians-negra-amarillo-world-series", "n": "Cleveland Indians Negra Amarillo World Series", "l": "MLB", "f": {"7 1/8": "img/7-1-8_cleveland-indians-negra-amarillo-world-series.jpg", "7 1/4": "img/7-1-4_cleveland-indians-negra-amarillo-world-series.jpg", "7 3/8": "img/7-3-8_cleveland-indians-negra-amarillo-world-series.jpg", "7 1/2": "img/7-1-2_cleveland-indians-negra-amarillo-world-series.jpg", "7 5/8": "img/7-5-8_cleveland-indians-negra-amarillo-world-series.jpg"}, "e": "59FIFTY cerrada", "w": ["7 1/8"]}, {"id": "golden-state-warriors-azul-amarilla", "n": "Golden State Warriors Azul Amarilla", "l": "NBA", "f": {"7 1/8": "img/7-1-8_golden-state-warriors-azul-amarilla.jpg", "7 1/4": "img/7-1-4_golden-state-warriors-azul-amarilla.jpg", "7 3/8": "img/7-3-8_golden-state-warriors-azul-amarilla.jpg", "7 1/2": "img/7-1-2_golden-state-warriors-azul-amarilla.jpg"}, "e": "59FIFTY cerrada", "w": ["7 1/8", "7 1/4", "7 3/8", "7 1/2"]}, {"id": "arizona-diamondbacks-world-series-2001-morada-turquesa", "n": "Arizona Diamondbacks World Series 2001 Morada Turquesa", "l": "MLB", "f": {"7 1/8": "img/7-1-8_arizona-diamondbacks-world-series-2001-morada-turquesa.jpg"}, "e": "59FIFTY cerrada", "w": ["7 1/8"]}, {"id": "la-dodgers-100-aniversario-negra-camel", "n": "LA Dodgers 100 Aniversario Negra Camel", "l": "MLB", "f": {"7 1/8": "img/7-1-8_la-dodgers-100-aniversario-negra-camel.jpg", "7 3/8": "img/7-3-8_la-dodgers-100-aniversario-negra-camel.jpg"}, "e": "59FIFTY cerrada"}, {"id": "philadelphia-phillies-all-star-1996-roja", "n": "Philadelphia Phillies All Star 1996 Roja", "l": "MLB", "f": {"7 1/4": "img/7-1-4_philadelphia-phillies-all-star-1996-roja.jpg", "7 3/8": "img/7-3-8_philadelphia-phillies-all-star-1996-roja.jpg"}, "e": "59FIFTY cerrada"}, {"id": "new-era-graffiti-negra", "n": "New Era Graffiti Negra", "l": "New Era", "f": {"7 3/8": "img/7-3-8_new-era-graffiti-negra.jpg"}, "e": "59FIFTY cerrada"}, {"id": "la-dodgers-rosas-esqueleto-negra", "n": "LA Dodgers Rosas Esqueleto Negra", "l": "MLB", "f": {"7 3/8": "img/7-3-8_la-dodgers-rosas-esqueleto-negra.jpg", "7 1/2": "img/7-1-2_la-dodgers-rosas-esqueleto-negra.jpg", "7 5/8": "img/7-5-8_la-dodgers-rosas-esqueleto-negra.jpg"}, "e": "59FIFTY cerrada"}, {"id": "la-dodgers-viva-los-dodgers-negra", "n": "LA Dodgers Viva Los Dodgers Negra", "l": "MLB", "f": {"7 3/8": "img/7-3-8_la-dodgers-viva-los-dodgers-negra.jpg", "7 5/8": "img/7-5-8_la-dodgers-viva-los-dodgers-negra.jpg"}, "e": "59FIFTY cerrada"}, {"id": "la-dodgers-ohtani-japones-crema-gris", "n": "LA Dodgers Ohtani Japonés Crema Gris", "l": "MLB", "f": {"7 5/8": "img/7-5-8_la-dodgers-ohtani-japones-crema-gris.jpg"}, "e": "59FIFTY cerrada"}, {"id": "boston-all-star-1999-verde-azul-marino", "n": "Boston All Star 1999 Verde Azul Marino", "l": "MLB", "f": {"7 5/8": "img/7-5-8_boston-all-star-1999-verde-azul-marino.jpg"}, "e": "59FIFTY cerrada", "w": ["7 5/8"]}, {"id": "new-york-yankees-world-series-azul-marino", "n": "New York Yankees World Series Azul Marino", "l": "MLB", "f": {"7 5/8": "img/7-5-8_new-york-yankees-world-series-azul-marino.jpg"}, "e": "59FIFTY cerrada"}, {"id": "anaheim-angels-calavera-50-aniversario-crema-cafe", "n": "Anaheim Angels Calavera 50 Aniversario Crema Café", "l": "MLB", "f": {"Única": "img/unica_anaheim-angels-calavera-50-aniversario-crema-cafe.jpg"}, "e": "9FIFTY snapback"}, {"id": "ny-yankees-lunar-new-year-serpiente-negra-roja", "n": "NY Yankees Lunar New Year Serpiente Negra Roja", "l": "MLB", "f": {"Única": "img/unica_ny-yankees-lunar-new-year-serpiente-negra-roja.jpg"}, "e": "9FIFTY snapback"}, {"id": "new-era-lunar-new-year-serpiente-negra-roja", "n": "New Era Lunar New Year Serpiente Negra Roja", "l": "New Era", "f": {"Única": "img/unica_new-era-lunar-new-year-serpiente-negra-roja.jpg"}, "e": "9FIFTY snapback"}, {"id": "mexico-gallo-bandera-negra-camel", "n": "México Gallo Bandera Negra Camel", "l": "México / LMB", "f": {"Única": "img/unica_mexico-gallo-bandera-negra-camel.jpg"}, "e": "9FIFTY snapback"}, {"id": "ny-yankees-republica-dominicana-blanca-roja", "n": "NY Yankees República Dominicana Blanca Roja", "l": "Selecciones", "f": {"Única": "img/unica_ny-yankees-republica-dominicana-blanca-roja.jpg"}, "e": "9FIFTY snapback"}, {"id": "oakland-athletics-calavera-negra", "n": "Oakland Athletics Calavera Negra", "l": "MLB", "f": {"Única": "img/unica_oakland-athletics-calavera-negra.jpg"}, "e": "9FORTY curva"}, {"id": "san-diego-padres-bordado-dorado-cafe", "n": "San Diego Padres Bordado Dorado Café", "l": "MLB", "f": {"Única": "img/unica_san-diego-padres-bordado-dorado-cafe.jpg"}, "e": "9FORTY curva"}, {"id": "la-dodgers-undefeated-crema", "n": "LA Dodgers Undefeated Crema", "l": "MLB", "f": {"Única": "img/unica_la-dodgers-undefeated-crema.jpg"}, "e": "9FORTY curva"}, {"id": "golden-state-warriors-azul-rey", "n": "Golden State Warriors Azul Rey", "l": "NBA", "f": {"Única": "img/unica_golden-state-warriors-azul-rey.jpg"}, "e": "9FORTY curva"}, {"id": "new-york-mets-letras-azul", "n": "New York Mets Letras Azul", "l": "MLB", "f": {"Única": "img/unica_new-york-mets-letras-azul.jpg"}, "e": "9FORTY curva"}, {"id": "chicago-blackhawks-flores-cafe", "n": "Chicago Blackhawks Flores Café", "l": "NHL", "f": {"Única": "img/unica_chicago-blackhawks-flores-cafe.jpg"}, "e": "9FORTY curva"}, {"id": "ny-yankees-bordado-dorado-azul-marino", "n": "NY Yankees Bordado Dorado Azul Marino", "l": "MLB", "f": {"Única": "img/unica_ny-yankees-bordado-dorado-azul-marino.jpg"}, "e": "9FORTY curva"}, {"id": "anaheim-angels-35-aniversario-palmeras-negra", "n": "Anaheim Angels 35 Aniversario Palmeras Negra", "l": "MLB", "f": {"Única": "img/unica_anaheim-angels-35-aniversario-palmeras-negra.jpg"}, "e": "9FORTY curva"}, {"id": "boston-red-sox-rosas-crema-negra", "n": "Boston Red Sox Rosas Crema Negra", "l": "MLB", "f": {"Única": "img/unica_boston-red-sox-rosas-crema-negra.jpg"}, "e": "9FORTY curva"}, {"id": "ny-yankees-rosas-all-star-1942-azul-marino", "n": "NY Yankees Rosas All Star 1942 Azul Marino", "l": "MLB", "f": {"Única": "img/unica_ny-yankees-rosas-all-star-1942-azul-marino.jpg"}, "e": "9FORTY curva"}, {"id": "ny-yankees-graffiti-negra", "n": "NY Yankees Graffiti Negra", "l": "MLB", "f": {"Única": "img/unica_ny-yankees-graffiti-negra.jpg"}, "e": "9FORTY curva"}, {"id": "puerto-rico-azul", "n": "Puerto Rico Azul", "l": "Selecciones", "f": {"Única": "img/unica_puerto-rico-azul.jpg"}, "e": "9FORTY curva"}, {"id": "la-dodgers-champions-anillo-negra", "n": "LA Dodgers Champions Anillo Negra", "l": "MLB", "f": {"Única": "img/unica_la-dodgers-champions-anillo-negra.jpg"}, "e": "9FORTY curva"}, {"id": "chicago-white-sox-champions-anillo-negra", "n": "Chicago White Sox Champions Anillo Negra", "l": "MLB", "f": {"Única": "img/unica_chicago-white-sox-champions-anillo-negra.jpg"}, "e": "9FORTY curva"}, {"id": "pittsburgh-pirates-negra-naranja", "n": "Pittsburgh Pirates Negra Naranja", "l": "MLB", "f": {"Única": "img/unica_pittsburgh-pirates-negra-naranja.jpg"}, "e": "9FORTY curva"}, {"id": "new-york-knicks-negra-azul", "n": "New York Knicks Negra Azul", "l": "NBA", "f": {"Única": "img/unica_new-york-knicks-negra-azul.jpg"}, "e": "9FORTY curva"}, {"id": "philadelphia-eagles-maneto-negra", "n": "Philadelphia Eagles Maneto Negra", "l": "NFL", "f": {"Única": "img/unica_philadelphia-eagles-maneto-negra.jpg"}, "e": "9FORTY curva"}, {"id": "la-dodgers-alpha-industries-negra-dorado", "n": "LA Dodgers Alpha Industries Negra Dorado", "l": "MLB", "f": {"Única": "img/unica_la-dodgers-alpha-industries-negra-dorado.jpg"}, "e": "9FORTY curva"}, {"id": "shohei-ohtani-50-50-negra", "n": "Shohei Ohtani 50 50 Negra", "l": "MLB", "f": {"Única": "img/unica_shohei-ohtani-50-50-negra.jpg"}, "e": "9FORTY curva"}, {"id": "diablos-rojos-bicampeones-negra", "n": "Diablos Rojos Bicampeones Negra", "l": "México / LMB", "f": {"Única": "img/unica_diablos-rojos-bicampeones-negra.jpg"}, "e": "9FORTY curva"}, {"id": "kansas-city-chiefs-parches-negra", "n": "Kansas City Chiefs Parches Negra", "l": "NFL", "f": {"Única": "img/unica_kansas-city-chiefs-parches-negra.jpg"}, "e": "9FORTY curva"}, {"id": "ny-yankees-realtree-camuflaje-turquesa-100-aniversario", "n": "NY Yankees Realtree Camuflaje Turquesa 100 Aniversario", "l": "MLB", "f": {"7": "img/7_ny-yankees-realtree-camuflaje-turquesa-100-aniversario.jpg"}, "e": "59FIFTY cerrada"}, {"id": "toronto-blue-jays-10-aniversario-azul-marino", "n": "Toronto Blue Jays 10 Aniversario Azul Marino", "l": "MLB", "f": {"7 1/8": "img/7-1-8_toronto-blue-jays-10-aniversario-azul-marino.jpg"}, "e": "59FIFTY cerrada"}, {"id": "tampa-bay-devil-rays-amarilla-azul-marino", "n": "Tampa Bay Devil Rays Amarilla Azul Marino", "l": "MLB", "f": {"Única": "img/unica_tampa-bay-devil-rays-amarilla-azul-marino.jpg"}, "e": "9FORTY curva"}];
+const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"];
+const CM = {"7":"55.8 cm","7 1/8":"56.8 cm","7 1/4":"57.7 cm","7 3/8":"58.7 cm","7 1/2":"59.6 cm","7 5/8":"60.6 cm"};
+const $ = s => document.querySelector(s);
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+const fmt = n => "$" + n.toLocaleString("es-MX");
+const store = { get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}} };
+
+DATA_ALL.forEach((d,i) => { d.c = "#"+String(i+1).padStart(3,"0"); });
+const DATA = DATA_ALL.filter(d=>!OCULTOS.includes(d.c));
+DATA.forEach(d => { const a = AGOTADOS[d.c]; if(a){ const ts = a==="todas"?Object.keys(d.f):a; d.out = new Set(ts); } else d.out = new Set(); d.s = norm(d.c+" "+d.c.slice(1)+" "+d.n+" "+d.id.replace(/-/g," ")+" "+d.l); });
+
+const COLS = [
+  {k:"todo", n:"Todo", t:()=>true},
+  {k:"sirm", n:"Entrega inmediata SIRM", t:d=>!!STOCK_SIRM[d.c]},
+  {k:"fav", n:"Favoritas ♥", t:d=>favs.has(d.id)},
+  {k:"dodgers", n:"Dodgers", t:d=>/dodgers/.test(d.id)},
+  {k:"yankees", n:"Yankees", t:d=>/yankees/.test(d.id)},
+  {k:"mx", n:"México / LMB", t:d=>d.l==="México / LMB"},
+  {k:"pastel", n:"Tonos pastel", t:d=>/azul-cielo|rosa/.test(d.id)},
+  {k:"aniv", n:"Aniversarios", t:d=>/aniversario|temporada|world-series|all-star|champions/.test(d.id)},
+  {k:"arte", n:"Bordados especiales", t:d=>/cupidos|cherubs|rosas|looney|ohtani|graffiti|gotica|esqueleto|paper/.test(d.id)},
+  {k:"nba", n:"NBA", t:d=>d.l==="NBA"},
+  {k:"nfl", n:"NFL / NHL", t:d=>d.l==="NFL"||d.l==="NHL"},
+  {k:"sel", n:"Selecciones", t:d=>d.l==="Selecciones"},
+];
+const COLORS = [
+  {k:"negra",c:"#111"},{k:"crema",c:"#efe6cf"},{k:"blanca",c:"#fff"},{k:"azul",c:"#2f5bd3"},{k:"roja",c:"#d4302b"},
+  {k:"gris",c:"#8d8d8d"},{k:"cafe",c:"#6b4a2f"},{k:"camel",c:"#c9a46c"},{k:"verde",c:"#1f9a6e"},{k:"morada",c:"#7b3fb5"}
+];
+
+let estilo = "todos", size = store.get("talla", null), col = "todo", color = null, q = "";
+let favs = new Set(store.get("favs", []));
+let bag = store.get("bolsa", []);   // [{id,t,q}]
+let list = [], cur = null, curT = null, curQ = 1;
+
+/* ---------- Puerta de talla ---------- */
+function buildGate(){
+  const g = $("#gsizes");
+  TALLAS.forEach(t=>{
+    const n = DATA.filter(d=>has(d,t)).length;
+    const b = document.createElement("button");
+    b.innerHTML = `<b>${t}</b><span>${CM[t]} · ${n} modelos</span>`;
+    b.onclick = ()=>{ setSize(t); $("#gate").hidden = true; };
+    g.appendChild(b);
+  });
+  $("#gall").onclick = ()=>{ setSize(null); $("#gate").hidden = true; };
+  $("#pill").onclick = ()=>{ $("#gate").hidden = false; };
+  $("#gate").hidden = !!store.get("visto", false);
+}
+function setSize(t){ size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
+
+/* ---------- Filtros ---------- */
+const ESTILOS = ["todos","59FIFTY cerrada","9FIFTY snapback","9FORTY curva"];
+function buildFilters(){
+  const et = $("#estilos");
+  ESTILOS.filter(e=>e==="todos"||DATA.some(d=>d.e===e)).forEach(e=>{
+    const b=document.createElement("button"); b.dataset.e=e;
+    const [a,c] = e==="todos"?["Todas","New Era AA"]:e.split(" ");
+    b.innerHTML = `${a}<small>${c}</small>`;
+    b.onclick=()=>{ estilo=e; render(); }; et.appendChild(b);
+  });
+  const r = $("#cols");
+  COLS.filter(c=>c.k!=="sirm"||Object.keys(STOCK_SIRM).length).forEach(c=>{
+    const b = document.createElement("button"); b.className="col"; b.dataset.k=c.k;
+    b.onclick = ()=>{ col=c.k; render(); };
+    r.appendChild(b);
+  });
+  const d = $("#colors");
+  COLORS.forEach(c=>{
+    const b = document.createElement("button"); b.className="dot";
+    b.innerHTML = `<i style="background:${c.c}"></i>${c.k==="cafe"?"café":c.k}`;
+    b.onclick = ()=>{ color = color===c.k?null:c.k; render(); };
+    b.dataset.k=c.k; d.appendChild(b);
+  });
+  $("#q").addEventListener("input", e=>{ q = norm(e.target.value.trim()); render(); });
+  $("#clear").onclick = ()=>{ estilo="todos"; col="todo"; color=null; q=""; $("#q").value=""; render(); };
+}
+const UNI = "Única";
+const enSirmT = (d,t) => { const s = STOCK_SIRM[d.c]; return !!s && Array.isArray(s) && s.includes(t); };
+const enSirm = (d,t) => { const s = STOCK_SIRM[d.c]; if(!s) return false; if(s==="todas"||s===UNI||!t) return true; return [].concat(s).includes(t); };
+const ALLT = [...TALLAS, UNI];
+const isUni = d => !!d.f[UNI];
+const has = (d,t) => isUni(d) ? (!t || TALLAS.includes(t) || t===UNI) && !d.out.has(UNI) : (!!d.f[t] || enSirmT(d,t)) && !d.out.has(t);
+const base = () => DATA.filter(d=> (estilo==="todos"||d.e===estilo) && (size ? has(d,size) : ALLT.some(t=>has(d,t))));
+const stockAll = () => DATA.filter(d=> STOCK_SIRM[d.c] && (estilo==="todos"||d.e===estilo));
+const stTallas = d => { const s = STOCK_SIRM[d.c]; return !s ? [] : Array.isArray(s) ? s : (isUni(d)?[UNI]:TALLAS.filter(t=>d.f[t])); };
+const sq = (d,t) => d.f[t] && !(d.w||[]).includes(t);
+const foto = d => (sq(d,size) && d.f[size]) || d.f[ALLT.find(t=>sq(d,t))] || d.f[size] || d.f[ALLT.find(t=>d.f[t])];
+
+/* ---------- Catálogo ---------- */
+function render(){
+  const words = q.split(/\s+/).filter(Boolean);
+  const pool = col==="sirm" ? stockAll() : base();
+  document.querySelectorAll(".col").forEach(b=>{
+    const c = COLS.find(x=>x.k===b.dataset.k);
+    b.setAttribute("aria-pressed", col===c.k);
+    const bp = base(); b.innerHTML = c.k==="sirm" ? `${c.n}<span>${stockAll().length} modelos · ${stockAll().reduce((a,d)=>a+stTallas(d).length,0)} gorras</span>` : `${c.n}<span>${bp.filter(c.t).length} modelos</span>`;
+  });
+  document.querySelectorAll(".dot").forEach(b=>b.setAttribute("aria-pressed", color===b.dataset.k));
+  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
+  const ct = COLS.find(c=>c.k===col).t;
+  list = pool.filter(d => ct(d) && (!color || d.id.includes(color)) && words.every(w=>d.s.includes(w)));
+  $("#count").textContent = `${list.length} ${list.length===1?"modelo":"modelos"}` + (col==="sirm"?" en stock · todas las tallas":size?` en talla ${size}`:"");
+  $("#clear").hidden = (col==="todo" && !color && !q && estilo==="todos");
+  const g = $("#grid"); g.innerHTML = "";
+  if(!list.length){ g.innerHTML = `<div class="empty">${col==="fav"?"Aún no marcas favoritas. Toca ♡ en las gorras que te gusten.":"No hay modelos con esos filtros."}</div>`; return; }
+  const frag = document.createDocumentFragment();
+  list.forEach(d=>{
+    const ts = isUni(d)?[UNI]:TALLAS.filter(t=>has(d,t));
+    const c = document.createElement("article"); c.className="card";
+    c.innerHTML = `<div class="ph"><img loading="lazy" src="${foto(d)}" alt="">${(col==="sirm"||enSirm(d,size))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
+      ${d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
+      <button class="fav" aria-label="Favorita" aria-pressed="${favs.has(d.id)}">${favs.has(d.id)?"♥":"♡"}</button>
+      <div class="tx"><span class="etag">${d.e}</span><h3></h3><div class="row"><span class="sz">${d.c} · ${col==="sirm"?"⚡ "+stTallas(d).map(t=>t===UNI?"Ajustable":"T. "+t).join(", "):isUni(d)?"Ajustable":size?"T. "+size:ts.length+" tallas"}</span><button class="add">+ Agregar</button></div></div>`;
+    c.querySelector("h3").textContent = d.n; c.querySelector("img").alt = d.n;
+    c.querySelector(".ph").onclick = ()=>openPD(d);
+    c.querySelector("h3").onclick = ()=>openPD(d);
+    c.querySelector(".fav").onclick = e=>{ toggleFav(d.id); const b=e.currentTarget; b.setAttribute("aria-pressed",favs.has(d.id)); b.textContent=favs.has(d.id)?"♥":"♡"; if(col==="fav") render(); };
+    c.querySelector(".add").onclick = e=>{
+      const st = stTallas(d); const tt = isUni(d)?UNI : col==="sirm" ? (st.length===1?st[0]:(st.includes(size)?size:null)) : size;
+      if(tt){ addBag(d.id,tt,1); const b=e.currentTarget; b.textContent="✓ En bolsa"; b.classList.add("done"); setTimeout(()=>{b.textContent="+ Agregar";b.classList.remove("done")},1300); }
+      else openPD(d);
+    };
+    frag.appendChild(c);
+  });
+  g.appendChild(frag);
+}
+function toggleFav(id){ favs.has(id)?favs.delete(id):favs.add(id); store.set("favs",[...favs]); }
+
+/* ---------- Hojas ---------- */
+function openSheet(id){ $("#scrim").classList.add("on"); $(id).classList.add("on"); }
+function closeAll(){ $("#scrim").classList.remove("on"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("on")); }
+$("#scrim").onclick = closeAll;
+document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeAll);
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeAll(); });
+
+function openPD(d){
+  cur = d; curQ = 1;
+  const ts = isUni(d)?[UNI]:TALLAS.filter(t=>has(d,t));
+  const st0 = stTallas(d); curT = isUni(d) ? UNI : size && has(d,size) ? size : col==="sirm" && st0.length===1 ? st0[0] : (ts.length===1?ts[0]:null);
+  $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+d.e; $("#qv").textContent = 1;
+  const z = $("#pszs"); z.innerHTML = "";
+  ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = t===UNI?"Única (ajustable)":t; b.setAttribute("aria-pressed",t===curT);
+    b.onclick=()=>{ curT=t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); updPD(); }; z.appendChild(b); });
+  const ss = STOCK_SIRM[d.c]; $("#psirm").hidden = !ss; if(ss) $("#psirmt").textContent = ss==="todas"||ss===UNI?(isUni(d)?"única":"todas sus tallas"):[].concat(ss).join(", ");
+  updPD(); openSheet("#pd");
+}
+function updPD(){ $("#pped").hidden = !!(curT && enSirm(cur,curT)); $("#pimg").src = cur.f[curT] || foto(cur); $("#pimg").alt = cur.n; $("#padd").textContent = curT ? "Agregar a la bolsa" : "Elige una talla"; }
+$("#qm").onclick = ()=>{ curQ=Math.max(1,curQ-1); $("#qv").textContent=curQ; };
+$("#qp").onclick = ()=>{ curQ=Math.min(50,curQ+1); $("#qv").textContent=curQ; };
+$("#padd").onclick = ()=>{ if(!curT){ toast("Primero elige una talla"); return; } addBag(cur.id,curT,curQ); closeAll(); };
+
+/* ---------- Bolsa ---------- */
+const byId = id => DATA_ALL.find(d=>d.id===id);
+function addBag(id,t,n){ const it = bag.find(x=>x.id===id&&x.t===t); it? it.q+=n : bag.push({id,t,q:n}); saveBag(); toast(t===UNI?"Agregada a la bolsa":`Agregada · talla ${t}`); }
+function saveBag(){ store.set("bolsa",bag); updBag(); }
+const pieces = () => bag.reduce((a,b)=>a+b.q,0);
+function quote(n){
+  if(n>=6){ const tier = MAYOREO.find(m=>n>=m.min); return {total:n*tier.precio, per:tier.precio, may:true}; }
+  const tres = Math.floor(n/3), r = n%3; return {total: tres*PROMO[3] + (r?PROMO[r]:0), may:false};
+}
+let dealSel = 0;
+function paintDeals(){
+  const n = pieces();
+  const k = dealSel || (n===0?0:(n%3===0?3:n%3));
+  document.querySelectorAll('.deal').forEach(b=>b.classList.toggle('hot', +b.dataset.n===k));
+  const need = k ? Math.max(0, k-(n%3===0&&n?3:n%3)) : 0;
+  const txt = {1:'1 gorra por $400.',2:'2 gorras por $750: ahorras $50.',3:'3 gorras por $1,000: ahorras $200.'}[k];
+  $('#dealhint').textContent = !k ? 'Toca una opción para ver cómo aplica.' : txt + (n===0 ? ' Agrega las gorras que quieras, el precio se aplica solo.' : need>0 ? ` Te falta${need>1?"n":""} ${need} para esta promo.` : ` Tu bolsa: ${n} ${n===1?'gorra':'gorras'} · ${fmt(quote(n).total)}.`);
+}
+document.querySelectorAll('.deal').forEach(b=>b.onclick=()=>{ dealSel = +b.dataset.n; paintDeals(); });
+function updBag(){
+  dealSel = 0;
+  const n = pieces();
+  $("#bagn").textContent = n;
+  $("#fbar").hidden = n===0;
+  if(n){ const qt = quote(n); $("#fbtxt").textContent = `${n} ${n===1?"gorra":"gorras"} · ${fmt(qt.total)}${qt.may?"*":""}`; }
+  if($("#bag").classList.contains("on")) drawBag();
+  paintDeals();
+}
+function drawBag(){
+  const L = $("#lines"), S = $("#sumbox"); L.innerHTML = "";
+  if(!bag.length){ L.innerHTML = `<p class="note" style="font-size:14px;padding:20px 0">Tu bolsa está vacía. Agrega gorras desde el catálogo.</p>`; S.innerHTML=""; return; }
+  bag.forEach((it,i)=>{
+    const d = byId(it.id); const r = document.createElement("div"); r.className="line";
+    r.innerHTML = `<img src="${d.f[it.t]||foto(d)}" alt=""><div class="t"><b></b><span>${d.c} · ${d.e} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${enSirm(d,it.t)?"⚡ Inmediata SIRM":"📦 4 a 7 días"}</span></div>
+      <div class="q"><button aria-label="Menos">−</button><b>${it.q}</b><button aria-label="Más">+</button></div>`;
+    r.querySelector(".t b").textContent = d.n;
+    const [m,p] = r.querySelectorAll(".q button");
+    m.onclick = ()=>{ it.q--; if(it.q<1) bag.splice(i,1); saveBag(); drawBag(); };
+    p.onclick = ()=>{ it.q++; saveBag(); drawBag(); };
+    L.appendChild(r);
+  });
+  const n = pieces(), qt = quote(n), regular = n*PROMO[1];
+  let next = "", pct = 100;
+  if(n<3){ next = `Agrega ${3-n} más y pagas ${fmt(PROMO[3])} por 3.`; pct = n/3*100; }
+  else if(n<6){ next = `Te faltan ${6-n} para precio de mayoreo.`; pct = n/6*100; }
+  else { const up = [...MAYOREO].reverse().find(m=>m.min>n); if(up){ next = `Te faltan ${up.min-n} para bajar a ${fmt(up.precio)} por pieza.`; pct = n/up.min*100; } else next = "Tienes el mejor precio de mayoreo."; }
+  S.innerHTML = `<div class="sum">
+    <div class="r"><span>Piezas</span><span>${n}</span></div>
+    ${qt.may?`<div class="r"><span>Mayoreo · ${fmt(qt.per)} c/u</span><span>${fmt(qt.total)}</span></div>`:`<div class="r"><span>Precio normal</span><span>${fmt(regular)}</span></div>`}
+    ${!qt.may && regular>qt.total?`<div class="r save"><span>Ahorras con la promo</span><span>−${fmt(regular-qt.total)}</span></div>`:""}
+    <div class="r big"><span>Total${qt.may?" estimado":""}</span><span>${fmt(qt.total)}</span></div>
+    <div class="meter"><i style="width:${Math.min(100,pct)}%"></i></div>
+    <div class="hint">${next}</div>
+  </div>
+  <div class="snap">📸 <b>Último paso:</b> después de enviar el mensaje, manda en el mismo chat las capturas de las gorras que elegiste.</div>
+  <p class="note">${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás llegan en 4 a 7 días.</p>
+  <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
+  <button class="cta alt" id="empty">Vaciar bolsa</button>`;
+  $("#send").href = "https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg());
+  $("#empty").onclick = ()=>{ bag=[]; saveBag(); drawBag(); };
+}
+function msg(){
+  const n = pieces(), qt = quote(n);
+  const lines = bag.map(it=>`• ${it.q} × ${byId(it.id).c} ${byId(it.id).n} (${byId(it.id).e}) — ${it.t===UNI?"ajustable":"talla "+it.t} — ${enSirm(byId(it.id),it.t)?"entrega inmediata SIRM":"sobre pedido (4 a 7 días)"}`).join("\n");
+  return `Hola, quiero hacer este pedido:\n\n${lines}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(qt.total)}${qt.may?" (mayoreo, por confirmar)":""}\nPago: 50% para apartar y el resto contra entrega.\nTe mando las capturas de los modelos. ¿Están disponibles?`;
+}
+$("#bagbtn").onclick = ()=>{ drawBag(); openSheet("#bag"); };
+$("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
+
+let tt; function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),1400); }
+
+buildGate(); buildFilters();
+if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
+$("#pill").textContent = "Talla: " + (size || "todas");
+render(); updBag();
+</script>
+</body>
+</html>
