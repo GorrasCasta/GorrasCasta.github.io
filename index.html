@@ -236,7 +236,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <div class="snap">📸 <b>Toma captura de esta pantalla.</b> Al enviar tu pedido por WhatsApp, mándanos también las capturas de las gorras que elegiste.</div>
     <div class="snap" id="psirm" style="background:#0c2219;border-color:#1d5a40;color:#7fe0b4" hidden>⚡ <b>Entrega inmediata en SIRM</b> en talla <span id="psirmt"></span>. Entrega a domicilio en San Ignacio Río Muerto después de las 3 pm.</div>
     <div class="snap" id="pped" style="background:var(--panel2);border-color:var(--line);color:var(--mute)">📦 <b>Sobre pedido:</b> entrega de 4 a 7 días. Pagas 50% para apartar y el resto contra entrega.</div>
-    <div class="lbl">Tallas disponibles</div><div class="szs" id="pszs"></div>
+    <div class="lbl" id="plbl">Tallas disponibles</div><div class="szs" id="pszs"></div>
+    <div class="note" id="pley" hidden>⚡ = en stock, entrega inmediata en SIRM. Las demás tallas son sobre pedido (4 a 7 días).</div>
+    <button class="note" id="pmas" hidden style="color:var(--acc);font-weight:700;text-decoration:underline">¿Otra talla? Ver todas las tallas sobre pedido (4 a 7 días)</button>
     <div class="lbl">Cantidad</div>
     <div class="qty"><button id="qm" aria-label="Menos">−</button><b id="qv">1</b><button id="qp" aria-label="Más">+</button></div>
     <button class="cta" id="padd">Agregar a la bolsa</button>
@@ -411,11 +413,16 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeAll(); });
 
 function openPD(d){
   cur = d; curQ = 1;
-  const ts = isUni(d)?[UNI]:TALLAS.filter(t=>has(d,t));
-  const st0 = stTallas(d); curT = isUni(d) ? UNI : size && has(d,size) ? size : col==="sirm" && st0.length===1 ? st0[0] : (ts.length===1?ts[0]:null);
+  const st0 = stTallas(d), soloStock = col==="sirm" && !isUni(d);
+  const ts = isUni(d) ? [UNI] : soloStock ? TALLAS.filter(t=>st0.includes(t)) : TALLAS.filter(t=>has(d,t));
+  curT = isUni(d) ? UNI : soloStock ? (st0.includes(size) ? size : ts.length===1 ? ts[0] : null) : size && has(d,size) ? size : (ts.length===1?ts[0]:null);
+  $("#plbl").textContent = soloStock ? "Talla en stock (entrega inmediata)" : "Tallas disponibles";
+  $("#pley").hidden = soloStock || isUni(d) || !st0.length;
+  $("#pmas").hidden = !soloStock || TALLAS.filter(t=>has(d,t)).length<=ts.length;
+  $("#pmas").onclick = ()=>{ col="todo"; render(); openPD(d); };
   $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+d.e; $("#qv").textContent = 1;
   const z = $("#pszs"); z.innerHTML = "";
-  ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = t===UNI?"Única (ajustable)":t; b.setAttribute("aria-pressed",t===curT);
+  ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = t===UNI?"Única (ajustable)":(st0.includes(t)&&!soloStock?"⚡ "+t:t); b.setAttribute("aria-pressed",t===curT);
     b.onclick=()=>{ curT=t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); updPD(); }; z.appendChild(b); });
   const ss = STOCK_SIRM[d.c]; $("#psirm").hidden = !ss; if(ss) $("#psirmt").textContent = ss==="todas"||ss===UNI?(isUni(d)?"única":"todas sus tallas"):[].concat(ss).join(", ");
   updPD(); openSheet("#pd");
