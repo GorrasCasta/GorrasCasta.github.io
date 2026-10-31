@@ -496,8 +496,17 @@ function drawBag(){
 }
 function msg(){
   const n = pieces(), qt = quote(n);
-  const lines = bag.map(it=>`• ${it.q} × ${byId(it.id).c} ${byId(it.id).n} (${byId(it.id).e}) — ${it.t===UNI?"ajustable":"talla "+it.t} — ${enSirm(byId(it.id),it.t)?"entrega inmediata SIRM":"sobre pedido (4 a 7 días)"}`).join("\n");
-  return `Hola, quiero hacer este pedido:\n\n${lines}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(qt.total)}${qt.may?" (mayoreo, por confirmar)":""}\nPago: 50% para apartar y el resto contra entrega.\nTe mando las capturas de los modelos. ¿Están disponibles?`;
+  const ln = it => { const d = byId(it.id); return `• ${it.q} × ${d.c} ${d.n} · ${d.e.split(" ")[0]} · ${it.t===UNI?"ajustable":"talla "+it.t}`; };
+  const ya = bag.filter(it=>enSirm(byId(it.id),it.t)), ped = bag.filter(it=>!enSirm(byId(it.id),it.t));
+  let m = "Hola, quiero hacer este pedido en Gorras Casta:\n";
+  if(ya.length) m += `\n⚡ Entrega inmediata en SIRM:\n${ya.map(ln).join("\n")}\n`;
+  if(ped.length) m += `\n📦 Sobre pedido (4 a 7 días):\n${ped.map(ln).join("\n")}\n`;
+  m += `\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(qt.total)}${qt.may?" (mayoreo, por confirmar)":""}`;
+  m += `\nPago: aparto con 50% (${fmt(Math.round(qt.total/2))}) y el resto contra entrega.`;
+  if(ya.length) m += `\nEntrega a domicilio en SIRM (después de las 3 pm). Mi dirección: `;
+  m += `\n\nTe mando las capturas de los modelos.`;
+  m += ped.length ? `\n¿Me confirmas disponibilidad${ya.length?" de las de sobre pedido":""} y fecha de entrega?` : `\n¿Me confirmas la entrega?`;
+  return m;
 }
 $("#bagbtn").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 $("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
