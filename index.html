@@ -120,8 +120,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .grab{width:44px;height:5px;border-radius:9px;background:#444;margin:10px auto 4px}
 .sheet .in{padding:8px 18px 22px}
 .sheet .x{position:absolute;top:12px;right:14px;width:34px;height:34px;border-radius:50%;background:var(--panel2);font-size:18px}
-.pimg{border-radius:16px;overflow:hidden;background:#111;margin-top:8px;display:flex;justify-content:center}
-.pimg img{width:100%;height:auto;max-height:62vh;object-fit:contain;display:block}
+.pimg{border-radius:16px;overflow:hidden;background:#111;margin-top:8px;display:flex;justify-content:center;min-height:260px}
+.pimg img{width:100%;height:auto;max-height:62vh;object-fit:contain;display:block;transition:opacity .15s}
 .sheet h2{font-size:22px;line-height:1.1;margin:14px 0 4px}
 .lbl{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:16px 0 8px}
 .szs{display:flex;flex-wrap:wrap;gap:8px}
@@ -411,7 +411,7 @@ function toggleFav(id){ favs.has(id)?favs.delete(id):favs.add(id); store.set("fa
 
 /* ---------- Hojas ---------- */
 function openSheet(id){ $("#scrim").classList.add("on"); $(id).classList.add("on"); }
-function closeAll(){ $("#scrim").classList.remove("on"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("on")); }
+function closeAll(){ pimgTok++;  $("#scrim").classList.remove("on"); document.querySelectorAll(".sheet").forEach(s=>s.classList.remove("on")); }
 $("#scrim").onclick = closeAll;
 document.querySelectorAll("[data-close]").forEach(b=>b.onclick=closeAll);
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeAll(); });
@@ -432,8 +432,15 @@ function openPD(d){
   const ss = STOCK_SIRM[d.c]; $("#psirm").hidden = !ss; if(ss) $("#psirmt").textContent = ss==="todas"||ss===UNI?(isUni(d)?"única":"todas sus tallas"):[].concat(ss).join(", ");
   updPD(); openSheet("#pd");
 }
-$("#pimg").onerror = function(){ if(cur && !this.src.includes("/t/")) this.src = th(cur.f[curT]||foto(cur)); };
-function updPD(){ $("#pped").hidden = !!(curT && enSirm(cur,curT)); $("#pimg").src = th(cur.f[curT] || foto(cur)); const big = cur.f[curT] || foto(cur); const pre = new Image(); pre.onload = ()=>{ if($("#pimg").src.endsWith(th(big))) $("#pimg").src = big; }; pre.src = big; $("#pimg").alt = cur.n; $("#padd").textContent = curT ? "Agregar a la bolsa" : "Elige una talla"; }
+let pimgTok = 0;
+function setPimg(){
+  const tok = ++pimgTok, img = $("#pimg"), big = cur.f[curT] || foto(cur), small = th(big);
+  img.style.opacity = 0; img.removeAttribute("src"); img.alt = cur.n;
+  const show = src => { if(tok!==pimgTok) return; img.src = src; img.style.opacity = 1; };
+  const s = new Image(); s.onload = ()=>{ if(!img.getAttribute("src")) show(small); }; s.src = small;
+  const g = new Image(); g.onload = ()=>show(big); g.onerror = ()=>show(small); g.src = big;
+}
+function updPD(){ $("#pped").hidden = !!(curT && enSirm(cur,curT)); setPimg(); $("#padd").textContent = curT ? "Agregar a la bolsa" : "Elige una talla"; }
 $("#qm").onclick = ()=>{ curQ=Math.max(1,curQ-1); $("#qv").textContent=curQ; };
 $("#qp").onclick = ()=>{ curQ=Math.min(50,curQ+1); $("#qv").textContent=curQ; };
 $("#padd").onclick = ()=>{ if(!curT){ toast("Primero elige una talla"); return; } addBag(cur.id,curT,curQ); closeAll(); };
