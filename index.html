@@ -152,6 +152,12 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .snap{background:#2a1a0c;border:1px solid #5a3410;color:var(--acc2);border-radius:12px;padding:11px 13px;font-size:13px;line-height:1.45;margin-top:14px}
 .snap b{color:var(--ink)}
 .note{font-size:12px;color:var(--mute);margin-top:10px;line-height:1.45}
+.vend{margin-top:14px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:11px 13px}
+.vend label{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px}
+.vend input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;color:var(--ink);font:inherit;font-size:18px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;padding:10px 12px;outline:none}
+.vend input:focus{border-color:var(--acc)}
+.vend .st{font-size:12px;margin-top:6px;min-height:16px;font-weight:600}
+.vend .st.ok{color:var(--ok)}.vend .st.bad{color:#ff6b6b}
 
 /* Info */
 .info{border-top:1px solid var(--line);padding:26px 0 120px;display:grid;gap:12px}
@@ -272,6 +278,25 @@ const $ = s => document.querySelector(s);
 const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 const fmt = n => "$" + n.toLocaleString("es-MX");
 const store = { get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}}, set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}} };
+
+/* ---------- Código de vendedor (cambia cada lunes, hora de Sonora) ---------- */
+const VALF = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const semana = (ms=Date.now()) => Math.floor((ms/864e5 - 7/24 - 4)/7);
+const finSemana = w => new Date((w*7+4+6)*864e5).toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long",timeZone:"UTC"});
+const limpiaCod = c => (c||"").toUpperCase().replace(/[^A-Z0-9]/g,"");
+const estadoCod = c => { c = limpiaCod(c); if(!c) return "vacio"; if(c.length!==5 || [...c].some(x=>!VALF.includes(x))) return "mal"; return c[0]===VALF[semana()%VALF.length] ? "ok" : "vencido"; };
+let vend = store.get("vend", null);
+if(vend && (vend.w!==semana() || estadoCod(vend.c)!=="ok")) { vend = null; store.set("vend", null); }
+let vendAviso = "";
+try{
+  const pv = new URLSearchParams(location.search).get("v");
+  if(pv){ const e = estadoCod(pv);
+    if(e==="ok"){ vend = {c:limpiaCod(pv), w:semana()}; store.set("vend", vend); vendAviso = "Código de vendedor "+vend.c+" aplicado ✓"; }
+    else if(e==="vencido") vendAviso = "Ese código de vendedor ya no está vigente. Pide el de esta semana.";
+    else vendAviso = "Código de vendedor no válido.";
+    history.replaceState(null, "", location.pathname + location.hash);
+  }
+}catch(e){}
 
 DATA_ALL.forEach((d,i) => { d.c = "#"+String(i+1).padStart(3,"0"); });
 const DATA = DATA_ALL.filter(d=>!OCULTOS.includes(d.c));
@@ -501,9 +526,15 @@ function drawBag(){
   </div>
   <div class="snap">📸 <b>Último paso:</b> después de enviar el mensaje, manda en el mismo chat las capturas de las gorras que elegiste.</div>
   <p class="note">${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás llegan en 4 a 7 días.</p>
+  <div class="vend"><label for="vcod">Código de vendedor (opcional)</label><input id="vcod" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="Ej. K7MPX" value="${vend?vend.c:""}"><div class="st" id="vst"></div></div>
   <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
   <button class="cta alt" id="empty">Vaciar bolsa</button>`;
-  $("#send").href = "https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg());
+  const setSend = ()=>{ $("#send").href = "https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg()); };
+  const vchk = ()=>{ const v = $("#vcod").value, e = estadoCod(v), st = $("#vst");
+    st.className = "st " + (e==="ok"?"ok":e==="vacio"?"":"bad");
+    st.textContent = {ok:"✓ Código válido hasta el "+finSemana(semana()), vacio:"Si un vendedor te atendió, escribe su código.", mal:"Revisa el código: son 5 letras o números.", vencido:"Este código no está vigente. Pide a tu vendedor el de esta semana."}[e];
+    vend = e==="ok" ? {c:limpiaCod(v), w:semana()} : null; store.set("vend", vend); setSend(); };
+  $("#vcod").oninput = vchk; vchk();
   $("#empty").onclick = ()=>{ bag=[]; saveBag(); drawBag(); };
 }
 function msg(){
@@ -516,6 +547,7 @@ function msg(){
   m += `\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(qt.total)}${qt.may?" (mayoreo, por confirmar)":""}`;
   m += `\nPago: aparto con 50% (${fmt(Math.round(qt.total/2))}) y el resto contra entrega.`;
   if(ya.length) m += `\nEntrega a domicilio en SIRM (después de las 3 pm). Mi dirección: `;
+  if(vend && estadoCod(vend.c)==="ok") m += `\nCódigo de vendedor: ${vend.c}`;
   m += `\n\nTe mando las capturas de los modelos.`;
   m += ped.length ? `\n¿Me confirmas disponibilidad${ya.length?" de las de sobre pedido":""} y fecha de entrega?` : `\n¿Me confirmas la entrega?`;
   return m;
@@ -523,12 +555,13 @@ function msg(){
 $("#bagbtn").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 $("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 
-let tt; function toast(t){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),1400); }
+let tt; function toast(t,ms=1400){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),ms); }
 
 buildGate(); buildFilters();
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
+if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
 const CN = "gc-v2";
