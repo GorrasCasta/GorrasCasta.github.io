@@ -85,7 +85,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 @media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative}
 .card .ph{aspect-ratio:1/1;background:#111;cursor:pointer;position:relative}
-.card img{width:100%;height:100%;object-fit:contain;display:block;background:#111}
+.card img{width:100%;height:100%;object-fit:cover;display:block}
 .card .tx{padding:10px 10px 12px;display:flex;flex-direction:column;gap:8px;flex:1}
 .card h3{font-size:13px;font-weight:600;line-height:1.3;cursor:pointer}
 .card .row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:6px}
@@ -564,7 +564,7 @@ render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v3";
+const CN = "gc-v4";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
