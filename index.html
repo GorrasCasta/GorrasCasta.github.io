@@ -229,6 +229,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> el resto del catálogo llega en 4 a 7 días.</p></div>
     <div><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
     <div><h4>Planchado y hormado</h4><p>Próximamente. En mayoreo se cotiza aparte si lo pides.</p></div>
+    <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
   </section>
 </main>
 
@@ -551,7 +552,8 @@ function drawBag(){
   <p class="note">${c.nE?"Deportiva y Nuevo Imperio $570 c/u, Bélicas $650 c/u: no entran en promo ni mayoreo. ":""}${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás llegan en 4 a 7 días.</p>
   <div class="vend"><label for="vcod">Código de vendedor (opcional)</label><input id="vcod" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="Ej. K7MPX" value="${vend?vend.c:""}"><div class="st" id="vst"></div></div>
   <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
-  <button class="cta alt" id="empty">Vaciar bolsa</button>`;
+  <button class="cta alt" id="empty">Vaciar bolsa</button>
+  <p class="note">Gorras Casta (Axel Michel Pineda Castañeda, San Ignacio Río Muerto, Sonora) usa tu nombre, WhatsApp y domicilio para confirmar, cobrar y entregar tu pedido. Si lo aceptas, también para mandarte modelos nuevos y promociones; puedes decir que no en cualquier momento escribiendo "No quiero promociones". No vendemos tus datos. Al enviar tu pedido aceptas los <a href="privacidad.html#terminos" target="_blank" style="color:var(--acc)">términos de venta</a>. Consulta el <a href="privacidad.html#privacidad" target="_blank" style="color:var(--acc)">aviso de privacidad completo</a> y cómo ejercer tus derechos ARCO.</p>`;
   const setSend = ()=>{ $("#send").href = "https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(msg()); };
   const vchk = ()=>{ const v = $("#vcod").value, e = estadoCod(v), st = $("#vst");
     st.className = "st " + (e==="ok"?"ok":e==="vacio"?"":"bad");
@@ -589,7 +591,7 @@ render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v15";
+const CN = "gc-v16";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
