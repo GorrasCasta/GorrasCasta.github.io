@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gorrascasta.github.io/">
 <meta property="og:title" content="GORRAS CASTA · Catálogo New Era AA">
-<meta property="og:description" content="Elige tu talla y arma tu pedido. 1 x $400 · 2 x $750 · 3 x $1,000. Entrega inmediata en SIRM.">
+<meta property="og:description" content="Elige tu talla y arma tu pedido por WhatsApp. New Era AA, Deportiva y Nuevo Imperio. Entrega inmediata en SIRM.">
 <meta property="og:image" content="https://gorrascasta.github.io/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -45,6 +45,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .deal .q{font-size:12px;color:var(--mute);font-weight:600}
 .deal .p{font-family:"Archivo Black";font-size:22px;margin-top:2px}
 .deal{color:var(--ink);width:100%}
+.noprom{margin-top:18px;max-width:520px}
 .deal.hot{border-color:var(--acc);background:#22160c}
 .deal.hot .p{color:var(--acc)}
 .dealhint{font-size:13px;color:var(--acc2);font-weight:600;margin-top:10px;min-height:18px}
@@ -200,14 +201,15 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   <section class="hero">
     <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
     <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp. Mientras más llevas, menos pagas por pieza.</p>
-    <div class="deals">
+    <div class="noprom" id="noprom" hidden></div>
+    <div class="deals" id="deals">
       <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$400</div></button>
       <button class="deal" data-n="2"><div class="q">2 gorras</div><div class="p">$750</div></button>
       <button class="deal" data-n="3"><div class="q">3 gorras</div><div class="p">$1,000</div></button>
     </div>
     <div class="dealhint" id="dealhint">Toca una opción para ver cómo aplica.</div>
-    <div class="fine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Válida hasta el 2 de noviembre de 2026. Desde 6 piezas aplica precio de mayoreo.</div>
-    <div class="fine" style="color:var(--acc2)">Deportiva y Nuevo Imperio (snapback ajustable): <b>$570 c/u</b>, no entran en la promo.</div>
+    <div class="fine" id="promofine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Válida hasta el 2 de noviembre de 2026. Desde 6 piezas aplica precio de mayoreo.</div>
+    <div class="fine" id="espfine" style="color:var(--acc2)">Deportiva y Nuevo Imperio (snapback ajustable): <b>$570 c/u</b>, no entran en la promo.</div>
   </section>
 
   <button class="sirmbtn" id="sirmbtn" hidden><b>⚡ Entrega inmediata en SIRM</b><span id="sirmtxt"></span></button>
@@ -265,7 +267,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 <script>
 /* ===== Ajustes de la tienda (cambia aquí) ===== */
 const WHATSAPP = "526624248769";          // número con lada, ej. "5216441234567"
-const PROMO = {1:400, 2:750, 3:1000};
+const PROMO_HASTA = Date.UTC(2026,10,3,7,0);   // promo válida hasta el 2 nov 2026 23:59 hora Sonora
+const PROMO_ON = Date.now() < PROMO_HASTA;
+const PROMO = PROMO_ON ? {1:400, 2:750, 3:1000} : {1:400, 2:800, 3:1200};   // sin promo: $400 c/u
 const PRECIO_ESP = {"Deportiva snapback":570, "Nuevo Imperio snapback":570};   // estilos con precio fijo, sin promo ni mayoreo
 const MAYOREO = [ {min:24, precio:270}, {min:12, precio:295}, {min:6, precio:320} ]; // por pieza, se confirma por WhatsApp
 const AGOTADOS = {};          // ej. {"#023":["7 3/8"], "#041":"todas"}
@@ -528,6 +532,7 @@ function drawBag(){
   const n = pieces(), c = cotiza(), nN = c.nN, qt = c.ne, regular = nN*PROMO[1];
   let next = "", pct = 100;
   if(!nN){ next = ""; }
+  else if(!PROMO_ON && nN<6){ next = `Te faltan ${6-nN} New Era AA para precio de mayoreo.`; pct = nN/6*100; }
   else if(nN<3){ next = `Agrega ${3-nN} New Era AA más y pagas ${fmt(PROMO[3])} por 3.`; pct = nN/3*100; }
   else if(nN<6){ next = `Te faltan ${6-nN} New Era AA para precio de mayoreo.`; pct = nN/6*100; }
   else { const up = [...MAYOREO].reverse().find(m=>m.min>nN); if(up){ next = `Te faltan ${up.min-nN} para bajar a ${fmt(up.precio)} por pieza.`; pct = nN/up.min*100; } else next = "Tienes el mejor precio de mayoreo."; }
@@ -575,13 +580,15 @@ $("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 let tt; function toast(t,ms=1400){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),ms); }
 
 buildGate(); buildFilters();
+if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#espfine").innerHTML = "Deportiva y Nuevo Imperio (snapback ajustable): <b>$570 c/u</b>."; const np = $("#noprom"); np.hidden = false;
+  np.innerHTML = `<div class="deal" style="text-align:left;padding:14px"><div class="q">New Era AA · 59FIFTY, 9FIFTY y 9FORTY</div><div class="p">$400 <span style="font-size:14px;color:var(--mute)">c/u</span></div><div class="q" style="margin-top:4px">Desde 6 piezas aplica precio de mayoreo.</div></div>`; }
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v12";
+const CN = "gc-v13";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
