@@ -183,6 +183,13 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 /* Floating bag bar (mobile) */
 .fbar{position:fixed;left:12px;right:12px;bottom:12px;z-index:30;background:var(--acc);color:#111;border-radius:16px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.5);max-width:560px;margin:0 auto}
 .fbar[hidden]{display:none}
+.wa{display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#06210f;font-weight:800;border-radius:999px;padding:10px 16px;text-decoration:none;font-size:15px;margin-top:14px}
+.wa small{font-weight:700;opacity:.85;font-size:12px}
+.waend{grid-column:1/-1;text-align:center;background:#0f2a1a!important;border-color:#1f5a35!important}
+.waend h4{font-size:16px!important}.waend .wa{font-size:17px;padding:12px 20px}
+.wafab{position:fixed;right:14px;bottom:16px;z-index:29;display:flex;align-items:center;gap:8px;background:#25D366;color:#06210f;font-weight:800;font-size:14px;border-radius:999px;padding:12px 16px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.45);transition:bottom .2s,opacity .2s}
+.wafab.up{bottom:84px}.wafab.off{opacity:0;pointer-events:none}
+
 .toast{position:fixed;left:50%;top:70px;transform:translateX(-50%);background:var(--ink);color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.on{opacity:1}
 </style>
@@ -214,6 +221,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   <section class="hero">
     <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
     <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp.</p>
+    <a class="wa" data-wa href="https://wa.me/526624248769">💬 Pedidos y dudas: 662 424 8769</a>
     <div class="noprom" id="noprom" hidden></div>
     <div class="deals" id="deals">
       <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$400</div></button>
@@ -244,9 +252,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <div><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
     <div><h4>Planchado y hormado</h4><p>Próximamente.</p></div>
     <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
+    <div class="waend"><h4>¿Listo para pedir o tienes dudas?</h4><p>Escríbenos por WhatsApp, te respondemos rápido.</p><a class="wa" data-wa href="https://wa.me/526624248769">💬 662 424 8769</a></div>
   </section>
 </main>
 
+<a class="wafab off" id="wafab" data-wa href="https://wa.me/526624248769" aria-label="WhatsApp 662 424 8769">💬 662 424 8769</a>
 <button class="fbar" id="fbar" hidden><span id="fbtxt"></span><span>Ver bolsa →</span></button>
 <div class="toast" id="toast"></div>
 <div class="scrim" id="scrim"></div>
@@ -595,6 +605,11 @@ function msg(){
 }
 $("#bagbtn").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 $("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
+/* ---------- WhatsApp visible ---------- */
+document.querySelectorAll("[data-wa]").forEach(a=>{ a.href="https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent("Hola, vi el catálogo de Gorras Casta y tengo una pregunta."); a.target="_blank"; a.rel="noopener"; });
+const waFab=()=>{ const f=$("#wafab"); if(!f) return; const vis=[...document.querySelectorAll(".wa")].some(e=>{const r=e.getBoundingClientRect(); return r.bottom>0 && r.top<innerHeight;}); f.classList.toggle("off", vis); f.classList.toggle("up", !$("#fbar").hidden); };
+addEventListener("scroll", waFab, {passive:true}); setInterval(waFab, 800); waFab();
+
 
 let tt; function toast(t,ms=1400){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),ms); }
 
@@ -642,7 +657,7 @@ render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v22";
+const CN = "gc-v23";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
