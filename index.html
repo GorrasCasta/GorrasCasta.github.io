@@ -225,10 +225,10 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
   <section class="info">
     <div><h4>Cómo pedir</h4><p>1. Toca <b>+ Agregar</b> en cada gorra y <b>toma captura</b> de las que elijas. 2. Revisa tu bolsa y presiona <b>Enviar por WhatsApp</b>. 3. Manda tus capturas en el mismo chat. Te confirmamos existencia, total y entrega.</p></div>
-    <div><h4>Mayoreo</h4><p>Desde 6 piezas, sumando cualquier modelo y talla. El precio por pieza baja en 6, 12 y 24 piezas y se confirma por WhatsApp.</p></div>
-    <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> el resto del catálogo llega en 4 a 7 días.</p></div>
+    <div><h4>Mayoreo</h4><p>Solo New Era AA (59FIFTY, 9FIFTY y 9FORTY), sumando cualquier modelo y talla: <b>6 a 9 pz $270 c/u · 10 a 19 pz $240 c/u · 20 pz o más $200 c/u.</b> Se confirma por WhatsApp. Deportiva, Nuevo Imperio y Bélicas no entran en mayoreo ni en promociones.</p></div>
+    <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> hacemos pedido al proveedor cada lunes; tu gorra llega de 4 a 7 días después del lunes de pedido.</p></div>
     <div><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
-    <div><h4>Planchado y hormado</h4><p>Próximamente. En mayoreo se cotiza aparte si lo pides.</p></div>
+    <div><h4>Planchado y hormado</h4><p>Próximamente.</p></div>
     <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
   </section>
 </main>
@@ -245,10 +245,10 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <h2 id="pname"></h2><div class="code" id="pcode"></div>
     <div class="snap">📸 <b>Toma captura de esta pantalla.</b> Al enviar tu pedido por WhatsApp, mándanos también las capturas de las gorras que elegiste.</div>
     <div class="snap" id="psirm" style="background:#0c2219;border-color:#1d5a40;color:#7fe0b4" hidden>⚡ <b>Entrega inmediata en SIRM</b> en talla <span id="psirmt"></span>. Entrega a domicilio en San Ignacio Río Muerto después de las 3 pm.</div>
-    <div class="snap" id="pped" style="background:var(--panel2);border-color:var(--line);color:var(--mute)">📦 <b>Sobre pedido:</b> entrega de 4 a 7 días. Pagas 50% para apartar y el resto contra entrega.</div>
+    <div class="snap" id="pped" style="background:var(--panel2);border-color:var(--line);color:var(--mute)">📦 <b>Sobre pedido:</b> se pide al proveedor el lunes y llega de 4 a 7 días después. Pagas 50% para apartar y el resto contra entrega.</div>
     <div class="lbl" id="plbl">Tallas disponibles</div><div class="szs" id="pszs"></div>
-    <div class="note" id="pley" hidden>⚡ = en stock, entrega inmediata en SIRM. Las demás tallas son sobre pedido (4 a 7 días).</div>
-    <button class="note" id="pmas" hidden style="color:var(--acc);font-weight:700;text-decoration:underline">¿Otra talla? Ver todas las tallas sobre pedido (4 a 7 días)</button>
+    <div class="note" id="pley" hidden>⚡ = en stock, entrega inmediata en SIRM. Las demás tallas son sobre pedido (pedido del lunes, 4 a 7 días después).</div>
+    <button class="note" id="pmas" hidden style="color:var(--acc);font-weight:700;text-decoration:underline">¿Otra talla? Ver todas las tallas sobre pedido</button>
     <div class="lbl">Cantidad</div>
     <div class="qty"><button id="qm" aria-label="Menos">−</button><b id="qv">1</b><button id="qp" aria-label="Más">+</button></div>
     <button class="cta" id="padd">Agregar a la bolsa</button>
@@ -272,7 +272,7 @@ const PROMO_HASTA = Date.UTC(2026,10,3,7,0);   // promo válida hasta el 2 nov 2
 const PROMO_ON = Date.now() < PROMO_HASTA;
 const PROMO = PROMO_ON ? {1:400, 2:750, 3:1000} : {1:400, 2:800, 3:1200};   // sin promo: $400 c/u
 const PRECIO_ESP = {"Deportiva snapback":570, "Nuevo Imperio snapback":570, "Bélicas snapback":650};   // estilos con precio fijo, sin promo ni mayoreo
-const MAYOREO = [ {min:24, precio:270}, {min:12, precio:295}, {min:6, precio:320} ]; // por pieza, se confirma por WhatsApp
+const MAYOREO = [ {min:20, precio:200}, {min:10, precio:240}, {min:6, precio:270} ]; // por pieza, se confirma por WhatsApp
 const AGOTADOS = {};          // ej. {"#023":["7 3/8"], "#041":"todas"}
 const OCULTOS = ["#102","#239"];           // modelos que no se muestran, ej. ["#010"]
 const STOCK_SIRM = {"#001":["7","7 1/2"],"#014":["7"],"#077":["7","7 5/8"],"#002":["7","7 3/8"],"#110":["7","7 1/8"],"#139":["7"],"#009":["7 1/8"],"#018":["7 1/8"],"#072":["7 1/8","7 1/4"],"#140":["7 1/8"],"#075":["7 1/4"],"#003":["7 1/4","7 1/2"],"#101":["7 1/4","7 3/8"],"#007":["7 1/4","7 3/8"],"#021":["7 1/2"],"#042":["7 1/2"],"#013":["7 1/2","7 3/8"],"#098":["7 1/2"],"#006":["7 3/8"],"#054":["7 3/8"],"#078":["7 5/8"],"#015":["7 5/8"],"#087":["7 5/8"],"#008":["7 5/8"],"#027":["7 5/8"],"#124":"Única","#134":"Única","#138":"Única","#141":"Única"};        // entrega inmediata en SIRM, ej. {"#023":["7 1/4","7 3/8"], "#120":"Única"}
@@ -523,7 +523,7 @@ function drawBag(){
   if(!bag.length){ L.innerHTML = `<p class="note" style="font-size:14px;padding:20px 0">Tu bolsa está vacía. Agrega gorras desde el catálogo.</p>`; S.innerHTML=""; return; }
   bag.forEach((it,i)=>{
     const d = byId(it.id); const r = document.createElement("div"); r.className="line";
-    r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${esp(d)?corto(d.e)+" · "+fmt(esp(d)):d.e} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${enSirm(d,it.t)?"⚡ Inmediata SIRM":"📦 4 a 7 días"}</span></div>
+    r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${esp(d)?corto(d.e)+" · "+fmt(esp(d)):d.e} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${enSirm(d,it.t)?"⚡ Inmediata SIRM":"📦 Sobre pedido"}</span></div>
       <div class="q"><button aria-label="Menos">−</button><b>${it.q}</b><button aria-label="Más">+</button></div>`;
     r.querySelector(".t b").textContent = d.n;
     const [m,p] = r.querySelectorAll(".q button");
@@ -550,7 +550,7 @@ function drawBag(){
     ${nN?`<div class="meter"><i style="width:${Math.min(100,pct)}%"></i></div><div class="hint">${next}</div>`:""}
   </div>
   <div class="snap">📸 <b>Último paso:</b> después de enviar el mensaje, manda en el mismo chat las capturas de las gorras que elegiste.</div>
-  <p class="note">${c.nE?"Deportiva y Nuevo Imperio $570 c/u, Bélicas $650 c/u: no entran en promo ni mayoreo. ":""}${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás llegan en 4 a 7 días.</p>
+  <p class="note">${c.nE?"Deportiva y Nuevo Imperio $570 c/u, Bélicas $650 c/u: no entran en promo ni mayoreo. ":""}${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás se piden al proveedor el lunes y llegan de 4 a 7 días después.</p>
   <div class="vend"><label for="vcod">Código de vendedor (opcional)</label><input id="vcod" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="Ej. K7MPX" value="${vend?vend.c:""}"><div class="st" id="vst"></div></div>
   <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
   <button class="cta alt" id="empty">Vaciar bolsa</button>
@@ -569,7 +569,7 @@ function msg(){
   const ya = bag.filter(it=>enSirm(byId(it.id),it.t)), ped = bag.filter(it=>!enSirm(byId(it.id),it.t));
   let m = "Hola, quiero hacer este pedido en Gorras Casta:\n";
   if(ya.length) m += `\n⚡ Entrega inmediata en SIRM:\n${ya.map(ln).join("\n")}\n`;
-  if(ped.length) m += `\n📦 Sobre pedido (4 a 7 días):\n${ped.map(ln).join("\n")}\n`;
+  if(ped.length) m += `\n📦 Sobre pedido (pedido del lunes, 4 a 7 días después):\n${ped.map(ln).join("\n")}\n`;
   m += `\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(qt.total)}${qt.may?" (mayoreo, por confirmar)":""}`;
   m += `\nPago: aparto con 50% (${fmt(Math.round(qt.total/2))}) y el resto contra entrega.`;
   if(ya.length) m += `\nEntrega a domicilio en SIRM (después de las 3 pm). Mi dirección: `;
@@ -585,14 +585,14 @@ let tt; function toast(t,ms=1400){ const e=$("#toast"); e.textContent=t; e.class
 
 buildGate(); buildFilters();
 if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#espfine").innerHTML = "Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. Snapback ajustable."; const np = $("#noprom"); np.hidden = false;
-  np.innerHTML = `<div class="deal" style="text-align:left;padding:14px"><div class="q">New Era AA · 59FIFTY, 9FIFTY y 9FORTY</div><div class="p">$400 <span style="font-size:14px;color:var(--mute)">c/u</span></div><div class="q" style="margin-top:4px">Desde 6 piezas aplica precio de mayoreo.</div></div>`; }
+  np.innerHTML = `<div class="deal" style="text-align:left;padding:14px"><div class="q">New Era AA · 59FIFTY, 9FIFTY y 9FORTY</div><div class="p">$400 <span style="font-size:14px;color:var(--mute)">c/u</span></div><div class="q" style="margin-top:4px">Mayoreo: 6–9 pz $270 · 10–19 pz $240 · 20+ pz $200 c/u</div></div>`; }
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v18";
+const CN = "gc-v19";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
