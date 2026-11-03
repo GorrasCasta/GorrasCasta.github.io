@@ -390,7 +390,8 @@ const enSirm = (d,t) => { const s = STOCK_SIRM[d.c]; if(!s) return false; if(s==
 const ALLT = [...TALLAS, UNI];
 const isUni = d => !!d.f[UNI];
 const has = (d,t) => isUni(d) ? (!t || t===UNI) && !d.out.has(UNI) : (!!d.f[t] || enSirmT(d,t)) && !d.out.has(t);
-const base = () => DATA.filter(d=> (estilo==="todos"||d.e===estilo) && (size ? has(d,size) : ALLT.some(t=>has(d,t))));
+const sizeOn = () => !!size && (estilo==="todos"||estilo==="59FIFTY cerrada");
+const base = () => DATA.filter(d=> (estilo==="todos"||d.e===estilo) && (sizeOn() ? has(d,size) : ALLT.some(t=>has(d,t))));
 const stockAll = () => DATA.filter(d=> STOCK_SIRM[d.c] && (estilo==="todos"||d.e===estilo));
 const stTallas = d => { const s = STOCK_SIRM[d.c]; return !s ? [] : Array.isArray(s) ? s : (isUni(d)?[UNI]:TALLAS.filter(t=>d.f[t])); };
 const sq = (d,t) => d.f[t] && !(d.w||[]).includes(t);
@@ -410,7 +411,7 @@ function render(){
   document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
   const ct = COLS.find(c=>c.k===col).t;
   list = pool.filter(d => ct(d) && (!color || d.id.includes(color)) && words.every(w=>d.s.includes(w)));
-  $("#count").textContent = `${list.length} ${list.length===1?"modelo":"modelos"}` + (col==="sirm"?" en stock · todas las tallas":size?` en talla ${size}`:"");
+  $("#count").textContent = `${list.length} ${list.length===1?"modelo":"modelos"}` + (col==="sirm"?" en stock · todas las tallas":sizeOn()?` en talla ${size}`:"");
   $("#clear").hidden = (col==="todo" && !color && !q && estilo==="todos");
   const g = $("#grid"); g.innerHTML = "";
   if(!list.length){ g.innerHTML = `<div class="empty">${col==="fav"?"Aún no marcas favoritas. Toca ♡ en las gorras que te gusten.":"No hay modelos con esos filtros."}</div>`; return; }
@@ -591,8 +592,8 @@ render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v17";
-const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
+const CN = "gc-v18";
+const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
   const b=$("#offbtn"), L=offList(); let ok=0; b.disabled=true;
