@@ -8,7 +8,7 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://gorrascasta.github.io/">
 <meta property="og:title" content="GORRAS CASTA · Catálogo New Era AA">
-<meta property="og:description" content="Elige tu talla y arma tu pedido por WhatsApp. New Era AA, Deportiva, Nuevo Imperio y Bélicas. Entrega inmediata en SIRM.">
+<meta property="og:description" content="New Era AA $400 c/u. Entre más llevas, menos pagas: 6+ $270 · 10+ $240 · 20+ $200. Deportiva, Nuevo Imperio y Bélicas. Pide por WhatsApp.">
 <meta property="og:image" content="https://gorrascasta.github.io/og.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
@@ -46,6 +46,19 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .deal .p{font-family:"Archivo Black";font-size:22px;margin-top:2px}
 .deal{color:var(--ink);width:100%}
 .noprom{margin-top:18px;max-width:520px}
+.esct{font-family:"Archivo Black";font-size:19px;text-transform:uppercase;line-height:1.05}
+.escs{font-size:12px;color:var(--mute);font-weight:600;margin-top:3px}
+.esc{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px;align-items:end}
+.esc button{background:var(--panel);border:1px solid var(--line);border-radius:12px 12px 6px 6px;padding:8px 4px;text-align:center;color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.esc button:nth-child(1){min-height:62px}.esc button:nth-child(2){min-height:76px;background:#1d1610}.esc button:nth-child(3){min-height:90px;background:#26190c}.esc button:nth-child(4){min-height:108px;background:#33200a;border-color:#7a4310}
+.esc .q{font-size:11px;color:var(--mute);font-weight:700}
+.esc .p{font-family:"Archivo Black";font-size:20px;line-height:1}
+.esc .t{font-size:10px;font-weight:800;color:var(--acc);text-transform:uppercase;letter-spacing:.03em;line-height:1.1}
+.esc button.hot{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
+.esc button.hot .p{color:var(--acc)}
+.eschint{font-size:14px;color:var(--acc2);font-weight:700;margin-top:10px;min-height:20px}
+.cierre{margin-top:12px;max-width:520px;background:#14202c;border:1px solid #27445e;border-radius:12px;padding:10px 12px;font-size:13px;color:#a9cbe8;line-height:1.4}
+.cierre b{color:#e3f0fb}
 .deal.hot{border-color:var(--acc);background:#22160c}
 .deal.hot .p{color:var(--acc)}
 .dealhint{font-size:13px;color:var(--acc2);font-weight:600;margin-top:10px;min-height:18px}
@@ -200,7 +213,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 <main class="wrap">
   <section class="hero">
     <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
-    <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp. Mientras más llevas, menos pagas por pieza.</p>
+    <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp.</p>
     <div class="noprom" id="noprom" hidden></div>
     <div class="deals" id="deals">
       <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$400</div></button>
@@ -209,6 +222,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     </div>
     <div class="dealhint" id="dealhint">Toca una opción para ver cómo aplica.</div>
     <div class="fine" id="promofine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Válida hasta el 2 de noviembre de 2026. Desde 6 piezas aplica precio de mayoreo.</div>
+    <div class="cierre" id="cierre"></div>
     <div class="fine" id="espfine" style="color:var(--acc2)">Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. Snapback ajustable, no entran en la promo.</div>
   </section>
 
@@ -268,7 +282,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 <script>
 /* ===== Ajustes de la tienda (cambia aquí) ===== */
 const WHATSAPP = "526624248769";          // número con lada, ej. "5216441234567"
-const PROMO_HASTA = Date.UTC(2026,10,3,7,0);   // promo válida hasta el 2 nov 2026 23:59 hora Sonora
+const PROMO_HASTA = Date.UTC(2026,10,3,4,0);   // promo terminó el 2 nov 2026 21:00 hora Sonora. Para una promo nueva, pon aquí su fecha de fin
+const CIERRE = {dia:1, hora:12};   // cierre del pedido al proveedor: lunes (1) a las 12:00 hora Sonora
 const PROMO_ON = Date.now() < PROMO_HASTA;
 const PROMO = PROMO_ON ? {1:400, 2:750, 3:1000} : {1:400, 2:800, 3:1200};   // sin promo: $400 c/u
 const PRECIO_ESP = {"Deportiva snapback":570, "Nuevo Imperio snapback":570, "Bélicas snapback":650};   // estilos con precio fijo, sin promo ni mayoreo
@@ -510,7 +525,7 @@ function paintDeals(){
 }
 document.querySelectorAll('.deal').forEach(b=>b.onclick=()=>{ dealSel = +b.dataset.n; paintDeals(); });
 function updBag(){
-  dealSel = 0;
+  dealSel = 0; if(typeof escHot==="function") escHot();
   const n = pieces();
   $("#bagn").textContent = n;
   $("#fbar").hidden = n===0;
@@ -583,16 +598,51 @@ $("#fbar").onclick = ()=>{ drawBag(); openSheet("#bag"); };
 
 let tt; function toast(t,ms=1400){ const e=$("#toast"); e.textContent=t; e.classList.add("on"); clearTimeout(tt); tt=setTimeout(()=>e.classList.remove("on"),ms); }
 
+/* ---------- Escalera de ahorro y cierre del lunes ---------- */
+const ESC = () => [{min:1, max:5, precio:PROMO[1]}, ...[...MAYOREO].sort((a,b)=>a.min-b.min).map((m,i,arr)=>({min:m.min, max:arr[i+1]?arr[i+1].min-1:null, precio:m.precio}))];
+const escPz = e => e.max ? `${e.min}–${e.max} pz` : `${e.min}+ pz`;
+let escSel = -1;
+function buildEsc(){
+  const st = ESC(), base = PROMO[1];
+  $("#noprom").innerHTML = `<div class="esct">Entre más llevas, <span style="color:var(--acc)">menos pagas</span></div><div class="escs">New Era AA · 59FIFTY, 9FIFTY y 9FORTY · combina modelos y tallas</div>
+    <div class="esc" id="esc">${st.map((e,i)=>`<button data-i="${i}"><span class="q">${escPz(e)}</span><span class="p">${fmt(e.precio)}</span>${e.precio*2<=base?`<span class="t">la mitad de precio</span>`:i?`<span class="t">−${fmt(base-e.precio)} c/u</span>`:`<span class="t" style="color:var(--mute)">c/u</span>`}</button>`).join("")}</div>
+    <div class="eschint" id="eschint"></div>`;
+  document.querySelectorAll("#esc button").forEach(b=>b.onclick=()=>{ escSel = +b.dataset.i; escHot(); });
+  escHot();
+}
+function escHot(){
+  const box = $("#esc"); if(!box) return;
+  const st = ESC(), n = piecesNE(), base = PROMO[1];
+  const cur = st.reduce((k,e,i)=> n>=e.min ? i : k, 0), k = escSel>=0 ? escSel : (n ? cur : -1);
+  box.querySelectorAll("button").forEach((b,i)=>b.classList.toggle("hot", i===k));
+  let h = "Toca un escalón para ver cuánto ahorras.";
+  if(k>0){ const e = st[k], q = e.min; h = `${q} gorras: ${fmt(q*e.precio)} en vez de ${fmt(q*base)}. Ahorras ${fmt(q*(base-e.precio))}.`; }
+  else if(k===0) h = "1 a 5 gorras a $400 c/u. Junta 6 y cada una baja a " + fmt(st[1].precio) + ".";
+  if(escSel<0 && n){ const nx = st[cur+1]; h = `Llevas ${n} New Era AA. ` + (nx ? `Te falta${nx.min-n>1?"n":""} ${nx.min-n} para bajar a ${fmt(nx.precio)} c/u.` : "Ya tienes el mejor precio."); }
+  $("#eschint").textContent = h;
+}
+function paintCierre(){
+  const off = 7*36e5, now = Date.now(), loc = new Date(now - off);   // hora Sonora (UTC-7, sin horario de verano)
+  let d = new Date(Date.UTC(loc.getUTCFullYear(), loc.getUTCMonth(), loc.getUTCDate(), CIERRE.hora));
+  d.setUTCDate(d.getUTCDate() + ((CIERRE.dia - d.getUTCDay() + 7) % 7));
+  if(d.getTime() <= loc.getTime()) d.setUTCDate(d.getUTCDate() + 7);
+  const ms = d.getTime() - loc.getTime(), dd = Math.floor(ms/864e5), hh = Math.floor(ms%864e5/36e5), mm = Math.floor(ms%36e5/6e4);
+  const falta = `<span style="white-space:nowrap">` + (dd ? `${dd} ${dd===1?"día":"días"} ${hh} h` : hh ? `${hh} h ${mm} min` : `${mm} min`) + `</span>`;
+  const hr = CIERRE.hora===12 ? "12:00 pm" : CIERRE.hora>12 ? (CIERRE.hora-12)+":00 pm" : CIERRE.hora+":00 am";
+  $("#cierre").innerHTML = `🗓 <b>Cierre de pedido: lunes ${hr} · faltan ${falta}</b><br>Aparta hoy con 50% y paga el resto al recibir. Llega de 4 a 7 días después del cierre.`;
+}
+
 buildGate(); buildFilters();
-if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#espfine").innerHTML = "Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. Snapback ajustable."; const np = $("#noprom"); np.hidden = false;
-  np.innerHTML = `<div class="deal" style="text-align:left;padding:14px"><div class="q">New Era AA · 59FIFTY, 9FIFTY y 9FORTY</div><div class="p">$400 <span style="font-size:14px;color:var(--mute)">c/u</span></div><div class="q" style="margin-top:4px">Mayoreo: 6–9 pz $270 · 10–19 pz $240 · 20+ pz $200 c/u</div></div>`; }
+if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#noprom").hidden = false; buildEsc(); }
+$("#espfine").innerHTML = "Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. No entran en mayoreo ni en promociones.";
+paintCierre(); setInterval(paintCierre, 60000);
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v19";
+const CN = "gc-v20";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
