@@ -484,7 +484,7 @@ function openPD(d){
   $("#pmas").onclick = ()=>{ col="todo"; render(); openPD(d); };
   $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+(esp(d)?corto(d.e)+" snapback · "+fmt(esp(d)):d.e); $("#qv").textContent = 1;
   const z = $("#pszs"); z.innerHTML = "";
-  ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = t===UNI?"Única (ajustable)":(st0.includes(t)&&!soloStock?"⚡ "+t:t); b.setAttribute("aria-pressed",t===curT);
+  ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = (enSirm(d,t)?"⚡ ":"")+(t===UNI?"Única (ajustable)":t); b.setAttribute("aria-pressed",t===curT);
     b.onclick=()=>{ curT=t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); updPD(); }; z.appendChild(b); });
   const ss = STOCK_SIRM[d.c]; $("#psirm").hidden = !ss; if(ss) $("#psirmt").textContent = ss==="todas"||ss===UNI?(isUni(d)?"única":"todas sus tallas"):[].concat(ss).join(", ");
   updPD(); openSheet("#pd");
@@ -642,7 +642,7 @@ render(); updBag();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v20";
+const CN = "gc-v21";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
