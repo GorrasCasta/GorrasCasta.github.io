@@ -85,6 +85,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .tabs button{flex:1;white-space:nowrap;padding:9px 10px;border-radius:10px;font-weight:700;font-size:13px;color:var(--mute)}
 .tabs button small{display:block;font-size:10px;font-weight:600;opacity:.8}
 .tabs button[aria-pressed=true]{background:var(--ink);color:#111}
+.tabs[hidden]{display:none}
+.tabs.sub{margin-top:-4px;background:#22160c;border-color:#5a3410}
+.tabs.sub button[aria-pressed=true]{background:var(--acc);color:#111}
 .etag{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--acc);text-transform:uppercase}
 .dots{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .dot{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 10px 5px 6px;font-size:13px;font-weight:600;color:var(--mute)}
@@ -239,6 +242,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   <section class="controls">
     <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Equipo, color o número (ej. dodgers, #023)" autocomplete="off"></label>
     <div class="tabs" id="estilos"></div>
+    <div class="tabs sub" id="subest" hidden></div>
     <div class="rail" id="cols"></div>
     <div class="dots" id="colors"></div>
   </section>
@@ -384,17 +388,24 @@ function buildGate(){
 let setSize = function(t){ size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
 
 /* ---------- Filtros ---------- */
-const ESTILOS = ["todos","59FIFTY cerrada","9FIFTY snapback","9FORTY curva","Deportiva snapback","Nuevo Imperio snapback","Bélicas snapback"];
-const ELBL = {"todos":["Todas","Todo el catálogo"],"Deportiva snapback":["Deportiva","snapback · $570"],"Nuevo Imperio snapback":["Nuevo Imperio","snapback · $570"],"Bélicas snapback":["Bélicas","snapback · $650"]};
+const NE = ["59FIFTY cerrada","9FIFTY snapback","9FORTY curva"];
+const ESTILOS = ["todos","newera","Deportiva snapback","Nuevo Imperio snapback","Bélicas snapback"];
+const enEstilo = d => estilo==="todos" || (estilo==="newera" ? NE.includes(d.e) : d.e===estilo);
+const ELBL = {"todos":["Todas","Todo el catálogo"],"newera":["New Era AA","59FIFTY · 9FIFTY · 9FORTY"],"Deportiva snapback":["Deportiva","snapback · $570"],"Nuevo Imperio snapback":["Nuevo Imperio","snapback · $570"],"Bélicas snapback":["Bélicas","snapback · $650"]};
 const corto = e => ELBL[e] ? ELBL[e][0] : e.split(" ")[0];
 const esp = d => PRECIO_ESP[d.e];
 function buildFilters(){
   const et = $("#estilos");
-  ESTILOS.filter(e=>e==="todos"||DATA.some(d=>d.e===e)).forEach(e=>{
+  ESTILOS.filter(e=>e==="todos"||DATA.some(d=>e==="newera"?NE.includes(d.e):d.e===e)).forEach(e=>{
     const b=document.createElement("button"); b.dataset.e=e;
     const [a,c] = ELBL[e] || e.split(" ");
     b.innerHTML = `${a}<small>${c}</small>`;
     b.onclick=()=>{ estilo=e; render(); }; et.appendChild(b);
+  });
+  const sb = $("#subest");
+  [["newera","Todas","New Era AA"],...NE.map(e=>[e,...e.split(" ")])].forEach(([e,a,c])=>{
+    const b=document.createElement("button"); b.dataset.e=e; b.innerHTML = `${a}<small>${c}</small>`;
+    b.onclick=()=>{ estilo=e; render(); }; sb.appendChild(b);
   });
   const r = $("#cols");
   COLS.filter(c=>c.k!=="sirm"||Object.keys(STOCK_SIRM).length).forEach(c=>{
@@ -418,9 +429,9 @@ const enSirm = (d,t) => { const s = STOCK_SIRM[d.c]; if(!s) return false; if(s==
 const ALLT = [...TALLAS, UNI];
 const isUni = d => !!d.f[UNI];
 const has = (d,t) => isUni(d) ? (!t || t===UNI) && !d.out.has(UNI) : (!!d.f[t] || enSirmT(d,t)) && !d.out.has(t);
-const sizeOn = () => !!size && (estilo==="todos"||estilo==="59FIFTY cerrada");
-const base = () => DATA.filter(d=> (estilo==="todos"||d.e===estilo) && (sizeOn() ? has(d,size) : ALLT.some(t=>has(d,t))));
-const stockAll = () => DATA.filter(d=> STOCK_SIRM[d.c] && (estilo==="todos"||d.e===estilo));
+const sizeOn = () => !!size && (estilo==="todos"||estilo==="newera"||estilo==="59FIFTY cerrada");
+const base = () => DATA.filter(d=> enEstilo(d) && (sizeOn() ? has(d,size) : ALLT.some(t=>has(d,t))));
+const stockAll = () => DATA.filter(d=> STOCK_SIRM[d.c] && enEstilo(d));
 const stTallas = d => { const s = STOCK_SIRM[d.c]; return !s ? [] : Array.isArray(s) ? s : (isUni(d)?[UNI]:TALLAS.filter(t=>d.f[t])); };
 const sq = (d,t) => d.f[t] && !(d.w||[]).includes(t);
 let WP = false; try{ WP = localStorage.getItem("wp")==="1"; }catch(e){}
@@ -438,7 +449,10 @@ function render(){
     const bp = base(); b.innerHTML = c.k==="sirm" ? `${c.n}<span>${stockAll().length} modelos · ${stockAll().reduce((a,d)=>a+stTallas(d).length,0)} gorras</span>` : `${c.n}<span>${bp.filter(c.t).length} modelos</span>`;
   });
   document.querySelectorAll(".dot").forEach(b=>b.setAttribute("aria-pressed", color===b.dataset.k));
-  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
+  const neOn = estilo==="newera" || NE.includes(estilo);
+  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.e==="newera" ? neOn : estilo===b.dataset.e));
+  $("#subest").hidden = !neOn;
+  document.querySelectorAll("#subest button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
   const ct = COLS.find(c=>c.k===col).t;
   list = pool.filter(d => ct(d) && (!color || d.id.includes(color)) && words.every(w=>d.s.includes(w)));
   $("#count").textContent = `${list.length} ${list.length===1?"modelo":"modelos"}` + (col==="sirm"?" en stock · todas las tallas":sizeOn()?` en talla ${size}`:"");
@@ -665,7 +679,7 @@ const arranque = () => { render(); updBag(); };
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v26";
+const CN = "gc-v27";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
