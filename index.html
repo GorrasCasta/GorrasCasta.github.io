@@ -36,8 +36,31 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .bagbtn b{background:#111;color:var(--acc);border-radius:999px;min-width:20px;height:20px;display:inline-grid;place-items:center;font-size:12px;padding:0 5px}
 
 /* Hero */
-.hero{padding:26px 0 8px}
-.hero h1{font-size:clamp(30px,8vw,56px);line-height:.95}
+.hero{padding:18px 0 2px}
+.hero h1{font-size:clamp(27px,7.4vw,48px);line-height:.95}
+.kick{font-size:11px;letter-spacing:.18em;color:var(--acc);font-weight:700;margin-bottom:8px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-top:14px}
+.chips::-webkit-scrollbar,.strip::-webkit-scrollbar{display:none}
+.chip{flex:none;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:700;color:var(--ink);white-space:nowrap}
+.chip em{font-style:normal;color:var(--acc)}
+.chip.g{background:#0c2219;border-color:#1d5a40;color:#bff3da}
+.sech{display:flex;justify-content:space-between;align-items:baseline;margin:20px 0 8px}
+.sech h2{font-size:17px}.sech button{color:var(--acc);font-weight:700;font-size:13px}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-bottom:2px}
+.mini{flex:none;width:136px;scroll-snap-align:start;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;position:relative}
+.mini img{width:136px;height:136px;object-fit:cover;display:block;background:#111}
+.mini b{display:block;font-size:11.5px;line-height:1.25;padding:7px 8px 9px;height:3.3em;overflow:hidden;font-weight:600}
+.mini i{position:absolute;top:6px;left:6px;font-style:normal;background:var(--acc);color:#111;font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:5px}
+.mini.more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:#22160c;border-color:#5a3410;color:var(--acc);font-weight:800;font-size:15px;min-height:190px}
+.mini.more span{font-size:12px;color:var(--acc2);font-weight:600}
+details.mayo{margin-top:12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+details.mayo summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800;font-size:14px}
+details.mayo summary::-webkit-details-marker{display:none}
+details.mayo summary small{display:block;font-size:12px;color:var(--mute);font-weight:600;margin-top:2px}
+details.mayo summary::after{content:"Ver ▾";color:var(--acc);font-size:12px;white-space:nowrap}
+details.mayo[open] summary::after{content:"Cerrar ▴"}
+details.mayo .noprom{margin-top:6px}
+details.mayo .esct,details.mayo .escs{display:none}
 .hero h1 em{font-style:normal;color:var(--acc)}
 .hero p{color:var(--mute);margin-top:10px;font-size:15px;max-width:520px}
 .deals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px;max-width:520px}
@@ -57,7 +80,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .esc button.hot{border-color:var(--acc);box-shadow:0 0 0 1px var(--acc) inset}
 .esc button.hot .p{color:var(--acc)}
 .eschint{font-size:14px;color:var(--acc2);font-weight:700;margin-top:10px;min-height:20px}
-.cierre{margin-top:12px;max-width:520px;background:#14202c;border:1px solid #27445e;border-radius:12px;padding:10px 12px;font-size:13px;color:#a9cbe8;line-height:1.4}
+.cierre{margin-top:10px;max-width:none;padding:9px 12px !important;background:#14202c;border:1px solid #27445e;border-radius:12px;padding:10px 12px;font-size:13px;color:#a9cbe8;line-height:1.4}
 .cierre b{color:#e3f0fb}
 .deal.hot{border-color:var(--acc);background:#22160c}
 .deal.hot .p{color:var(--acc)}
@@ -129,6 +152,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .sizes button{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 6px;text-align:center}
 .sizes button b{display:block;font-family:"Archivo Black";font-size:24px}
 .sizes button span{font-size:11px;color:var(--mute);font-weight:600}
+.sizes button.prev{border-color:var(--acc);background:#22160c}
 .sizes button:hover,.sizes button:focus-visible{border-color:var(--acc)}
 .gate .all{margin-top:14px;width:100%;padding:13px;border-radius:12px;border:1px solid var(--line);font-weight:700;color:var(--mute)}
 
@@ -207,7 +231,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   <div class="box">
     <small>ANTES DE EMPEZAR</small>
     <h2 class="display">¿Qué talla <span style="color:var(--acc)">usas?</span></h2>
-    <p>Te mostramos las gorras cerradas de tu medida. Las de broche y ajustables te quedan siempre y también las verás. Puedes cambiar tu talla cuando quieras.</p>
+    <p>Elige tu medida y te mostramos las gorras cerradas que te quedan. ¿Prefieres de broche? Elige <b>Ajustable</b>. Puedes cambiarla cuando quieras.</p>
     <div class="sizes" id="gsizes"></div>
     <button class="all" id="gall">No sé mi talla · ver todas</button>
   </div>
@@ -225,9 +249,22 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 <div class="offbar" id="offbar" hidden>📴 Sin internet: estás viendo el catálogo guardado. Para enviar tu pedido por WhatsApp necesitas conexión.</div>
 <main class="wrap">
   <section class="hero">
+    <div class="kick">NEW ERA AA · <span id="nmod">479</span> MODELOS</div>
     <h1 class="display">Gorras New Era AA,<br><em>a tu medida.</em></h1>
-    <p>Elige tus modelos, arma tu bolsa y mándanos el pedido por WhatsApp.</p>
-    <a class="wa" data-wa href="https://wa.me/526624248769">💬 Pedidos y dudas: 662 424 8769</a>
+    <p>Elige, arma tu bolsa y pide por WhatsApp. Apartas con 50% y pagas el resto al recibir.</p>
+    <div class="chips">
+      <button class="chip" data-go="mayo">🔥 Mayoreo desde <em>$200</em> c/u</button>
+      <button class="chip g" data-go="sirm" id="chipsirm" hidden>⚡ Entrega inmediata SIRM</button>
+      <button class="chip" data-go="info">💵 Pago contra entrega</button>
+    </div>
+    <div class="cierre" id="cierre"></div>
+  </section>
+
+  <div class="sech"><h2>✨ Recién llegadas</h2><button id="vernew">Ver todas →</button></div>
+  <div class="strip" id="strip"></div>
+
+  <details class="mayo" id="mayo">
+    <summary><div><span id="mayot">Entre más llevas, menos pagas</span><small id="mayos">New Era AA: 6 pz $270 · 10 pz $240 · 20 pz $200 c/u</small></div></summary>
     <div class="noprom" id="noprom" hidden></div>
     <div class="deals" id="deals">
       <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$400</div></button>
@@ -235,14 +272,10 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
       <button class="deal" data-n="3"><div class="q">3 gorras</div><div class="p">$1,000</div></button>
     </div>
     <div class="dealhint" id="dealhint">Toca una opción para ver cómo aplica.</div>
-    <div class="fine" id="promofine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Válida hasta el 2 de noviembre de 2026. Desde 6 piezas aplica precio de mayoreo.</div>
-    <div class="cierre" id="cierre"></div>
-    <div class="fine" id="espfine" style="color:var(--acc2)">Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. Snapback ajustable, no entran en la promo.</div>
-  </section>
+    <div class="fine" id="promofine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Desde 6 piezas aplica precio de mayoreo.</div>
+    <div class="fine" id="espfine" style="color:var(--acc2)"></div>
+  </details>
 
-  <button class="newbtn" id="newbtn"><b>✨ Modelos nuevos</b><span id="newtxt"></span></button>
-  <button class="sirmbtn" id="sirmbtn" hidden><b>⚡ Entrega inmediata en SIRM</b><span id="sirmtxt"></span></button>
-  <button class="offbtn" id="offbtn" hidden><span style="font-size:22px">📥</span><div><b id="offt">Guardar catálogo para verlo sin internet</b><span id="offs"></span></div></button>
   <section class="controls">
     <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Equipo, color o número (ej. dodgers, #023)" autocomplete="off"></label>
     <div class="tabs" id="estilos"></div>
@@ -254,10 +287,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
   <section class="grid" id="grid"></section>
 
   <section class="info">
+    <button class="offbtn" id="offbtn" hidden style="grid-column:1/-1;margin-top:0"><span style="font-size:22px">📥</span><div><b id="offt">Guardar catálogo para verlo sin internet</b><span id="offs"></span></div></button>
     <div><h4>Cómo pedir</h4><p>1. Toca <b>+ Agregar</b> en cada gorra y <b>toma captura</b> de las que elijas. 2. Revisa tu bolsa y presiona <b>Enviar por WhatsApp</b>. 3. Manda tus capturas en el mismo chat. Te confirmamos existencia, total y entrega.</p></div>
     <div><h4>Mayoreo</h4><p>Solo New Era AA (59FIFTY, 9FIFTY y 9FORTY), sumando cualquier modelo y talla: <b>6 a 9 pz $270 c/u · 10 a 19 pz $240 c/u · 20 pz o más $200 c/u.</b> Se confirma por WhatsApp. Deportiva, Nuevo Imperio y Bélicas no entran en mayoreo ni en promociones.</p></div>
     <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> hacemos pedido al proveedor cada lunes; tu gorra llega de 4 a 7 días después del lunes de pedido. <b>Por ahora solo entregamos a domicilio en San Ignacio Río Muerto.</b></p></div>
-    <div><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
+    <div id="infopago"><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
     <div><h4>Planchado y hormado</h4><p>Próximamente.</p></div>
     <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
     <div class="waend"><h4>¿Listo para pedir o tienes dudas?</h4><p>Escríbenos por WhatsApp, te respondemos rápido.</p><a class="wa" data-wa href="https://wa.me/526624248769">💬 662 424 8769</a></div>
@@ -388,9 +422,11 @@ function buildGate(){
       g.appendChild(b); } }
   $("#gall").onclick = ()=>{ setSize(null); $("#gate").hidden = true; };
   $("#pill").onclick = ()=>{ $("#gate").hidden = false; };
-  $("#gate").hidden = !!store.get("visto", false);
+  let ses = false; try{ ses = sessionStorage.getItem("gate")==="1"; }catch(e){}
+  $("#gate").hidden = ses;
+  g.querySelectorAll("button").forEach((b,i)=>{ const t = i<TALLAS.length ? TALLAS[i] : UNI; if(store.get("visto",false) && size===t) b.classList.add("prev"); });
 }
-let setSize = function(t){ size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
+let setSize = function(t){ try{ sessionStorage.setItem("gate","1"); }catch(e){} size = t; store.set("talla", t); store.set("visto", true); $("#pill").textContent = "Talla: " + (t || "todas"); render(); }
 
 /* ---------- Filtros ---------- */
 const NE = ["59FIFTY cerrada","9FIFTY snapback","9FORTY curva"];
@@ -668,26 +704,41 @@ function paintCierre(){
   const ms = d.getTime() - loc.getTime(), dd = Math.floor(ms/864e5), hh = Math.floor(ms%864e5/36e5), mm = Math.floor(ms%36e5/6e4);
   const falta = `<span style="white-space:nowrap">` + (dd ? `${dd} ${dd===1?"día":"días"} ${hh} h` : hh ? `${hh} h ${mm} min` : `${mm} min`) + `</span>`;
   const hr = CIERRE.hora===12 ? "12:00 pm" : CIERRE.hora>12 ? (CIERRE.hora-12)+":00 pm" : CIERRE.hora+":00 am";
-  $("#cierre").innerHTML = `🗓 <b>Cierre de pedido: lunes ${hr} · faltan ${falta}</b><br>Aparta hoy con 50% y paga el resto al recibir. Llega de 4 a 7 días después del cierre.`;
+  $("#cierre").innerHTML = `🗓 Próximo pedido: <b>lunes ${hr}</b> · faltan <b>${falta}</b> · llega de 4 a 7 días`;
 }
 
 buildGate(); buildFilters();
 if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#noprom").hidden = false; buildEsc(); }
 $("#espfine").innerHTML = "Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. No entran en mayoreo ni en promociones.";
 paintCierre(); setInterval(paintCierre, 60000);
-if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
-{ const n = DATA.filter(esNuevo).length; $("#newtxt").textContent = n+" gorras recién agregadas. Toca para verlas."; $("#newbtn").onclick=()=>{ col="nuevos"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
+const irA = c => { col=c; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"start"}); };
+$("#chipsirm").hidden = !Object.keys(STOCK_SIRM).length;
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{ const g=b.dataset.go;
+  if(g==="sirm") irA("sirm");
+  else if(g==="mayo"){ $("#mayo").open = true; $("#mayo").scrollIntoView({behavior:"smooth",block:"center"}); }
+  else $("#infopago").scrollIntoView({behavior:"smooth",block:"center"}); });
+$("#nmod").textContent = DATA.length;
+if(PROMO_ON){ $("#mayot").textContent = "🔥 Promoción activa"; $("#mayos").textContent = "Toca para ver precios"; }
+function buildStrip(){
+  const nv = DATA.filter(esNuevo), st = $("#strip"); st.innerHTML = "";
+  if(!nv.length){ st.hidden = true; $(".sech").hidden = true; return; }
+  nv.slice(0,14).forEach(d=>{ const b=document.createElement("button"); b.className="mini";
+    b.innerHTML = `<img loading="lazy" decoding="async" src="${th(foto(d))}" alt=""><i>NUEVO</i><b></b>`; b.querySelector("b").textContent = d.n;
+    b.onclick = ()=>openPD(d); st.appendChild(b); });
+  const m=document.createElement("button"); m.className="mini more"; m.innerHTML = `Ver las ${nv.length} →<span>modelos nuevos</span>`; m.onclick=()=>irA("nuevos"); st.appendChild(m);
+  $("#vernew").textContent = `Ver las ${nv.length} →`; $("#vernew").onclick = ()=>irA("nuevos");
+}
 $("#pill").textContent = "Talla: " + (size || "todas");
-const arranque = () => { render(); updBag(); };
+const arranque = () => { buildStrip(); render(); updBag(); };
 (()=>{ const t = new Image(); let ok = false; const fin = v => { if(ok) return; ok = true; WP = v; try{ localStorage.setItem("wp", v?"1":"0"); }catch(e){} arranque(); };
   t.onload = ()=>fin(t.width===1); t.onerror = ()=>fin(false); setTimeout(()=>fin(WP), 400);
   t.src = "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA"; })();
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v28";
+const CN = "gc-v29";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
-function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
+function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.025))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
   const b=$("#offbtn"), L=offList(); let ok=0; b.disabled=true;
   try{ const c = await caches.open(CN);
