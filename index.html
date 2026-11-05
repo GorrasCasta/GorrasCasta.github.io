@@ -88,6 +88,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .tabs[hidden]{display:none}
 .tabs.sub{margin-top:-4px;background:#22160c;border-color:#5a3410}
 .tabs.sub button[aria-pressed=true]{background:var(--acc);color:#111}
+.nw{display:inline-block;background:var(--acc);color:#111;border-radius:5px;padding:1px 5px;margin-right:5px;letter-spacing:.04em}
+.newbtn{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:10px;background:#2a1a0c;border:1px solid #5a3410;color:var(--acc2);border-radius:14px;padding:13px 15px;text-align:left}
+.newbtn b{font-size:15px;color:var(--ink)}.newbtn span{font-size:12px}
 .etag{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--acc);text-transform:uppercase}
 .dots{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .dot{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 10px 5px 6px;font-size:13px;font-weight:600;color:var(--mute)}
@@ -237,6 +240,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <div class="fine" id="espfine" style="color:var(--acc2)">Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. Snapback ajustable, no entran en la promo.</div>
   </section>
 
+  <button class="newbtn" id="newbtn"><b>✨ Modelos nuevos</b><span id="newtxt"></span></button>
   <button class="sirmbtn" id="sirmbtn" hidden><b>⚡ Entrega inmediata en SIRM</b><span id="sirmtxt"></span></button>
   <button class="offbtn" id="offbtn" hidden><span style="font-size:22px">📥</span><div><b id="offt">Guardar catálogo para verlo sin internet</b><span id="offs"></span></div></button>
   <section class="controls">
@@ -343,6 +347,7 @@ DATA.forEach(d => { const a = AGOTADOS[d.c]; if(a){ const ts = a==="todas"?Objec
 
 const COLS = [
   {k:"todo", n:"Todo", t:()=>true},
+  {k:"nuevos", n:"✨ Nuevos", t:d=>esNuevo(d)},
   {k:"sirm", n:"Entrega inmediata SIRM", t:d=>!!STOCK_SIRM[d.c]},
   {k:"fav", n:"Favoritas ♥", t:d=>favs.has(d.id)},
   {k:"dodgers", n:"Dodgers", t:d=>/dodgers/.test(d.id)},
@@ -478,7 +483,7 @@ function drawMore(){
     c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt="">${(col==="sirm"||enSirm(d,size))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
       ${d.l&&d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
       <button class="fav" aria-label="Favorita" aria-pressed="${favs.has(d.id)}">${favs.has(d.id)?"♥":"♡"}</button>
-      <div class="tx"><span class="etag">${esp(d)?corto(d.e)+" · "+fmt(esp(d)):d.e}</span><h3></h3><div class="row"><span class="sz">${szTxt(d,ts)}</span><button class="add">+ Agregar</button></div></div>`;
+      <div class="tx"><span class="etag">${esNuevo(d)?`<span class="nw">Nuevo</span>`:""}${esp(d)?corto(d.e)+" · "+fmt(esp(d)):d.e}</span><h3></h3><div class="row"><span class="sz">${szTxt(d,ts)}</span><button class="add">+ Agregar</button></div></div>`;
     c.querySelector("h3").textContent = d.n; c.querySelector("img").alt = d.n;
     c.querySelector(".ph").onclick = ()=>openPD(d);
     c.querySelector("h3").onclick = ()=>openPD(d);
@@ -671,6 +676,7 @@ if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display
 $("#espfine").innerHTML = "Deportiva y Nuevo Imperio: <b>$570 c/u</b>. Bélicas: <b>$650 c/u</b>. No entran en mayoreo ni en promociones.";
 paintCierre(); setInterval(paintCierre, 60000);
 if(Object.keys(STOCK_SIRM).length){ const sb=$("#sirmbtn"); sb.hidden=false; $("#sirmtxt").textContent="Gorras en stock en San Ignacio Río Muerto · entrega a domicilio después de las 3 pm. Toca para verlas."; sb.onclick=()=>{ col="sirm"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
+{ const n = DATA.filter(esNuevo).length; $("#newtxt").textContent = n+" gorras recién agregadas. Toca para verlas."; $("#newbtn").onclick=()=>{ col="nuevos"; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"center"}); }; }
 $("#pill").textContent = "Talla: " + (size || "todas");
 const arranque = () => { render(); updBag(); };
 (()=>{ const t = new Image(); let ok = false; const fin = v => { if(ok) return; ok = true; WP = v; try{ localStorage.setItem("wp", v?"1":"0"); }catch(e){} arranque(); };
@@ -679,7 +685,7 @@ const arranque = () => { render(); updBag(); };
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v27";
+const CN = "gc-v28";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.018))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
