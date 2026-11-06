@@ -181,7 +181,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <ol>
       <li>Comparte tu link en estados, grupos y chats.</li>
       <li>Tu cliente elige y te manda el pedido por WhatsApp, con el <b>número de modelo</b> (ej. #023) y la talla.</li>
-      <li>Reenvía ese mensaje a tu proveedor para apartar. Tu precio de revendedor te lo confirma él.</li>
+      <li>Reenvía ese mensaje a tu proveedor para apartar. Tú le pagas tu costo y te quedas con la diferencia.</li>
     </ol>
     <p class="note">Para cambiar tus precios vuelve a esta página, cámbialos y comparte el link nuevo. El link viejo sigue con los precios anteriores.</p>
   </div>
@@ -257,6 +257,7 @@ const CATS = [
   {k:"c", n:"Bélicas", s:"snapback", e:["Bélicas snapback"]},
 ];
 const CLAVE_H = "1e1787fc4018042743bc0a6adc6c962b0a6f6504dbe0df861a046c0a20f0a013";   // huella de la clave de revendedor (la clave no se guarda en la página)
+const COSTO = {a:350, b:550, c:650};   // lo que el revendedor paga por pieza (precio mínimo de venta)
 const NUEVOS_DESDE = 333;
 const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
 const CM = {"7":"55.8 cm","7 1/8":"56.8 cm","7 1/4":"57.7 cm","7 3/8":"58.7 cm","7 1/2":"59.6 cm","7 5/8":"60.6 cm"};
@@ -272,7 +273,7 @@ const precioOk = v => { const n = Math.round(+v); return n>=50 && n<=5000 ? n : 
 /* ===== Lee los datos de la liga ===== */
 const P = new URLSearchParams(location.search);
 const R = { t:(P.get("t")||"").trim().slice(0,30), w:limpiaTel(P.get("w")), p:{} };
-CATS.forEach(c => { const v = precioOk(P.get(c.k)); if(v) R.p[c.k] = v; });
+CATS.forEach(c => { const v = precioOk(P.get(c.k)); if(v && v>=COSTO[c.k]) R.p[c.k] = v; });
 const modoCliente = R.t && R.w.length===10 && Object.keys(R.p).length;
 
 /* ===== Configuración (revendedor) ===== */
@@ -283,12 +284,20 @@ function setup(){
   const pr = $("#prows");
   CATS.forEach(c => {
     const r = document.createElement("div"); r.className = "prow";
-    r.innerHTML = `<div><b>${c.n}</b><span>${c.s}</span></div><div class="in"><input id="p_${c.k}" inputmode="numeric" maxlength="4" placeholder="—" value="${prev.p&&prev.p[c.k]||""}"></div>`;
+    r.innerHTML = `<div><b>${c.n}</b><span>${c.s}</span><span class="gan" id="g_${c.k}" style="display:block;margin-top:3px"></span></div><div class="in"><input id="p_${c.k}" inputmode="numeric" maxlength="4" placeholder="—" value="${prev.p&&prev.p[c.k]||""}"></div>`;
     pr.appendChild(r);
+    const inp = r.querySelector("input"), g = r.querySelector(".gan");
+    const pinta = () => { const v = +inp.value.replace(/\D/g,"");
+      if(!v){ g.style.color="var(--mute)"; g.textContent = `Tu costo: ${fmt(COSTO[c.k])}`; return; }
+      if(v < COSTO[c.k]){ g.style.color="#ff6b6b"; g.textContent = `Mínimo ${fmt(COSTO[c.k])} (tu costo)`; return; }
+      g.style.color="var(--ok)"; g.textContent = `Costo ${fmt(COSTO[c.k])} · ganas ${fmt(v-COSTO[c.k])} c/u`; };
+    inp.addEventListener("input", pinta); pinta();
   });
   $("#mk").onclick = () => {
     const t = $("#sn").value.trim().slice(0,30), w = limpiaTel($("#sw").value), p = {};
-    CATS.forEach(c => { const v = precioOk($("#p_"+c.k).value.replace(/\D/g,"")); if(v) p[c.k] = v; });
+    let bajo = null;
+    CATS.forEach(c => { const raw = $("#p_"+c.k).value.replace(/\D/g,""); if(!raw) return; const v = precioOk(raw); if(v && v>=COSTO[c.k]) p[c.k] = v; else bajo = c; });
+    if(bajo){ toast(`${bajo.n}: mínimo ${fmt(COSTO[bajo.k])}`); $("#p_"+bajo.k).focus(); return; }
     if(!t){ toast("Escribe el nombre de tu tienda"); $("#sn").focus(); return; }
     if(w.length!==10){ $("#swh").className="h bad"; $("#swh").textContent="Revisa tu número: deben ser 10 dígitos."; $("#sw").focus(); return; }
     $("#swh").className="h"; $("#swh").textContent="A este número llegan los pedidos de tus clientes.";
