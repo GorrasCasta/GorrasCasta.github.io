@@ -736,7 +736,7 @@ const arranque = () => { buildStrip(); render(); updBag(); };
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v32";
+const CN = "gc-v33";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.025))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
