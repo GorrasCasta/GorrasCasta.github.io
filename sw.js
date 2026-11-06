@@ -5,7 +5,7 @@ self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.
 self.addEventListener("fetch",e=>{
   const r=e.request; if(r.method!=="GET") return;
   const u=new URL(r.url);
-  if(r.mode==="navigate"&&u.pathname.endsWith("revende.html")){ e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("revende.html",c));return res;}).catch(()=>caches.match("revende.html"))); return; }
+  if(r.mode==="navigate"&&u.pathname.endsWith("r-hspd76.html")){ e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("r-hspd76.html",c));return res;}).catch(()=>caches.match("r-hspd76.html"))); return; }
   if(r.mode==="navigate"&&!(u.pathname.endsWith("/")||u.pathname.endsWith("index.html"))){ e.respondWith(fetch(r).catch(()=>caches.match("index.html"))); return; }
   if(r.mode==="navigate"||u.pathname.endsWith("/")||u.pathname.endsWith("index.html")){
     e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("index.html",c));return res;}).catch(()=>caches.match("index.html")));

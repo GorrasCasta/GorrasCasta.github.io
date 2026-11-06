@@ -149,6 +149,13 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 <body>
 
 <!-- ===== Configuración del revendedor (link sin datos) ===== -->
+<section class="setup" id="lock" hidden>
+  <div class="k">CATÁLOGO PARA REVENDEDORES</div>
+  <h1 class="display">Acceso para <em>revendedores.</em></h1>
+  <p>Escribe la clave que te dio tu proveedor para crear tu catálogo.</p>
+  <div class="fld"><label for="ck">Clave de revendedor</label><input id="ck" maxlength="12" autocomplete="off" autocapitalize="characters" placeholder="Ej. ABC123"><div class="h" id="ckh"></div></div>
+  <button class="cta" id="ckb">Entrar</button>
+</section>
 <section class="setup" id="setup" hidden>
   <div class="k">CATÁLOGO PARA REVENDEDORES</div>
   <h1 class="display">Pon tu precio y <em>vende con tu link.</em></h1>
@@ -249,6 +256,7 @@ const CATS = [
   {k:"b", n:"Deportiva y Nuevo Imperio", s:"snapback", e:["Deportiva snapback","Nuevo Imperio snapback"]},
   {k:"c", n:"Bélicas", s:"snapback", e:["Bélicas snapback"]},
 ];
+const CLAVE_H = "1e1787fc4018042743bc0a6adc6c962b0a6f6504dbe0df861a046c0a20f0a013";   // huella de la clave de revendedor (la clave no se guarda en la página)
 const NUEVOS_DESDE = 333;
 const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
 const CM = {"7":"55.8 cm","7 1/8":"56.8 cm","7 1/4":"57.7 cm","7 3/8":"58.7 cm","7 1/2":"59.6 cm","7 5/8":"60.6 cm"};
@@ -467,7 +475,18 @@ function msg(){
 if(modoCliente){
   tienda();
   cargar().then(() => { gate(); render(); updBag(); }).catch(() => { $("#grid").innerHTML = `<div class="empty">No se pudo cargar el catálogo. Revisa tu conexión y vuelve a abrir el link.</div>`; });
-} else setup();
+} else acceso();
+async function hashClave(k){ const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("gc|"+k)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
+async function acceso(){
+  const ok = async k => { try{ return await hashClave(k) === CLAVE_H; }catch(e){ return false; } };
+  const guardada = store.get("rclave", "");
+  if(guardada && await ok(guardada)){ setup(); return; }
+  $("#lock").hidden = false;
+  const probar = async () => { const k = $("#ck").value.toUpperCase().replace(/[^A-Z0-9]/g,"");
+    if(await ok(k)){ store.set("rclave", k); $("#lock").hidden = true; setup(); }
+    else { $("#ckh").className = "h bad"; $("#ckh").textContent = "Clave incorrecta. Pídesela a tu proveedor."; } };
+  $("#ckb").onclick = probar; $("#ck").addEventListener("keydown", e => { if(e.key==="Enter") probar(); });
+}
 </script>
 </body>
 </html>
