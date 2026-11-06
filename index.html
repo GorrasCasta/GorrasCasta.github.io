@@ -9,7 +9,7 @@
 <meta property="og:url" content="https://gorrascasta.github.io/">
 <meta property="og:title" content="GORRAS CASTA · Catálogo New Era AA">
 <meta property="og:description" content="New Era AA $400 c/u. Entre más llevas, menos pagas: 6+ $270 · 10+ $240 · 20+ $200. Deportiva, Nuevo Imperio y Bélicas. Pide por WhatsApp.">
-<meta property="og:image" content="https://gorrascasta.github.io/og.jpg">
+<meta property="og:image" content="https://gorrascasta.github.io/og2.jpg">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#0d0d0d">
@@ -736,7 +736,7 @@ const arranque = () => { buildStrip(); render(); updBag(); };
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v31";
+const CN = "gc-v32";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.025))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
