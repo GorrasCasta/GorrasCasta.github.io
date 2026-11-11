@@ -337,7 +337,8 @@ async function cargar(){
   DATA.forEach(d => { const a = agot[d.c]; d.out = new Set(a ? (a==="todas" ? Object.keys(d.f) : a) : []); d.s = norm(d.c+" "+d.c.slice(1)+" "+d.n+" "+d.id.replace(/-/g," ")+" "+(d.l||"")+" "+d.e); });
   DATA = DATA.filter(d => tallasDe(d).length);
   const n = d => +d.c.slice(1);
-  DATA.sort((a,b) => (n(b)>=NUEVOS_DESDE) - (n(a)>=NUEVOS_DESDE) || n(a)-n(b));
+  const ORD = toma("ORDEN", []), POS = {}; ORD.forEach((c,i)=>POS[c]=i+1);
+  DATA.sort((a,b) => ((POS[a.c]||9999)-(POS[b.c]||9999)) || (n(b)>=NUEVOS_DESDE) - (n(a)>=NUEVOS_DESDE) || n(a)-n(b));
 }
 
 function tienda(){
