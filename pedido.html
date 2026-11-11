@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Pedido · Gorras Casta</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pedido · Gorras Casta">
+<meta property="og:description" content="Fotos, tallas y cantidades del pedido.">
+<meta property="og:image" content="https://gorrascasta.github.io/og.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="data:,">
+<style>
+:root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--ok:#3ecf8e}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button,a{font:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+[hidden]{display:none!important}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
+.top{padding:18px 0 14px;border-bottom:1px solid var(--line)}
+.brand{font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:-.01em}
+.brand small{display:block;font-size:10px;letter-spacing:.14em;color:var(--mute);font-weight:600;margin-top:3px}
+.ref{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px}
+.ref h1{font-size:22px;font-weight:800}
+.ref span{font-size:12px;color:var(--mute);text-align:right}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.sum div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
+.sum b{display:block;font-size:20px;font-weight:800}
+.sum i{font-style:normal;font-size:11px;color:var(--mute);font-weight:600}
+.sum .tot b{color:var(--acc)}
+.grp{margin-top:18px}
+.grp h2{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 2px 8px;display:flex;gap:8px;align-items:center}
+.grp h2 small{color:var(--mute);font-weight:600;text-transform:none;letter-spacing:0}
+.grp.ya h2{color:var(--ok)}
+.item{display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
+.item img{width:96px;height:96px;border-radius:12px;object-fit:cover;flex:none;background:#222;cursor:zoom-in}
+.item .t{flex:1;min-width:0}
+.item .n{font-weight:700;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.item .c{font-size:12px;color:var(--mute);margin-top:3px}
+.item .sz{display:inline-block;margin-top:8px;background:var(--ink);color:#111;border-radius:10px;padding:5px 10px;font-weight:800;font-size:14px}
+.item .q{flex:none;text-align:center;min-width:46px}
+.item .q b{display:block;font-size:24px;font-weight:800;line-height:1}
+.item .q i{font-style:normal;font-size:10px;color:var(--mute);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.note{font-size:12.5px;color:var(--mute);line-height:1.5;margin-top:14px}
+.vend{margin-top:12px;font-size:13px;color:var(--mute)}
+.vend b{color:var(--ink);letter-spacing:.08em}
+.acts{display:grid;gap:10px;margin-top:20px}
+.btn{display:block;text-align:center;border-radius:14px;padding:14px;font-weight:800;font-size:15px;text-decoration:none}
+.btn.main{background:var(--acc);color:#111}
+.btn.alt{background:var(--panel2);border:1px solid var(--line)}
+.msg{padding:50px 10px;text-align:center;color:var(--mute);line-height:1.6}
+.msg b{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.94);display:grid;place-items:center;z-index:50;padding:14px;cursor:zoom-out}
+.lb img{max-width:100%;max-height:78vh;border-radius:14px}
+.lb p{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-weight:700;padding:0 20px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,20px);background:#fff;color:#111;font-weight:700;border-radius:999px;padding:10px 18px;opacity:0;pointer-events:none;transition:.25s;font-size:14px}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div class="brand">Gorras Casta<small>NEW ERA AA · OBREGÓN · SIRM</small></div>
+    <div class="ref"><h1>Pedido</h1><span id="ref"></span></div></div>
+  <div id="msg" class="msg">Cargando pedido…</div>
+  <div id="doc" hidden>
+    <div class="sum"><div><b id="spz">0</b><i>PIEZAS</i></div><div class="tot"><b id="stot">$0</b><i id="stl">TOTAL</i></div><div><b id="sant">$0</b><i>ANTICIPO 50%</i></div></div>
+    <div id="lists"></div>
+    <div class="vend" id="vend" hidden>Código de vendedor: <b id="vcode"></b></div>
+    <p class="note" id="nota"></p>
+    <div class="acts">
+      <button class="btn main" id="copiar">Copiar lista del pedido</button>
+      <a class="btn alt" id="editar" href="index.html">Abrir en el catálogo para editar</a>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+const $ = s => document.querySelector(s);
+const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
+const sKey = t => t===UNI ? "U" : t.replace(/[ \/]/g,"-");
+const fmt = n => "$" + Number(n).toLocaleString("es-MX");
+const webp = p => p.replace(/\.jpg$/, ".webp");
+window.jpg = img => { img.onerror = null; img.src = img.src.replace(/\.webp$/, ".jpg"); };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function fallo(t, d){ $("#msg").innerHTML = "<b>"+t+"</b>"+d; }
+let ITEMS = [], P = {};
+
+function leer(){
+  const q = new URLSearchParams(location.search); P = { i:q.get("i")||"", t:+q.get("t")||0, m:q.get("m")==="1", v:(q.get("v")||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,7), r:q.get("r")||"" };
+  return P.i.split("~").map(x => { const [n,k,c,s] = x.split("."); return { n:+n, k, q:Math.max(1,Math.min(99,+c||1)), s:s==="1" }; }).filter(x => x.n>0 && x.k);
+}
+function armar(html, its){
+  const m = html.match(/^const DATA_ALL = (.*?);\s*(\/\/.*)?$/m); if(!m) return false;
+  const all = JSON.parse(m[1]);
+  ITEMS = its.map(x => { const d = all[x.n-1]; if(!d) return null; const t = x.k==="U" ? UNI : TALLAS.find(z => sKey(z)===x.k); if(!t) return null;
+    const f = d.f[t] || d.f[TALLAS.find(z => d.f[z])] || d.f[UNI] || Object.values(d.f)[0];
+    return { n:x.n, c:"#"+String(x.n).padStart(3,"0"), name:d.n, e:d.e, t, q:x.q, s:x.s, f }; }).filter(Boolean);
+  return ITEMS.length > 0;
+}
+function grupo(cls, titulo, sub, arr){
+  if(!arr.length) return "";
+  return `<div class="grp ${cls}"><h2>${titulo} <small>${sub}</small></h2>` + arr.map(it =>
+    `<div class="item"><img src="${webp(it.f.replace('img/','t/'))}" alt="${esc(it.name)}" width="96" height="96" onerror="jpg(this)" data-big="${it.f}" data-cap="${esc(it.name)}">
+      <div class="t"><div class="n">${esc(it.name)}</div><div class="c">${it.c} · ${esc(it.e)}</div><span class="sz">${it.t===UNI?"Ajustable":"Talla "+it.t}</span></div>
+      <div class="q"><b>×${it.q}</b><i>pz</i></div></div>`).join("") + "</div>";
+}
+function pintar(){
+  const pz = ITEMS.reduce((a,x) => a+x.q, 0);
+  $("#spz").textContent = pz;
+  if(P.t){ $("#stot").textContent = fmt(P.t); $("#sant").textContent = fmt(Math.round(P.t/2)); $("#stl").textContent = P.m ? "TOTAL (MAYOREO)" : "TOTAL"; }
+  else { $("#stot").textContent = "—"; $("#sant").textContent = "—"; }
+  const ya = ITEMS.filter(x => x.s), ped = ITEMS.filter(x => !x.s);
+  $("#lists").innerHTML = grupo("ya","⚡ Entrega inmediata en SIRM","Después de las 3 pm", ya) + grupo("ped","📦 Sobre pedido","Pedido del lunes · llega 4 a 7 días después", ped);
+  if(P.v){ $("#vend").hidden = false; $("#vcode").textContent = P.v; }
+  $("#nota").textContent = (P.m ? "El precio de mayoreo se confirma por WhatsApp. " : "") + "Total y existencia sujetos a confirmación. Se aparta con 50% y el resto es contra entrega.";
+  $("#editar").href = "index.html?b=" + ITEMS.map(x => [x.n, sKey(x.t), x.q].join(".")).join("~");
+  $("#msg").hidden = true; $("#doc").hidden = false;
+  document.querySelectorAll(".item img").forEach(im => im.onclick = () => lightbox(im.dataset.big, im.dataset.cap));
+}
+function lightbox(src, cap){
+  const d = document.createElement("div"); d.className = "lb";
+  d.innerHTML = `<img src="${webp(src)}" alt="" onerror="jpg(this)"><p>${esc(cap)}</p>`; d.onclick = () => d.remove(); document.body.appendChild(d);
+}
+function ref(){
+  const s = parseInt(P.r, 36); if(!s || s < 1e9){ $("#ref").textContent = ""; return; }
+  const f = new Date(s*1000);
+  $("#ref").innerHTML = "GC-" + P.r.toUpperCase().slice(-5) + "<br>" + f.toLocaleDateString("es-MX", {day:"numeric", month:"short"}) + " · " + f.toLocaleTimeString("es-MX", {hour:"numeric", minute:"2-digit"});
+}
+function toast(t){ const e = $("#toast"); e.textContent = t; e.classList.add("on"); setTimeout(() => e.classList.remove("on"), 1600); }
+$("#copiar").onclick = () => {
+  const ln = it => `• ${it.q} × ${it.c} ${it.name} · ${it.e} · ${it.t===UNI?"ajustable":"talla "+it.t}`;
+  const ya = ITEMS.filter(x => x.s), ped = ITEMS.filter(x => !x.s);
+  let t = "Pedido Gorras Casta" + (P.r ? " GC-" + P.r.toUpperCase().slice(-5) : "") + "\n";
+  if(ya.length) t += "\n⚡ Entrega inmediata SIRM:\n" + ya.map(ln).join("\n") + "\n";
+  if(ped.length) t += "\n📦 Sobre pedido:\n" + ped.map(ln).join("\n") + "\n";
+  t += "\nPiezas: " + ITEMS.reduce((a,x) => a+x.q, 0) + (P.t ? " · Total: " + fmt(P.t) : "") + (P.v ? "\nVendedor: " + P.v : "");
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("Lista copiada"), () => { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try{ document.execCommand("copy"); toast("Lista copiada"); }catch(e){ toast("No se pudo copiar"); } a.remove(); });
+};
+const its = leer(); ref();
+if(!its.length) fallo("Este pedido no tiene gorras", "Revisa que el link esté completo.");
+else fetch("index.html", {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.text(); }).then(h => { if(armar(h, its)) pintar(); else fallo("No se pudo leer el pedido", "Revisa que el link esté completo."); }).catch(() => fallo("Sin conexión", "Conéctate a internet para ver las fotos del pedido."));
+</script>
+</body>
+</html>
