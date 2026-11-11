@@ -139,11 +139,11 @@ if(TIENDA){ $("#brand").textContent = TIENDA; document.title = TIENDA + " · Cat
 let DATA = [], BY = {}, estilo = "", talla = "", q = "", list = [], shown = 0, cur = null, curT = "";
 const PASO = 24;
 const isUni = d => !!d.f[UNI];
-const has = (d,t) => !!d.f[t] && !d.out.has(t);
+const has = (d,t) => (!!d.f[t] || d.sirm.has(t)) && !d.out.has(t);   // incluye tallas que hay en stock
 const tallasDe = d => isUni(d) ? (d.out.has(UNI) ? [] : [UNI]) : TALLAS.filter(t => has(d,t));
 const webp = p => p.replace(/\.jpg$/, ".webp");
 const mini = p => webp(p.replace("img/","t/"));
-const foto = (d,t) => d.f[t && has(d,t) ? t : tallasDe(d)[0]];
+const foto = (d,t) => { const k = t && has(d,t) ? t : tallasDe(d)[0]; return d.f[k] || d.f[TALLAS.find(x => d.f[x])] || d.f[UNI]; };
 const tallaOn = () => talla && (estilo==="" || estilo==="59FIFTY cerrada");
 window.jpg = img => { img.onerror = null; img.src = img.src.replace(/\.webp$/, ".jpg"); };   // respaldo si el celular no abre WebP
 
@@ -151,18 +151,18 @@ window.jpg = img => { img.onerror = null; img.src = img.src.replace(/\.webp$/, "
 function armar(html){
   const toma = (nom, def) => { const m = html.match(new RegExp("^const " + nom + " = (.*?);\\s*(//.*)?$", "m")); if(!m) return def; try{ return JSON.parse(m[1]); }catch(e){ return def; } };
   const all = toma("DATA_ALL", null); if(!all || !all.length) return false;
-  const ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {}), orden = toma("ORDEN", []), nuevos = toma("NUEVOS_DESDE", 1e9);
+  const ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {}), orden = toma("ORDEN", []), stock = toma("STOCK_SIRM", {}), nuevos = toma("NUEVOS_DESDE", 1e9);
   const pos = {}; orden.forEach((c,i) => pos[c] = i+1);
   all.forEach((d,i) => { d.num = i+1; d.c = "#" + String(i+1).padStart(3,"0"); });
   const D = all.filter(d => !ocultos.includes(d.c));
-  D.forEach(d => { const a = agot[d.c]; d.out = new Set(a ? (a==="todas" ? Object.keys(d.f) : a) : []); d.nuevo = d.num >= nuevos;
+  D.forEach(d => { const a = agot[d.c]; d.out = new Set(a ? (a==="todas" ? Object.keys(d.f) : a) : []); d.nuevo = d.num >= nuevos; d.sirm = new Set(Array.isArray(stock[d.c]) ? stock[d.c] : []);
     d.s = norm(d.c + " " + d.c.slice(1) + " " + d.num + " " + d.n + " " + d.id.replace(/-/g," ") + " " + (d.l||"") + " " + d.e); });
   DATA = D.filter(d => tallasDe(d).length);
   DATA.sort((a,b) => ((pos[a.c]||9999)-(pos[b.c]||9999)) || (b.nuevo-a.nuevo) || (a.num-b.num));
   BY = {}; DATA.forEach(d => BY[d.c.slice(1)] = d);
   return true;
 }
-const recorta = html => (html.match(/^const (DATA_ALL|OCULTOS|AGOTADOS|ORDEN|NUEVOS_DESDE) = .*$/gm) || []).join("\n");
+const recorta = html => (html.match(/^const (DATA_ALL|OCULTOS|AGOTADOS|ORDEN|STOCK_SIRM|NUEVOS_DESDE) = .*$/gm) || []).join("\n");
 
 /* ----- Filtros ----- */
 function filtros(){
