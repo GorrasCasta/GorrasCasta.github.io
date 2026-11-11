@@ -1,15 +1,15 @@
-const V="gc-v43";
+const V="gc-v44";
 const CORE=["./","index.html","og.jpg","manifest.json","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
   const r=e.request; if(r.method!=="GET") return;
   const u=new URL(r.url);
-  if(r.mode==="navigate"&&u.pathname.endsWith("r-hspd76.html")){ e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("r-hspd76.html",c));return res;}).catch(()=>caches.match("r-hspd76.html"))); return; }
-  if(r.mode==="navigate"&&!(u.pathname.endsWith("/")||u.pathname.endsWith("index.html"))){ e.respondWith(fetch(r).catch(()=>caches.match("index.html"))); return; }
+  if(r.mode==="navigate"&&u.pathname.endsWith("r-hspd76.html")){ e.respondWith(fetch(u.href,{cache:"no-cache"}).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("r-hspd76.html",c));return res;}).catch(()=>caches.match("r-hspd76.html"))); return; }
+  if(r.mode==="navigate"&&!(u.pathname.endsWith("/")||u.pathname.endsWith("index.html"))){ e.respondWith(fetch(u.href,{cache:"no-cache"}).catch(()=>caches.match("index.html"))); return; }
   if(r.mode==="navigate"||u.pathname.endsWith("/")||u.pathname.endsWith("index.html")){
-    e.respondWith(fetch(r).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("index.html",c));return res;}).catch(()=>caches.match("index.html")));
+    e.respondWith(fetch(u.href,{cache:"no-cache"}).then(res=>{const c=res.clone();caches.open(V).then(x=>x.put("index.html",c));return res;}).catch(()=>caches.match("index.html")));
     return;
   }
-  e.respondWith(caches.match(r).then(hit=>hit||fetch(r).then(res=>{ if(res.ok||res.type==="opaque"){const c=res.clone();caches.open(V).then(x=>x.put(r,c));} return res; })));
+  e.respondWith(caches.match(r).then(hit=>hit||fetch(u.href,{cache:"no-cache"}).then(res=>{ if(res.ok||res.type==="opaque"){const c=res.clone();caches.open(V).then(x=>x.put(r,c));} return res; })));
 });
