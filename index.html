@@ -292,7 +292,7 @@ details.mayo .esct,details.mayo .escs{display:none}
     <div><h4>Mayoreo</h4><p>Solo New Era AA (59FIFTY, 9FIFTY y 9FORTY), sumando cualquier modelo y talla: <b>5 a 9 pz $320 c/u · 10 a 14 pz $295 c/u · 15 a 19 pz $280 c/u · 20 pz o más $270 c/u.</b> Se confirma por WhatsApp. Deportiva, Nuevo Imperio y Bélicas no entran en mayoreo ni en promociones.</p></div>
     <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> hacemos pedido al proveedor cada lunes; tu gorra llega de 4 a 7 días después del lunes de pedido. <b>Por ahora solo entregamos a domicilio en San Ignacio Río Muerto.</b></p></div>
     <div id="infopago"><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
-    <div><h4>Planchado y hormado</h4><p>Próximamente.</p></div>
+    <div><h4>Planchado y hormado</h4><p>Ya disponible. <b>Gratis de 1 a 4 piezas.</b> En mayoreo (5 o más) se cotiza aparte, pregunta por WhatsApp.</p></div>
     <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
     <div class="waend"><h4>¿Listo para pedir o tienes dudas?</h4><p>Escríbenos por WhatsApp, te respondemos rápido.</p><a class="wa" data-wa href="https://wa.me/526624248769">💬 662 424 8769</a></div>
   </section>
@@ -754,7 +754,7 @@ const arranque = () => { buildStrip(); render(); updBag(); };
 if(vendAviso) setTimeout(()=>toast(vendAviso,3500), 400);
 
 /* ---------- Sin internet ---------- */
-const CN = "gc-v45";
+const CN = "gc-v46";
 const offList = () => { const s = new Set(); (size ? DATA.filter(d=>has(d,size)||has(d,UNI)) : DATA).forEach(d=>{ const f = foto(d); if(f) s.add(th(f)); if(size && d.f[size]) s.add(th(d.f[size])); }); return [...s]; };
 function offLabel(){ const n = offList().length; $("#offs").textContent = (size?`Fotos de talla ${size} y ajustables`:"Todas las fotos")+` · ${n} fotos · aprox. ${Math.max(1,Math.round(n*0.025))} MB. Recomendado con Wi-Fi.`; }
 async function saveOffline(){
