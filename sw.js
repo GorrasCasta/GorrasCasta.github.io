@@ -1,4 +1,4 @@
-const V="gc-v52", FOTOS="gc-fotos";
+const V="gc-v53", FOTOS="gc-fotos";
 const CORE=["./","index.html","css/catalogo.css?v=51","js/datos.js?v=51","js/catalogo.js?v=51","datos/ajustes.json","datos/gorras.json","datos/estado.json","og.jpg","manifest.json","icon-192.png","icon-512.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!==FOTOS).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
