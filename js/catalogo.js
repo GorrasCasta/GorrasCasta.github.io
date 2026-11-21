@@ -89,7 +89,7 @@ const CC = () => CATK[cat] || G;
 const PUERTA = !!(CATK.gorras && G.variante && G.variante.puerta && CPOS.gorras!==undefined);
 function buildGate(){
   if(!PUERTA){ $("#gate").hidden = true; $("#pill").hidden = true; return; }
-  const g = $("#gsizes"), GD = DATA.filter(d=>d.cat==="gorras");
+  const g = $("#gsizes"), GD = DATA.filter(d=>d.cat==="gorras"); g.innerHTML = "";
   TALLAS.forEach(t=>{
     const n = GD.filter(d=>has(d,t)).length;
     const b = document.createElement("button");
