@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casta Caps · Catálogo de gorras New Era AA, Deportiva, Nuevo Imperio y Bélicas</title>
+<meta name="description" content="Catálogo de gorras New Era AA (59FIFTY, 9FIFTY y 9FORTY), Deportiva, Nuevo Imperio y Bélicas. Entrega inmediata en SIRM y sobre pedido. Pide por WhatsApp.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gorrascasta.github.io/">
+<meta property="og:title" content="CASTA CAPS · Catálogo New Era AA">
+<meta property="og:description" content="New Era AA $450 c/u. Entre más llevas, menos pagas: 5+ $320 · 10+ $295 · 15+ $280 · 20+ $270. Deportiva, Nuevo Imperio y Bélicas. Pide por WhatsApp.">
+<meta property="og:image" content="https://gorrascasta.github.io/og2.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="css/catalogo.css?v=50">
+
+</head>
+<body>
+
+<!-- Paso 1: talla -->
+<section class="gate" id="gate">
+  <div class="box">
+    <small>ANTES DE EMPEZAR</small>
+    <h2 class="display">¿Qué talla <span style="color:var(--acc)">usas?</span></h2>
+    <p>Elige tu medida y te mostramos las gorras cerradas que te quedan. ¿Prefieres de broche? Elige <b>Ajustable</b>. Puedes cambiarla cuando quieras.</p>
+    <div class="sizes" id="gsizes"></div>
+    <button class="all" id="gall">No sé mi talla · ver todas</button>
+  </div>
+</section>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand" id="brand">Casta Caps<small>NEW ERA AA<br>OBREGÓN · SIRM</small></div>
+    <div class="sp"></div>
+    <button class="sizepill" id="pill">Talla: todas</button>
+    <button class="bagbtn" id="bagbtn">Bolsa <b id="bagn">0</b></button>
+  </div>
+</header>
+
+<div class="offbar" id="offbar" hidden>📴 Sin internet: estás viendo el catálogo guardado. Para enviar tu pedido por WhatsApp necesitas conexión.</div>
+<main class="wrap">
+  <section class="hero">
+    <div class="kick" id="kick">&nbsp;</div>
+    <h1 class="display" id="tit">Gorras New Era AA,<br><em>a tu medida.</em></h1>
+    <p id="txt">Elige, arma tu bolsa y pide por WhatsApp. Apartas con 50% y pagas el resto al recibir.</p>
+    <div class="chips">
+      <button class="chip" data-go="mayo" id="chipmay">🔥 Mayoreo desde <em>$270</em> c/u</button>
+      <button class="chip g" data-go="sirm" id="chipsirm" hidden>⚡ Entrega inmediata SIRM</button>
+      <button class="chip" data-go="info">💵 Pago contra entrega</button>
+    </div>
+    <div class="cierre" id="cierre"></div>
+  </section>
+
+  <div class="sech"><h2>✨ Recién llegadas</h2><button id="vernew">Ver todas →</button></div>
+  <div class="strip" id="strip"></div>
+
+  <details class="mayo" id="mayo">
+    <summary><div><span id="mayot">Entre más llevas, menos pagas</span><small id="mayos">New Era AA: 5 pz $320 · 10 $295 · 15 $280 · 20 $270 c/u</small></div></summary>
+    <div class="noprom" id="noprom" hidden></div>
+    <div class="deals" id="deals">
+      <button class="deal" data-n="1"><div class="q">1 gorra</div><div class="p">$450</div></button>
+      <button class="deal" data-n="2"><div class="q">2 gorras</div><div class="p">$750</div></button>
+      <button class="deal" data-n="3"><div class="q">3 gorras</div><div class="p">$1,050</div></button>
+    </div>
+    <div class="dealhint" id="dealhint">Toca una opción para ver cómo aplica.</div>
+    <div class="fine" id="promofine">Aplica en 59FIFTY, 9FIFTY y 9FORTY, puedes combinarlas. Desde 5 piezas aplica precio de mayoreo: 5–9 pz $320 · 10–14 $295 · 15–19 $280 · 20 o más $270 c/u. Promo válida hasta el 31 de diciembre.</div>
+    <div class="fine" id="espfine" style="color:var(--acc2)"></div>
+  </details>
+
+  <section class="controls">
+    <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="Equipo, color o número (ej. dodgers, #023)" autocomplete="off"></label>
+    <div class="tabs cats" id="cats" hidden></div>
+    <div class="tabs" id="estilos"></div>
+    <div class="tabs sub" id="subest" hidden></div>
+    <div class="rail" id="cols"></div>
+    <div class="dots" id="colors"></div>
+  </section>
+  <div class="meta"><span id="count"></span><button id="clear" hidden>Quitar filtros</button></div>
+  <section class="grid" id="grid"></section>
+
+  <section class="info">
+    <button class="offbtn" id="offbtn" hidden style="grid-column:1/-1;margin-top:0"><span style="font-size:22px">📥</span><div><b id="offt">Guardar catálogo para verlo sin internet</b><span id="offs"></span></div></button>
+    <div><h4>Cómo pedir</h4><p>1. Toca <b>+ Agregar</b> en cada gorra con su talla. 2. Revisa tu bolsa y presiona <b>Enviar por WhatsApp</b>. Tu pedido llega con un link que muestra las fotos y tallas que elegiste, sin mandar capturas. 3. Te confirmamos existencia, total y entrega.</p></div>
+    <div><h4>Mayoreo</h4><p id="infomay">Solo New Era AA (59FIFTY, 9FIFTY y 9FORTY), sumando cualquier modelo y talla: <b>5 a 9 pz $320 c/u · 10 a 14 pz $295 c/u · 15 a 19 pz $280 c/u · 20 pz o más $270 c/u.</b> Se confirma por WhatsApp. Deportiva, Nuevo Imperio y Bélicas no entran en mayoreo ni en promociones.</p></div>
+    <div><h4>Entregas</h4><p><b>⚡ Entrega inmediata en SIRM:</b> modelos en stock en San Ignacio Río Muerto, con entrega a domicilio después de las 3 pm. <b>📦 Sobre pedido:</b> hacemos pedido al proveedor cada lunes; tu gorra llega de 4 a 7 días después del lunes de pedido. <b>Por ahora solo entregamos a domicilio en San Ignacio Río Muerto.</b></p></div>
+    <div id="infopago"><h4>Pago contra entrega</h4><p>Apartas tu pedido con el 50% del total y pagas el resto al recibir tus gorras.</p></div>
+    <div><h4>Planchado y hormado</h4><p>Ya disponible. <b>Gratis de 1 a 4 piezas.</b> En mayoreo (5 o más) se cotiza aparte, pregunta por WhatsApp.</p></div>
+    <div><h4>Términos y privacidad</h4><p>Cambios, garantía, cancelaciones y cómo cuidamos tus datos: <a href="privacidad.html#terminos" style="color:var(--acc)">Términos de venta</a> · <a href="privacidad.html#privacidad" style="color:var(--acc)">Aviso de privacidad</a>.</p></div>
+    <div class="waend"><h4>¿Listo para pedir o tienes dudas?</h4><p>Escríbenos por WhatsApp, te respondemos rápido.</p><a class="wa" data-wa href="https://wa.me/526624248769">💬 662 424 8769</a></div>
+  </section>
+</main>
+
+<a class="wafab off" id="wafab" data-wa href="https://wa.me/526624248769" aria-label="WhatsApp 662 424 8769">💬 662 424 8769</a>
+<button class="fbar" id="fbar" hidden><span id="fbtxt"></span><span>Ver bolsa →</span></button>
+<div class="toast" id="toast"></div>
+<div class="scrim" id="scrim"></div>
+
+<!-- Ficha de gorra -->
+<section class="sheet" id="pd" aria-modal="true" role="dialog">
+  <div class="grab"></div><button class="x" data-close>×</button>
+  <div class="in">
+    <div class="pimg"><img id="pimg" alt=""></div>
+    <h2 id="pname"></h2><div class="code" id="pcode"></div>
+    <div class="snap" id="psirm" style="background:#0c2219;border-color:#1d5a40;color:#7fe0b4" hidden>⚡ <b>Entrega inmediata en SIRM</b> en talla <span id="psirmt"></span>. Entrega a domicilio en San Ignacio Río Muerto después de las 3 pm.</div>
+    <div class="snap" id="pped" style="background:var(--panel2);border-color:var(--line);color:var(--mute)">📦 <b>Sobre pedido:</b> se pide al proveedor el lunes y llega de 4 a 7 días después. Pagas 50% para apartar y el resto contra entrega.</div>
+    <div class="lbl" id="plbl">Tallas disponibles</div><div class="szs" id="pszs"></div>
+    <div class="note" id="pley" hidden>⚡ = en stock, entrega inmediata en SIRM. Las demás tallas son sobre pedido (pedido del lunes, 4 a 7 días después).</div>
+    <button class="note" id="pmas" hidden style="color:var(--acc);font-weight:700;text-decoration:underline">¿Otra talla? Ver todas las tallas sobre pedido</button>
+    <div class="lbl">Cantidad</div>
+    <div class="qty"><button id="qm" aria-label="Menos">−</button><b id="qv">1</b><button id="qp" aria-label="Más">+</button></div>
+    <button class="cta" id="padd">Agregar a la bolsa</button>
+  </div>
+</section>
+
+<!-- Bolsa -->
+<section class="sheet" id="bag" aria-modal="true" role="dialog">
+  <div class="grab"></div><button class="x" data-close>×</button>
+  <div class="in">
+    <h2 class="display" style="font-size:26px">Tu bolsa</h2>
+    <div id="lines"></div>
+    <div id="sumbox"></div>
+  </div>
+</section>
+
+<script>window.CASTA_MODO="prueba";</script>
+<script src="js/datos.js?v=50"></script>
+<script src="js/catalogo.js?v=50"></script>
+</body>
+</html>

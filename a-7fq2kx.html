@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Panel · Casta Caps</title>
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<style>
+:root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--acc2:#ffb066;--ok:#3ecf8e;--bad:#ff6b6b;--warn:#ffcc00}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{background:var(--bg);color:var(--ink);font-family:Archivo,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-size:15px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{background:none;border:none;cursor:pointer}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px}
+.display{font-family:"Archivo Black",Impact,sans-serif;text-transform:uppercase;letter-spacing:-.01em}
+.top{position:sticky;top:0;z-index:20;background:rgba(13,13,13,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px;height:54px}
+.brand{font-family:"Archivo Black";font-size:16px;text-transform:uppercase}.brand small{display:block;font-family:Archivo;font-size:10px;letter-spacing:.14em;color:var(--acc);font-weight:700}
+.sp{flex:1}
+.nav{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:10px 0}
+.nav::-webkit-scrollbar{display:none}
+.nav button{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 14px;font-weight:700;font-size:14px;color:var(--mute)}
+.nav button[aria-pressed=true]{background:var(--ink);color:#111;border-color:var(--ink)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.card h3{font-size:15px;margin-bottom:8px}
+.hint{font-size:12.5px;color:var(--mute);line-height:1.45}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.f{display:flex;flex-direction:column;gap:4px;margin:8px 0;flex:1;min-width:120px}
+.f label{font-size:12px;color:var(--mute);font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+input[type=text],input[type=number],input[type=password],input[type=date],input[type=search],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:16px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc)}
+textarea{min-height:70px;resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:12px;padding:11px 16px;font-weight:800;background:var(--panel2);border:1px solid var(--line)}
+.btn.p{background:var(--acc);color:#111;border-color:var(--acc)}
+.btn.ok{background:var(--ok);color:#06241a;border-color:var(--ok)}
+.btn.bad{background:#3a1212;color:#ffb4b4;border-color:#6b2020}
+.btn.sm{padding:7px 11px;font-size:13px;border-radius:10px}
+.btn.w{width:100%}
+.btn:disabled{opacity:.45}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.sw:last-child{border-bottom:none}
+.sw b{font-size:14px}.sw small{display:block;color:var(--mute);font-size:12px;margin-top:2px}
+.tg{position:relative;width:50px;height:30px;flex:none}
+.tg input{opacity:0;width:0;height:0}
+.tg span{position:absolute;inset:0;background:#333;border-radius:99px;transition:.2s}
+.tg span::after{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}
+.tg input:checked+span{background:var(--ok)}.tg input:checked+span::after{left:23px}
+.list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.it{display:flex;gap:10px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:8px;text-align:left;width:100%}
+.it img{width:58px;height:58px;border-radius:10px;object-fit:cover;background:#111;flex:none}
+.it .t{flex:1;min-width:0}
+.it .t b{display:block;font-size:13.5px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .t span{font-size:12px;color:var(--mute)}
+.bd{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 6px;border-radius:5px;margin:3px 4px 0 0;background:#2a2a2a;color:var(--mute)}
+.bd.o{background:#3a1212;color:#ffb4b4}.bd.s{background:#0c2219;color:#7fe0b4}.bd.x{background:#3a2a05;color:#ffd27a}.bd.n{background:var(--acc);color:#111}.bd.c{background:#1b2a3a;color:#a9cbe8}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:13px;font-weight:700;background:var(--panel2);color:var(--mute)}
+.chip[aria-pressed=true]{background:var(--acc);color:#111;border-color:var(--acc)}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(13,13,13,.97);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom))}
+.bar .wrap{display:flex;gap:10px;align-items:center;padding:0}
+.bar .st{flex:1;font-size:13px;color:var(--mute);line-height:1.3}
+.bar .st b{color:var(--warn)}
+main{padding-bottom:110px}
+.sheet{position:fixed;inset:0;z-index:40;background:var(--bg);overflow:auto;display:none}
+.sheet.on{display:block}
+.sheet .hd{position:sticky;top:0;background:rgba(13,13,13,.97);border-bottom:1px solid var(--line);z-index:2}
+.sheet .hd .wrap{display:flex;align-items:center;gap:10px;height:54px}
+.sheet .hd h2{font-size:16px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vt{width:100%;border-collapse:collapse;font-size:14px}
+.vt td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:middle}
+.vt td:first-child{font-weight:800;white-space:nowrap}
+.vt img{width:46px;height:46px;border-radius:8px;object-fit:cover;background:#111;display:block}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{padding:7px 9px;font-size:12px;font-weight:800;color:var(--mute);background:var(--panel2)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed=true].a{background:var(--ok);color:#06241a}
+.seg button[aria-pressed=true].x{background:#ffcc00;color:#111}
+.seg button[aria-pressed=true].n{background:#444;color:#fff}
+.bolt{border:1px solid var(--line);border-radius:10px;padding:7px 9px;font-size:12px;font-weight:800;color:var(--mute);background:var(--panel2)}
+.bolt[aria-pressed=true]{background:#0c2219;border-color:#1d5a40;color:#7fe0b4}
+.crop{position:relative;width:100%;max-width:520px;margin:10px auto;touch-action:none;background:#000;border-radius:12px;overflow:hidden}
+.crop canvas{display:block;width:100%;height:auto}
+.toast{position:fixed;left:50%;top:64px;transform:translateX(-50%);background:var(--ink);color:#111;padding:10px 16px;border-radius:999px;font-weight:700;font-size:14px;z-index:90;opacity:0;transition:opacity .2s;pointer-events:none;max-width:92vw;text-align:center}
+.toast.on{opacity:1}
+.gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.gate .box{max-width:420px;width:100%}
+.err{color:var(--bad);font-size:13px;font-weight:700;min-height:18px;margin-top:6px}
+.diff{font-size:13px;line-height:1.5;color:var(--mute)}.diff b{color:var(--ink)}
+.busy{position:fixed;inset:0;z-index:95;background:rgba(0,0,0,.72);display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px;font-weight:800;text-align:center;padding:20px}
+.busy.on{display:flex}
+.spin{width:38px;height:38px;border:4px solid #333;border-top-color:var(--acc);border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+a{color:var(--acc)}
+.mtr{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:center;margin:6px 0}
+hr{border:none;border-top:1px solid var(--line);margin:12px 0}
+</style>
+</head>
+<body>
+
+<!-- Entrada -->
+<section class="gate" id="login" hidden>
+  <div class="box">
+    <div class="brand" style="font-size:22px">Casta Caps<small>PANEL DE ADMINISTRACIÓN</small></div>
+    <div id="lg1" hidden>
+      <p class="hint" style="margin:14px 0">Primera vez en este celular. Crea la <b>clave del panel</b> y pega tu <b>llave de GitHub (token)</b>. La llave se guarda cifrada con tu clave y solo en este celular.</p>
+      <div class="f"><label>Clave del panel (mín. 6)</label><input id="k1" type="password" autocomplete="new-password"></div>
+      <div class="f"><label>Repite la clave</label><input id="k2" type="password" autocomplete="new-password"></div>
+      <div class="f"><label>Llave de GitHub (empieza con github_pat_)</label><input id="tk" type="password" autocomplete="off" spellcheck="false"></div>
+      <button class="btn p w" id="lgsave" style="margin-top:8px">Guardar y entrar</button>
+      <details style="margin-top:14px"><summary class="hint" style="cursor:pointer">¿Cómo saco la llave de GitHub?</summary>
+        <ol class="hint" style="padding-left:18px;margin-top:8px">
+          <li>Entra a github.com con la cuenta <b>GorrasCasta</b> → foto de perfil → <b>Settings</b> → <b>Developer settings</b> → <b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b>.</li>
+          <li>Nombre: "Panel Casta". Expiración: 1 año.</li>
+          <li><b>Repository access:</b> "Only select repositories" → GorrasCasta.github.io.</li>
+          <li><b>Permissions → Repository → Contents: Read and write</b> (lo demás se queda igual).</li>
+          <li>Generate token, copia la llave y pégala aquí. No la mandes por WhatsApp ni la compartas.</li>
+        </ol></details>
+    </div>
+    <div id="lg2" hidden>
+      <div class="f" style="margin-top:16px"><label>Clave del panel</label><input id="kk" type="password" autocomplete="current-password"></div>
+      <button class="btn p w" id="lgin" style="margin-top:8px">Entrar</button>
+      <button class="hint" id="lgreset" style="margin-top:16px;text-decoration:underline">Olvidé la clave / cambiar la llave de GitHub</button>
+    </div>
+    <div class="err" id="lgerr"></div>
+  </div>
+</section>
+
+<div id="app" hidden>
+<header class="top"><div class="wrap">
+  <div class="brand">Casta Caps<small>PANEL</small></div><div class="sp"></div>
+  <a class="btn sm" href="prueba.html" target="_blank" rel="noopener">🧪 Ver prueba</a>
+  <button class="btn sm" id="salir">Salir</button>
+</div></header>
+<main class="wrap">
+  <nav class="nav" id="nav">
+    <button data-v="prod" aria-pressed="true">Productos</button>
+    <button data-v="sirm">⚡ Stock SIRM</button>
+    <button data-v="prec">Precios</button>
+    <button data-v="ajus">Ajustes</button>
+    <button data-v="pub">Publicar</button>
+  </nav>
+
+  <!-- PRODUCTOS -->
+  <section data-p="prod">
+    <div class="chips" id="pcats"></div>
+    <div class="row" style="margin-top:10px"><input id="pq" type="search" placeholder="Buscar: nombre, número (#023), equipo…" style="flex:1"><button class="btn p" id="pnew">+ Nuevo</button></div>
+    <div class="chips" id="pfil" style="margin-top:8px"></div>
+    <div class="hint" id="pcount" style="margin-top:8px"></div>
+    <div class="list" id="plist"></div>
+  </section>
+
+  <!-- STOCK SIRM -->
+  <section data-p="sirm" hidden>
+    <div class="card"><h3>⚡ Stock en SIRM (entrega inmediata)</h3><p class="hint">Toca una talla para quitarla cuando se venda. Para agregar stock, busca el modelo abajo.</p></div>
+    <div class="list" id="slist"></div>
+    <div class="card"><h3>Agregar stock</h3><input id="sq" type="search" placeholder="Número o nombre del modelo"><div class="list" id="sadd"></div></div>
+  </section>
+
+  <!-- PRECIOS -->
+  <section data-p="prec" hidden>
+    <div class="card" id="cpool"></div>
+    <div class="card" id="cpromo"></div>
+    <div class="card" id="cmay"></div>
+    <div class="card" id="clin"></div>
+  </section>
+
+  <!-- AJUSTES -->
+  <section data-p="ajus" hidden>
+    <div class="card" id="ctienda"></div>
+    <div class="card" id="ccats"></div>
+  </section>
+
+  <!-- PUBLICAR -->
+  <section data-p="pub" hidden>
+    <div class="card"><h3>1 · Revisa el catálogo de prueba</h3><p class="hint">Todo lo que guardas aquí va primero al <b>catálogo de prueba</b> (<a href="prueba.html" target="_blank" rel="noopener">prueba.html</a>), con franja amarilla y pedidos marcados como PRUEBA. Ábrelo en tu celular y revisa antes de publicar. Tarda 1 a 2 minutos en actualizarse después de guardar.</p></div>
+    <div class="card"><h3>2 · Diferencias con el catálogo público</h3><div class="diff" id="diff">Calculando…</div>
+      <button class="btn p w" id="publicar" style="margin-top:12px">🚀 Publicar al catálogo público</button>
+      <button class="btn w" id="descartar" style="margin-top:8px">↩︎ Descartar prueba (volver a lo publicado)</button></div>
+    <div class="card"><h3>Emergencias</h3>
+      <div class="sw"><div><b>"Estamos actualizando"</b><small>Bloquea el catálogo público, el de muestra y el de revendedores con un aviso y botón de WhatsApp. El de prueba sigue funcionando.</small></div><label class="tg"><input type="checkbox" id="mant"><span></span></label></div>
+      <div class="f"><label>Mensaje</label><input type="text" id="mantmsg"></div>
+      <div class="sw"><div><b>Bloquear catálogo de revendedores</b><small>r-hspd76.html muestra "no disponible" sin cambiar la dirección (los links ya compartidos vuelven a funcionar al desbloquear).</small></div><label class="tg"><input type="checkbox" id="revblq"><span></span></label></div>
+      <button class="btn bad w" id="mantsave" style="margin-top:8px">Aplicar ahora al público</button>
+    </div>
+    <div class="card"><h3>Links</h3><p class="hint" style="line-height:2">
+      <a href="./" target="_blank" rel="noopener">Catálogo público (mayoristas)</a> ·
+      <a href="modelos.html" target="_blank" rel="noopener">Muestra sin precios</a> ·
+      <a href="r-hspd76.html" target="_blank" rel="noopener">Revendedores</a> ·
+      <a href="privacidad.html" target="_blank" rel="noopener">Términos y privacidad</a></p></div>
+  </section>
+</main>
+<div class="bar"><div class="wrap"><div class="st" id="bst">Sin cambios</div><button class="btn ok" id="guardar" disabled>💾 Guardar en prueba</button></div></div>
+</div>
+
+<!-- Editor de producto -->
+<section class="sheet" id="ed">
+  <div class="hd"><div class="wrap"><button class="btn sm" id="edx">← Volver</button><h2 id="edt"></h2></div></div>
+  <div class="wrap" id="edb" style="padding-bottom:120px"></div>
+</section>
+
+<!-- Recorte de foto -->
+<section class="sheet" id="cr">
+  <div class="hd"><div class="wrap"><button class="btn sm" id="crx">Cancelar</button><h2>Recortar foto</h2><button class="btn p sm" id="crok">Usar foto</button></div></div>
+  <div class="wrap">
+    <p class="hint" style="margin-top:10px">Arrastra para mover el cuadro. Que se vea toda la gorra, sin la interfaz del celular.</p>
+    <div class="crop" id="crbox"><canvas id="crc"></canvas></div>
+    <div class="f"><label>Tamaño del recorte</label><input type="range" id="crz" min="20" max="100" value="100"></div>
+    <div class="row"><button class="btn sm" id="crauto">✨ Auto (captura del proveedor)</button><button class="btn sm" id="crfull">⬜ Foto completa (relleno desenfocado)</button></div>
+    <p class="hint" id="crinfo" style="margin-top:8px"></p>
+  </div>
+</section>
+
+<div class="busy" id="busy"><div class="spin"></div><div id="busyt">Guardando…</div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="file" accept="image/*" hidden>
+
+<script>
+/* ===================== Panel de administración · Casta Caps =====================
+   Guarda en el repositorio GorrasCasta/GorrasCasta.github.io usando la API de GitHub.
+   - Todo lo que se edita va a datos-prueba/ (catálogo de prueba).
+   - "Publicar" copia datos-prueba/ → datos/ (catálogo público) en un solo cambio.
+   - "Estamos actualizando" escribe datos/estado.json directo al público.
+   La llave de GitHub se guarda cifrada (AES-GCM, PBKDF2) con la clave del panel, solo en este navegador. */
+const OWNER = "GorrasCasta", REPO = "GorrasCasta.github.io", BR = "main";
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => "$" + Number(n||0).toLocaleString("es-MX");
+const slug = s => String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"");
+const tkey = t => t === "Única" ? "unica" : slug(t.replace(/\//g,"-"));
+const UNI = "Única";
+let tt; const toast = (t, ms=1800) => { const e = $("#toast"); e.textContent = t; e.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => e.classList.remove("on"), ms); };
+const busy = t => { $("#busyt").textContent = t || ""; $("#busy").classList.toggle("on", !!t); };
+
+/* ---------- Llave cifrada ---------- */
+const enc = new TextEncoder(), dec = new TextDecoder();
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function llaveDe(clave, salt){
+  const k = await crypto.subtle.importKey("raw", enc.encode(clave), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2", salt, iterations:200000, hash:"SHA-256"}, k, {name:"AES-GCM", length:256}, false, ["encrypt","decrypt"]);
+}
+async function cifra(clave, texto){
+  const salt = crypto.getRandomValues(new Uint8Array(16)), iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, await llaveDe(clave, salt), enc.encode(texto));
+  return {s:b64(salt), i:b64(iv), d:b64(ct)};
+}
+async function descifra(clave, o){
+  const pt = await crypto.subtle.decrypt({name:"AES-GCM", iv:unb64(o.i)}, await llaveDe(clave, unb64(o.s)), unb64(o.d));
+  return dec.decode(pt);
+}
+let TOKEN = null;
+
+/* ---------- GitHub ---------- */
+async function gh(path, opt={}){
+  const r = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + path, {
+    ...opt, cache:"no-store",
+    headers:{"Authorization":"Bearer " + TOKEN, "Accept":"application/vnd.github+json", "X-GitHub-Api-Version":"2022-11-28", ...(opt.body?{"Content-Type":"application/json"}:{})}
+  });
+  if(!r.ok){ let m = r.status + ""; try{ m += " " + (await r.json()).message; }catch(e){} const e = new Error(m); e.status = r.status; throw e; }
+  return r.status === 204 ? null : r.json();
+}
+const utf8b64 = s => { const b = enc.encode(s); let x = ""; for(let i=0;i<b.length;i+=0x8000) x += String.fromCharCode(...b.subarray(i,i+0x8000)); return btoa(x); };
+const b64utf8 = s => dec.decode(Uint8Array.from(atob(s.replace(/\n/g,"")), c => c.charCodeAt(0)));
+async function leer(path){
+  try{ const j = await gh("/contents/" + encodeURI(path) + "?ref=" + BR);
+    let txt;
+    if(j.content) txt = b64utf8(j.content);
+    else { const bl = await gh("/git/blobs/" + j.sha); txt = b64utf8(bl.content); }
+    return {sha:j.sha, txt};
+  }catch(e){ if(e.status === 404) return {sha:null, txt:null}; throw e; }
+}
+// Un solo commit con varios archivos. files: [{path, txt}] o [{path, b64}]
+async function commit(files, msg){
+  for(let intento=0; intento<2; intento++){
+    const ref = await gh("/git/ref/heads/" + BR), base = ref.object.sha;
+    const bc = await gh("/git/commits/" + base);
+    const tree = [];
+    for(const f of files){
+      const bl = await gh("/git/blobs", {method:"POST", body:JSON.stringify(f.b64 != null ? {content:f.b64, encoding:"base64"} : {content:f.txt, encoding:"utf-8"})});
+      tree.push({path:f.path, mode:"100644", type:"blob", sha:bl.sha});
+    }
+    const t = await gh("/git/trees", {method:"POST", body:JSON.stringify({base_tree:bc.tree.sha, tree})});
+    const c = await gh("/git/commits", {method:"POST", body:JSON.stringify({message:msg + "\n\n(desde el panel de administración)", tree:t.sha, parents:[base]})});
+    try{ await gh("/git/refs/heads/" + BR, {method:"PATCH", body:JSON.stringify({sha:c.sha})}); return c.sha; }
+    catch(e){ if(e.status !== 422 || intento) throw e; }
+  }
+}
+
+/* ---------- Datos ---------- */
+let AJ = null, CF = {}, SHA = {}, PUB = {}, EST = {}, dirty = new Set(), FOTOS = [];   // FOTOS: archivos nuevos por subir
+const PRUEBA = "datos-prueba/", PUBLI = "datos/";
+const archivo = c => c.archivo || c.k + ".json";
+function serCat(o){
+  return '{"orden":' + JSON.stringify(o.orden||[]) + ',\n"productos":[\n' + (o.productos||[]).map(p => JSON.stringify(p)).join(",\n") + "\n]}\n";
+}
+const serAj = o => JSON.stringify(o, null, 1) + "\n";
+async function cargarTodo(){
+  busy("Cargando datos…");
+  try{
+    const a = await leer(PRUEBA + "ajustes.json"); AJ = JSON.parse(a.txt); SHA["ajustes.json"] = a.sha;
+    for(const c of AJ.categorias){
+      const r = await leer(PRUEBA + archivo(c));
+      CF[c.k] = r.txt ? JSON.parse(r.txt) : {orden:[], productos:[]}; SHA[archivo(c)] = r.sha;
+    }
+    const e = await leer(PUBLI + "estado.json"); EST = e.txt ? JSON.parse(e.txt) : {}; SHA["estado"] = e.sha;
+    dirty.clear(); FOTOS = [];
+  } finally { busy(""); }
+  pintarTodo();
+  calcDiff();
+}
+function marca(k){ dirty.add(k); paintBar(); }
+function paintBar(){
+  const n = dirty.size + FOTOS.length;
+  $("#guardar").disabled = !n;
+  $("#bst").innerHTML = n ? `<b>● Cambios sin guardar</b><br>${[...dirty].map(k=>k==="ajustes.json"?"ajustes y precios":k.replace(".json","")).join(", ")}${FOTOS.length?` · ${FOTOS.length/4} foto(s) nueva(s)`:""}` : "Todo guardado en prueba";
+}
+window.addEventListener("beforeunload", e => { if(dirty.size || FOTOS.length){ e.preventDefault(); e.returnValue = ""; } });
+
+async function guardar(){
+  // ¿Alguien más cambió los datos mientras editabas?
+  busy("Revisando…");
+  try{
+    for(const k of dirty){ const r = await leer(PRUEBA + k); if(r.sha !== SHA[k]){ busy(""); if(!confirm(`El archivo ${k} cambió en GitHub desde que lo abriste (otro celular u otra persona). ¿Guardar encima de todos modos?`)) return; busy("Guardando…"); } }
+    busy("Guardando en prueba…");
+    const files = FOTOS.map(f => ({path:f.path, b64:f.b64}));
+    for(const k of dirty){
+      if(k === "ajustes.json") files.push({path:PRUEBA + k, txt:serAj(AJ)});
+      else { const c = AJ.categorias.find(c => archivo(c) === k); files.push({path:PRUEBA + k, txt:serCat(CF[c.k])}); }
+    }
+    await commit(files, "Prueba: " + resumenCambios());
+    for(const k of dirty){ const r = await leer(PRUEBA + k); SHA[k] = r.sha; }
+    dirty.clear(); FOTOS = []; LOG = []; paintBar(); calcDiff();
+    toast("✓ Guardado en prueba. Se ve en 1–2 min", 3000);
+  }catch(e){ alert("No se pudo guardar: " + e.message); }
+  finally{ busy(""); }
+}
+let LOG = [];
+const anota = t => { if(!LOG.includes(t)) LOG.push(t); };
+const resumenCambios = () => (LOG.length ? LOG.slice(0,6).join("; ") + (LOG.length>6?` y ${LOG.length-6} más`:"") : "cambios") ;
+
+/* ---------- Navegación ---------- */
+let VISTA = "prod";
+$$("#nav button").forEach(b => b.onclick = () => { VISTA = b.dataset.v; $$("#nav button").forEach(x => x.setAttribute("aria-pressed", x===b)); $$("section[data-p]").forEach(s => s.hidden = s.dataset.p !== VISTA); pintarTodo(); });
+function pintarTodo(){
+  if(VISTA === "prod") pintaProd();
+  if(VISTA === "sirm") pintaSirm();
+  if(VISTA === "prec") pintaPrec();
+  if(VISTA === "ajus") pintaAjus();
+  if(VISTA === "pub") pintaPub();
+  paintBar();
+}
+
+/* ---------- Ayudantes de producto ---------- */
+const CAT = k => AJ.categorias.find(c => c.k === k);
+const VOP = c => (c.variante && c.variante.opciones) || [];
+const esGorra = c => c.k === "gorras";
+const thumb = p => { const f = p.f || {}; const v = f["*"] || Object.values(f)[0]; if(!v) return "og.jpg"; const nf = FOTOS.find(x => x.path === v.replace("img/","t/")); return nf ? nf.url : v.replace("img/","t/"); };
+const fotoUrl = v => { const nf = FOTOS.find(x => x.path === v); return nf ? nf.url : v; };
+// variantes que tiene: gorras = tallas con foto (+ stock); otras = lista v
+function tieneVar(c, p, t){ if(!esGorra(c) && Array.isArray(p.v)) return t===UNI ? p.v.length===0 : p.v.includes(t); return !!(p.f||{})[t]; }
+function agotada(p, t){ return p.x === "todas" || (Array.isArray(p.x) && p.x.includes(t)); }
+function enStock(p, t){ return p.s === "todas" || (Array.isArray(p.s) && p.s.includes(t)); }
+function linea(c, p){ return (c.lineas||[]).find(l => l.k === p.e); }
+function siguiente(c){ const ps = CF[c.k].productos; const n = ps.reduce((a,p) => Math.max(a, parseInt(String(p.c).replace(/\D/g,""),10)||0), 0) + 1;
+  return c.prefijo ? c.prefijo + "-" + String(n).padStart(3,"0") : "#" + String(n).padStart(3,"0"); }
+
+/* ---------- Productos: lista ---------- */
+let PCAT = "gorras", PFIL = "todos", PQ = "", PMAX = 60;
+const FILS = [["todos","Todos"],["vis","Visibles"],["ocu","Ocultos"],["ago","Con agotadas"],["sirm","⚡ Stock"],["nuevo","Nuevos"]];
+function pintaProd(){
+  if(!CAT(PCAT)) PCAT = AJ.categorias[0].k;
+  $("#pcats").innerHTML = AJ.categorias.map(c => `<button class="chip" data-k="${c.k}" aria-pressed="${c.k===PCAT}">${esc(c.n)} · ${CF[c.k].productos.length}${c.activa?"":" (oculta)"}</button>`).join("");
+  $$("#pcats .chip").forEach(b => b.onclick = () => { PCAT = b.dataset.k; PMAX = 60; pintaProd(); });
+  $("#pfil").innerHTML = FILS.map(([k,n]) => `<button class="chip" data-k="${k}" aria-pressed="${k===PFIL}">${n}</button>`).join("");
+  $$("#pfil .chip").forEach(b => b.onclick = () => { PFIL = b.dataset.k; PMAX = 60; pintaProd(); });
+  const c = CAT(PCAT), ps = CF[PCAT].productos, nd = AJ.nuevos_desde || 1e9;
+  const w = slug(PQ).split("-").filter(Boolean);
+  let L = ps.filter(p => {
+    if(PFIL==="vis" && p.o) return false; if(PFIL==="ocu" && !p.o) return false;
+    if(PFIL==="ago" && !p.x) return false; if(PFIL==="sirm" && !p.s) return false;
+    if(PFIL==="nuevo" && !(p.nv || (esGorra(c) && parseInt(p.c.slice(1))>=nd))) return false;
+    const s = slug(p.c + " " + p.c.replace(/\D/g,"") + " " + p.n + " " + p.id + " " + (p.l||"") + " " + p.e);
+    return w.every(x => s.includes(x));
+  });
+  L = L.slice().reverse();   // los más nuevos primero
+  $("#pcount").textContent = `${L.length} de ${ps.length} productos` + (c.activa ? "" : " · esta categoría está oculta en el público (actívala en Ajustes)");
+  $("#plist").innerHTML = L.slice(0, PMAX).map(p => {
+    const vs = esGorra(c) ? [...VOP(c), UNI].filter(t => tieneVar(c,p,t)) : (Array.isArray(p.v) ? (p.v.length ? p.v : [UNI]) : []);
+    return `<button class="it" data-c="${esc(p.c)}"><img loading="lazy" src="${esc(thumb(p))}" alt=""><div class="t"><b>${esc(p.c)} · ${esc(p.n)}</b><span>${esc(p.e)}${p.l?" · "+esc(p.l):""} · ${vs.map(t=>t===UNI?"Única":t).join(", ")||"sin variantes"}</span><div>
+      ${p.o?'<span class="bd o">Oculto</span>':""}${p.x?'<span class="bd x">Agotada '+esc(p.x==="todas"?"todo":p.x.join(", "))+'</span>':""}${p.s?'<span class="bd s">⚡ '+esc(p.s==="todas"?"todas":p.s.join(", "))+'</span>':""}${p.nv?'<span class="bd n">Nuevo</span>':""}${p.pr||p.p?'<span class="bd c">Precio propio</span>':""}</div></div></button>`; }).join("")
+    + (L.length > PMAX ? `<button class="btn w" id="pmas">Ver más (${L.length-PMAX})</button>` : "");
+  $$("#plist .it").forEach(b => b.onclick = () => editar(PCAT, b.dataset.c));
+  if($("#pmas")) $("#pmas").onclick = () => { PMAX += 120; pintaProd(); };
+}
+$("#pq").oninput = e => { PQ = e.target.value; PMAX = 60; pintaProd(); };
+$("#pnew").onclick = () => nuevo(PCAT);
+
+/* ---------- Productos: editor ---------- */
+let EP = null, EC = null, EN = false;   // producto en edición (copia), categoría, ¿es nuevo?
+function nuevo(ck){
+  const c = CAT(ck);
+  EC = c; EN = true;
+  EP = {c:siguiente(c), id:"", n:"", l:"", e:(c.lineas[0]||{}).k||"", f:{}};
+  if(!esGorra(c)) EP.v = [];
+  abrirEd();
+}
+function editar(ck, code){
+  EC = CAT(ck); EN = false;
+  EP = JSON.parse(JSON.stringify(CF[ck].productos.find(p => p.c === code)));
+  abrirEd();
+}
+function abrirEd(){ $("#ed").classList.add("on"); pintaEd(); window.scrollTo(0,0); $("#ed").scrollTop = 0; }
+$("#edx").onclick = () => { if(edCambio && !confirm("¿Salir sin aplicar los cambios de este producto?")) return; $("#ed").classList.remove("on"); edCambio = false; };
+let edCambio = false;
+function pintaEd(){
+  const c = EC, p = EP, gor = esGorra(c), lin = linea(c,p) || {};
+  const ligas = [...new Set(CF[c.k].productos.map(x => x.l).filter(Boolean))];
+  const ops = gor ? [...VOP(c), UNI] : [...VOP(c)];
+  const vnom = (c.variante && c.variante.nombre) || "Opción";
+  $("#edt").textContent = (EN ? "Nuevo · " : "") + p.c + (p.n ? " · " + p.n : "");
+  let h = `<div class="card">
+    <div class="f"><label>Nombre (equipo · parche · colores)</label><input type="text" id="en" value="${esc(p.n)}" placeholder="Ej. LA Dodgers Clásica Negra"></div>
+    <div class="row">
+      <div class="f"><label>Línea / estilo</label><select id="ee">${(c.lineas||[]).map(l => `<option value="${esc(l.k)}" ${l.k===p.e?"selected":""}>${esc(l.n||l.k)}${l.sub?" "+esc(l.sub):""}</option>`).join("")}</select></div>
+      <div class="f"><label>Etiqueta / liga</label><input type="text" id="el" value="${esc(p.l||"")}" list="ligas" placeholder="MLB, NBA, Bélicas…"><datalist id="ligas">${ligas.map(l=>`<option value="${esc(l)}">`).join("")}</datalist></div>
+    </div>
+    <div class="f"><label>Identificador (para las fotos)</label><input type="text" id="ei" value="${esc(p.id)}" ${EN?"":"readonly"} placeholder="se llena solo con el nombre">
+      <span class="hint">${EN ? "Se llena solo. Debe ser único en todo el catálogo." : "No se cambia en productos ya publicados (rompería bolsas y favoritos)."}</span></div>
+  </div>`;
+  // Variantes
+  h += `<div class="card"><h3>${gor ? "Tallas" : esc(vnom) + (ops.length ? "s" : "")}</h3>
+    <p class="hint" style="margin-bottom:6px">${gor ? "Una talla está disponible si tiene foto. Usa <b>Agotada</b> si el proveedor ya no la tiene y <b>⚡</b> si la tienes en SIRM." : "Marca las opciones que manejas. Si no tiene opciones, se vende como pieza única."}</p>
+    <table class="vt">${(gor ? ops : [...ops, UNI]).map(t => {
+      const on = tieneVar(c,p,t), ag = agotada(p,t), st = enStock(p,t), ft = gor ? (p.f||{})[t] : null;
+      return `<tr data-t="${esc(t)}"><td>${t===UNI ? (gor?"Ajustable":"Única") : esc(t)}</td>
+        ${gor ? `<td>${ft ? `<img src="${esc(fotoUrl(ft).replace(/^img\//,"t/"))}" alt="">` : `<span class="hint">sin foto</span>`}</td>` : ""}
+        <td><div class="seg"><button class="n" data-a="no" aria-pressed="${!on}">No</button><button class="a" data-a="si" aria-pressed="${on && !ag}">Sí</button><button class="x" data-a="ago" aria-pressed="${on && ag}">Agotada</button></div></td>
+        <td><button class="bolt" data-a="sirm" aria-pressed="${st}">⚡</button></td>
+        ${gor ? `<td><button class="btn sm" data-a="foto">📷</button></td>` : ""}</tr>`; }).join("")}</table>
+    ${gor ? `<button class="btn w" id="efall" style="margin-top:10px">📷 Una foto para todas las tallas marcadas</button>` : ""}
+  </div>`;
+  if(!gor){
+    const fm = (p.f||{})["*"];
+    h += `<div class="card"><h3>Foto</h3><div class="row">${fm ? `<img src="${esc(fotoUrl(fm).replace(/^img\//,"t/"))}" style="width:110px;height:110px;border-radius:12px;object-fit:cover">` : `<span class="hint">Sin foto todavía</span>`}<button class="btn" id="efmain">📷 ${fm?"Cambiar":"Subir"} foto</button></div></div>`;
+  }
+  // Precio
+  if(!lin.pool){
+    h += `<div class="card"><h3>Precio</h3><p class="hint">Precio de la línea: <b>${lin.precio>0?fmt(lin.precio):"sin precio"}</b>. Déjalo vacío para usar el de la línea.</p>
+      <div class="f"><label>Precio propio de este producto</label><input type="number" id="epr" inputmode="numeric" value="${p.pr||""}" placeholder="${lin.precio||""}"></div>
+      ${ops.length ? `<details ${p.p?"open":""}><summary class="hint" style="cursor:pointer">Precio distinto por ${esc(vnom.toLowerCase())} (ej. perfume 50 ml / 100 ml)</summary>
+        ${ops.map(t => `<div class="row"><span style="width:90px;font-weight:700">${esc(t)}</span><input type="number" data-pv="${esc(t)}" inputmode="numeric" value="${(p.p||{})[t]||""}" style="flex:1"></div>`).join("")}</details>` : ""}</div>`;
+  } else h += `<div class="card"><p class="hint">Precio: el de <b>${esc(AJ.pool.nombre)}</b> (${fmt(AJ.pool.precio)}, con promo y mayoreo). Se cambia en la pestaña Precios.</p></div>`;
+  // Estado
+  const nd = AJ.nuevos_desde || 1e9, nuevoNum = gor && parseInt(p.c.slice(1)) >= nd;
+  h += `<div class="card">
+    <div class="sw"><div><b>Visible en el catálogo</b><small>Apágalo para ocultarlo (no se borra: el número se conserva).</small></div><label class="tg"><input type="checkbox" id="evis" ${p.o?"":"checked"}><span></span></label></div>
+    <div class="sw"><div><b>Marcar como NUEVO</b><small>${nuevoNum ? "Ya sale como nuevo por su número (desde #" + nd + ")." : "Sale en ✨ Nuevos y en Recién llegadas."}</small></div><label class="tg"><input type="checkbox" id="env" ${p.nv||nuevoNum?"checked":""} ${nuevoNum?"disabled":""}><span></span></label></div>
+    <div class="sw"><div><b>Mostrar primero</b><small>Lo pone al inicio del orden del catálogo.</small></div><label class="tg"><input type="checkbox" id="eord" ${(CF[c.k].orden||[]).includes(p.c)?"checked":""}><span></span></label></div>
+  </div>
+  <button class="btn ok w" id="eok">✓ Aplicar cambios</button>
+  <p class="hint" style="margin-top:8px;text-align:center">Después toca <b>Guardar en prueba</b> abajo para subirlo.</p>`;
+  $("#edb").innerHTML = h;
+  // Eventos
+  const nm = $("#en"), idf = $("#ei");
+  nm.oninput = () => { p.n = nm.value; edCambio = true; if(EN) idf.value = p.id = slug(nm.value); };
+  idf.oninput = () => { p.id = slug(idf.value); edCambio = true; };
+  $("#ee").onchange = e => { p.e = e.target.value; edCambio = true; pintaEd(); };
+  $("#el").oninput = e => { p.l = e.target.value; edCambio = true; };
+  $$("#edb tr[data-t]").forEach(tr => {
+    const t = tr.dataset.t;
+    tr.querySelectorAll("button[data-a]").forEach(b => b.onclick = () => {
+      const a = b.dataset.a; edCambio = true;
+      if(a === "foto"){ pideFoto(t); return; }
+      if(a === "sirm"){ setLista(p, "s", t, !enStock(p,t)); pintaEd(); return; }
+      if(a === "no"){ quitaVar(c,p,t); setLista(p,"x",t,false); }
+      if(a === "si" || a === "ago"){
+        if(!tieneVar(c,p,t) && !poneVar(c,p,t)) return;
+        setLista(p, "x", t, a === "ago");
+      }
+      pintaEd();
+    });
+  });
+  if($("#efall")) $("#efall").onclick = () => pideFoto("*todas");
+  if($("#efmain")) $("#efmain").onclick = () => pideFoto("*");
+  if($("#epr")) $("#epr").oninput = e => { const v = Math.round(+e.target.value); if(v>0) p.pr = v; else delete p.pr; edCambio = true; };
+  $$("#edb [data-pv]").forEach(i => i.oninput = () => { const v = Math.round(+i.value); p.p = p.p || {}; if(v>0) p.p[i.dataset.pv] = v; else delete p.p[i.dataset.pv]; if(!Object.keys(p.p).length) delete p.p; edCambio = true; });
+  $("#evis").onchange = e => { if(e.target.checked) delete p.o; else p.o = 1; edCambio = true; };
+  $("#env").onchange = e => { if(e.target.checked) p.nv = 1; else delete p.nv; edCambio = true; };
+  $("#eord").onchange = () => { edCambio = true; };
+  $("#eok").onclick = aplicarEd;
+}
+// agrega/quita una talla u opción
+function poneVar(c, p, t){
+  if(esGorra(c)){
+    const otra = Object.values(p.f||{})[0];
+    if(!otra){ toast("Primero sube una foto para esta talla 📷"); pideFoto(t); return false; }
+    p.f[t] = otra;   // misma foto de otra talla del mismo modelo
+    if(t === UNI){ Object.keys(p.f).forEach(k => { if(k !== UNI) delete p.f[k]; }); }
+    else delete p.f[UNI];
+    return true;
+  }
+  p.v = Array.isArray(p.v) ? p.v : [];
+  if(t === UNI) p.v = []; else if(!p.v.includes(t)){ const o = VOP(c); p.v.push(t); p.v.sort((a,b) => o.indexOf(a)-o.indexOf(b)); }
+  return true;
+}
+function quitaVar(c, p, t){
+  if(esGorra(c)){ delete p.f[t]; if(p.w) { p.w = p.w.filter(x => x!==t); if(!p.w.length) delete p.w; } }
+  else if(Array.isArray(p.v)) p.v = p.v.filter(x => x !== t);
+  setLista(p, "s", t, false);
+}
+function setLista(p, k, t, on){
+  let a = p[k];
+  if(a === "todas"){ const c = EC; a = esGorra(c) ? Object.keys(p.f) : (p.v && p.v.length ? [...p.v] : [UNI]); }
+  a = Array.isArray(a) ? a.filter(x => x !== t) : [];
+  if(on) a.push(t);
+  if(a.length) p[k] = a; else delete p[k];
+}
+function aplicarEd(){
+  const c = EC, p = EP, ps = CF[c.k].productos;
+  p.n = p.n.trim();
+  if(!p.n){ toast("Falta el nombre"); return; }
+  if(EN){
+    p.id = slug(p.id || p.n);
+    if(!p.id){ toast("Falta el identificador"); return; }
+    if(AJ.categorias.some(cc => CF[cc.k].productos.some(x => x.id === p.id))){ toast("Ya existe un producto con ese identificador. Cambia el nombre (agrega color o 'Snapback')", 3500); return; }
+  }
+  const nv = esGorra(c) ? Object.keys(p.f).length : 1;
+  if(esGorra(c) && !nv){ toast("Marca al menos una talla con foto"); return; }
+  if(!esGorra(c) && !(p.f||{})["*"] && !confirm("Este producto no tiene foto. ¿Guardarlo así?")) return;
+  if(!p.l) delete p.l;
+  const ord = CF[c.k].orden = CF[c.k].orden || [];
+  const enOrd = ord.includes(p.c), quiere = $("#eord").checked;
+  if(quiere && !enOrd) ord.unshift(p.c); else if(!quiere && enOrd) CF[c.k].orden = ord.filter(x => x !== p.c);
+  if(EN){ ps.push(p); anota(`nuevo ${p.c} ${p.n}`); }
+  else { const i = ps.findIndex(x => x.c === p.c); ps[i] = p; anota(`${p.c} ${p.n}`); }
+  marca(archivo(c));
+  edCambio = false; $("#ed").classList.remove("on");
+  toast(EN ? "Producto agregado. Falta Guardar en prueba" : "Cambios aplicados. Falta Guardar en prueba", 2500);
+  pintarTodo();
+}
+
+/* ---------- Fotos: recorte y compresión en el celular ---------- */
+let FOTO_DEST = null, IMG = null, CROP = {x:0, y:0, s:0, full:false};
+function pideFoto(dest){
+  if(!EP.n.trim()){ toast("Primero escribe el nombre del producto"); return; }
+  if(EN && !EP.id) EP.id = slug(EP.n);
+  FOTO_DEST = dest; $("#file").value = ""; $("#file").click();
+}
+$("#file").onchange = async e => {
+  const f = e.target.files[0]; if(!f) return;
+  const url = URL.createObjectURL(f);
+  IMG = new Image(); IMG.onload = () => { CROP = {x:0, y:0, s:Math.min(IMG.width, IMG.height), full:false}; autoCrop(); $("#cr").classList.add("on"); dibuja(); };
+  IMG.src = url;
+};
+function autoCrop(){
+  // Capturas del visor del proveedor (1080 px de ancho): foto cuadrada de ~944 px en x 72–1008.
+  const W = IMG.width, H = IMG.height;
+  if(H > W * 1.3){
+    const s = Math.round(W * 944/1080), x = Math.round(W * 72/1080);
+    // busca la franja más clara (la foto) recorriendo filas
+    const cv = document.createElement("canvas"), k = 200 / W; cv.width = 200; cv.height = Math.round(H * k);
+    const cx = cv.getContext("2d"); cx.drawImage(IMG, 0, 0, cv.width, cv.height);
+    const d = cx.getImageData(0, 0, cv.width, cv.height).data, rows = [];
+    for(let y=0; y<cv.height; y++){ let sum = 0; for(let xx=20; xx<180; xx+=4){ const i = (y*200+xx)*4; sum += d[i]+d[i+1]+d[i+2]; } rows.push(sum/40/3); }
+    const sk = Math.round(s * k); let best = 0, by = 0;
+    for(let y=0; y+sk<rows.length; y++){ let m = 0; for(let j=0;j<sk;j+=2) m += rows[y+j]; if(m > best){ best = m; by = y; } }
+    CROP = {x, y:Math.round(by / k), s, full:false};
+  } else CROP = {x:Math.round((W-Math.min(W,H))/2), y:Math.round((H-Math.min(W,H))/2), s:Math.min(W,H), full:false};
+  $("#crz").value = Math.round(CROP.s / Math.min(W,H) * 100);
+}
+function dibuja(){
+  const c = $("#crc"), W = IMG.width, H = IMG.height, k = Math.min(1, 900 / Math.max(W,H));
+  c.width = Math.round(W*k); c.height = Math.round(H*k);
+  const x = c.getContext("2d"); x.drawImage(IMG, 0, 0, c.width, c.height);
+  if(!CROP.full){
+    x.fillStyle = "rgba(0,0,0,.6)"; x.beginPath(); x.rect(0,0,c.width,c.height); x.rect(CROP.x*k, CROP.y*k, CROP.s*k, CROP.s*k); x.fill("evenodd");
+    x.strokeStyle = "#ff7a1a"; x.lineWidth = 3; x.strokeRect(CROP.x*k, CROP.y*k, CROP.s*k, CROP.s*k);
+  }
+  $("#crinfo").textContent = CROP.full ? `Foto completa ${W}×${H}, se rellena a cuadrado con fondo desenfocado.` : `Recorte ${CROP.s}×${CROP.s} px` + (CROP.s < 600 ? " · ⚠️ chico, puede verse borroso" : "");
+}
+(() => {
+  const box = $("#crbox"); let drag = null;
+  const pt = e => { const r = $("#crc").getBoundingClientRect(), k = IMG.width / r.width; return {x:(e.clientX - r.left)*k, y:(e.clientY - r.top)*k}; };
+  box.addEventListener("pointerdown", e => { if(!IMG || CROP.full) return; drag = {p:pt(e), x:CROP.x, y:CROP.y}; box.setPointerCapture(e.pointerId); });
+  box.addEventListener("pointermove", e => { if(!drag) return; const q = pt(e);
+    CROP.x = Math.max(0, Math.min(IMG.width - CROP.s, Math.round(drag.x + q.x - drag.p.x)));
+    CROP.y = Math.max(0, Math.min(IMG.height - CROP.s, Math.round(drag.y + q.y - drag.p.y))); dibuja(); });
+  box.addEventListener("pointerup", () => drag = null); box.addEventListener("pointercancel", () => drag = null);
+  $("#crz").oninput = e => { const m = Math.min(IMG.width, IMG.height), s = Math.round(m * e.target.value / 100), cx = CROP.x + CROP.s/2, cy = CROP.y + CROP.s/2;
+    CROP.s = s; CROP.full = false; CROP.x = Math.max(0, Math.min(IMG.width - s, Math.round(cx - s/2))); CROP.y = Math.max(0, Math.min(IMG.height - s, Math.round(cy - s/2))); dibuja(); };
+  $("#crauto").onclick = () => { autoCrop(); dibuja(); };
+  $("#crfull").onclick = () => { CROP.full = true; dibuja(); };
+  $("#crx").onclick = () => $("#cr").classList.remove("on");
+  $("#crok").onclick = usarFoto;
+})();
+const blobDe = (cv, tipo, q) => new Promise(r => cv.toBlob(r, tipo, q));
+const b64De = blob => new Promise(r => { const fr = new FileReader(); fr.onload = () => r(String(fr.result).split(",")[1]); fr.readAsDataURL(blob); });
+function lienzo(lado){
+  // devuelve un canvas cuadrado con la foto recortada (o completa con relleno desenfocado)
+  const cv = document.createElement("canvas"); cv.width = cv.height = lado; const x = cv.getContext("2d");
+  x.imageSmoothingQuality = "high";
+  if(!CROP.full){ x.drawImage(IMG, CROP.x, CROP.y, CROP.s, CROP.s, 0, 0, lado, lado); return cv; }
+  const W = IMG.width, H = IMG.height;
+  // fondo: la misma foto agrandada, desenfocada y oscurecida (equivale a blur 28 + brillo 0.55; funciona en todos los navegadores)
+  const sm = document.createElement("canvas"); sm.width = sm.height = 24;
+  const sx = sm.getContext("2d"), s0 = Math.min(W,H); sx.drawImage(IMG, (W-s0)/2, (H-s0)/2, s0, s0, 0, 0, 24, 24);
+  x.drawImage(sm, -lado*.05, -lado*.05, lado*1.1, lado*1.1);
+  x.fillStyle = "rgba(0,0,0,.45)"; x.fillRect(0, 0, lado, lado);
+  const r = Math.min(lado/W, lado/H), w = W*r, h = H*r; x.drawImage(IMG, (lado-w)/2, (lado-h)/2, w, h);
+  return cv;
+}
+async function usarFoto(){
+  busy("Preparando foto…");
+  try{
+    const lado = Math.min(CROP.full ? Math.max(IMG.width, IMG.height) : CROP.s, 1000);
+    const big = lienzo(Math.max(400, lado)), sm = document.createElement("canvas"); sm.width = sm.height = 480;
+    const sx = sm.getContext("2d"); sx.imageSmoothingQuality = "high"; sx.drawImage(big, 0, 0, 480, 480);
+    const bj = await blobDe(big, "image/jpeg", .88), tj = await blobDe(sm, "image/jpeg", .80);
+    let bw = await blobDe(big, "image/webp", .86), tw = await blobDe(sm, "image/webp", .80);
+    if(!bw || bw.type !== "image/webp"){ bw = bj; tw = tj; }   // el navegador no hace WebP: se sube el JPG también con nombre .webp (los navegadores lo muestran igual)
+    const c = EC, p = EP;
+    const destinos = FOTO_DEST === "*todas" ? Object.keys(p.f).length ? Object.keys(p.f) : null : [FOTO_DEST];
+    if(!destinos){ toast("Primero marca qué tallas tiene (Sí) y luego sube la foto"); return; }
+    const pref = FOTO_DEST === "*" || FOTO_DEST === "*todas" ? (esGorra(c) ? tkey(destinos[0]) : (c.prefijo||c.k).toLowerCase()) : tkey(FOTO_DEST);
+    let base = `img/${pref}_${p.id}`, n = 1, nombre = base + ".jpg";
+    const usados = new Set(); AJ.categorias.forEach(cc => CF[cc.k].productos.forEach(x => Object.values(x.f||{}).forEach(v => usados.add(v)))); FOTOS.forEach(f => usados.add(f.path));
+    while(usados.has(nombre)){ n++; nombre = `${base}-${n}.jpg`; }   // nombre nuevo: evita que se vea la foto vieja guardada en los celulares
+    const t = nombre.replace(/^img\//, "t/");
+    FOTOS = FOTOS.filter(f => ![nombre, nombre.replace(".jpg",".webp"), t, t.replace(".jpg",".webp")].includes(f.path));
+    FOTOS.push({path:nombre, b64:await b64De(bj), url:URL.createObjectURL(bj)}, {path:nombre.replace(".jpg",".webp"), b64:await b64De(bw)},
+               {path:t, b64:await b64De(tj), url:URL.createObjectURL(tj)}, {path:t.replace(".jpg",".webp"), b64:await b64De(tw)});
+    p.f = p.f || {};
+    destinos.forEach(d => { p.f[d] = nombre; if(p.w) p.w = p.w.filter(x => x !== d); });
+    if(p.w && !p.w.length) delete p.w;
+    if(esGorra(c) && FOTO_DEST !== "*todas"){ if(FOTO_DEST === UNI) Object.keys(p.f).forEach(k => { if(k !== UNI) delete p.f[k]; }); else delete p.f[UNI]; }
+    edCambio = true; $("#cr").classList.remove("on"); paintBar(); pintaEd();
+    toast(`Foto lista (${Math.round(bj.size/1024)} KB)`);
+  }catch(e){ alert("No se pudo preparar la foto: " + e.message); }
+  finally{ busy(""); }
+}
+
+/* ---------- Stock SIRM ---------- */
+function pintaSirm(){
+  const L = [];
+  AJ.categorias.forEach(c => CF[c.k].productos.forEach(p => { if(p.s) L.push([c,p]); }));
+  const tot = L.reduce((a,[c,p]) => a + (p.s==="todas" ? 1 : p.s.length), 0);
+  $("#slist").innerHTML = `<p class="hint">${L.length} modelos · ${tot} piezas en stock</p>` + L.map(([c,p]) => `<div class="it"><img src="${esc(thumb(p))}" alt=""><div class="t"><b>${esc(p.c)} · ${esc(p.n)}</b><div class="chips" style="margin-top:6px">${(p.s==="todas"?["todas"]:p.s).map(t => `<button class="chip" aria-pressed="true" data-k="${c.k}" data-c="${esc(p.c)}" data-t="${esc(t)}">⚡ ${t===UNI?"Única":esc(t)} ✕</button>`).join("")}</div>${p.o?'<span class="bd o">Oculto</span>':""}</div></div>`).join("");
+  $$("#slist .chip").forEach(b => b.onclick = () => {
+    const c = CAT(b.dataset.k), p = CF[c.k].productos.find(x => x.c === b.dataset.c), t = b.dataset.t;
+    if(!confirm(`¿Quitar ${t==="todas"?"todo el stock":"la talla "+t} de ${p.c} ${p.n}? (vendida)`)) return;
+    EC = c; if(t === "todas") delete p.s; else setLista(p, "s", t, false);
+    anota(`stock ${p.c} −${t}`); marca(archivo(c)); pintaSirm();
+  });
+  const q = slug($("#sq").value), w = q.split("-").filter(Boolean);
+  const R = !w.length ? [] : AJ.categorias.flatMap(c => CF[c.k].productos.filter(p => w.every(x => slug(p.c+" "+p.c.replace(/\D/g,"")+" "+p.n).includes(x))).slice(0,8).map(p => [c,p]));
+  $("#sadd").innerHTML = R.map(([c,p]) => { const ops = esGorra(c) ? [...VOP(c), UNI].filter(t => tieneVar(c,p,t)) : (p.v && p.v.length ? p.v : [UNI]);
+    return `<div class="it"><img src="${esc(thumb(p))}" alt=""><div class="t"><b>${esc(p.c)} · ${esc(p.n)}</b><div class="chips" style="margin-top:6px">${ops.map(t => `<button class="chip" aria-pressed="${enStock(p,t)}" data-k="${c.k}" data-c="${esc(p.c)}" data-t="${esc(t)}">${t===UNI?"Única":esc(t)}</button>`).join("")}</div></div></div>`; }).join("");
+  $$("#sadd .chip").forEach(b => b.onclick = () => {
+    const c = CAT(b.dataset.k), p = CF[c.k].productos.find(x => x.c === b.dataset.c), t = b.dataset.t;
+    EC = c; const on = !enStock(p,t); setLista(p, "s", t, on); anota(`stock ${p.c} ${on?"+":"−"}${t}`); marca(archivo(c)); pintaSirm();
+  });
+}
+$("#sq").oninput = () => pintaSirm();
+
+/* ---------- Precios ---------- */
+const num = (id, v, ph="") => `<input type="number" inputmode="numeric" id="${id}" value="${v ?? ""}" placeholder="${ph}">`;
+function pintaPrec(){
+  const P = AJ.pool, PR = P.promo = P.promo || {};
+  $("#cpool").innerHTML = `<h3>${esc(P.nombre)} (59FIFTY, 9FIFTY, 9FORTY)</h3>
+    <div class="row"><div class="f"><label>Precio normal c/u</label>${num("pp", P.precio)}</div><div class="f"><label>Precio revendedor c/u</label>${num("prv", P.rev)}</div></div>`;
+  $("#cpromo").innerHTML = `<h3>Promoción (solo ${esc(P.nombre)})</h3>
+    <div class="sw"><div><b>Promo activa</b><small>${PR.activa && Date.now() < finDia(PR.hasta) ? "Se ve en el catálogo ahora." : PR.activa ? "⚠️ Ya venció por fecha: no se muestra." : "Apagada."}</small></div><label class="tg"><input type="checkbox" id="pon" ${PR.activa?"checked":""}><span></span></label></div>
+    <div class="row"><div class="f"><label>2 gorras por</label>${num("p2", PR.p2)}</div><div class="f"><label>3 gorras por</label>${num("p3", PR.p3)}</div></div>
+    <div class="f"><label>Vigente hasta (inclusive, hora Sonora)</label><input type="date" id="phas" value="${esc(PR.hasta||"")}"></div>`;
+  $("#cmay").innerHTML = `<h3>Mayoreo (solo ${esc(P.nombre)})</h3><p class="hint">Desde cuántas piezas y precio por pieza. Para quitar un escalón, deja el precio vacío.</p>
+    <div class="mtr hint"><b>Desde (pz)</b><b>Precio c/u</b><span></span></div>
+    ${(P.mayoreo||[]).map((m,i) => `<div class="mtr"><input type="number" data-mi="${i}" data-mk="min" value="${m.min}"><input type="number" data-mi="${i}" data-mk="precio" value="${m.precio}"><span class="hint">${fmt(m.min*m.precio)}</span></div>`).join("")}
+    <button class="btn sm" id="madd">+ Escalón</button><div class="err" id="merr"></div>`;
+  $("#clin").innerHTML = `<h3>Precios fijos por línea</h3><p class="hint">Sin promo ni mayoreo. El precio revendedor es su costo (mínimo que pueden cobrar).</p>` +
+    AJ.categorias.map(c => `<hr><b>${esc(c.n)}</b>${c.activa?"":" <span class='bd'>oculta</span>"}` + (c.lineas||[]).filter(l => !l.pool).map(l => {
+      const i = c.k + "|" + l.k;
+      return `<div class="row"><span style="flex:1.3;min-width:120px;font-weight:700">${esc(l.n||l.k)}</span><div class="f"><label>Público</label><input type="number" data-lk="${esc(i)}" data-lf="precio" value="${l.precio||""}"></div><div class="f"><label>Revendedor</label><input type="number" data-lk="${esc(i)}" data-lf="rev" value="${l.rev||""}"></div></div>`; }).join("")).join("");
+  const set = (fn) => e => { fn(e.target.value); marca("ajustes.json"); anota("precios"); checaMay(); };
+  $("#pp").oninput = set(v => P.precio = Math.round(+v)||0);
+  $("#prv").oninput = set(v => P.rev = Math.round(+v)||0);
+  $("#pon").onchange = e => { PR.activa = e.target.checked; marca("ajustes.json"); anota(PR.activa?"promo activada":"promo apagada"); pintaPrec(); };
+  $("#p2").oninput = set(v => PR.p2 = Math.round(+v)||0);
+  $("#p3").oninput = set(v => PR.p3 = Math.round(+v)||0);
+  $("#phas").oninput = set(v => PR.hasta = v);
+  $$("#cmay input").forEach(i => i.oninput = set(v => { const m = P.mayoreo[+i.dataset.mi]; m[i.dataset.mk] = Math.round(+v)||0; }));
+  $$("#cmay input").forEach(i => i.onchange = () => { P.mayoreo = P.mayoreo.filter(m => m.min > 1 && m.precio > 0).sort((a,b) => a.min-b.min); pintaPrec(); });
+  $("#madd").onclick = () => { const u = (P.mayoreo||[]).slice(-1)[0] || {min:4, precio:P.precio}; P.mayoreo.push({min:u.min+5, precio:u.precio-10}); marca("ajustes.json"); pintaPrec(); };
+  $$("#clin input").forEach(i => i.oninput = set(v => { const [ck, lk] = i.dataset.lk.split("|"), l = CAT(ck).lineas.find(x => x.k === lk); l[i.dataset.lf] = Math.round(+v)||0; }));
+  checaMay();
+}
+function checaMay(){
+  const P = AJ.pool, M = [...(P.mayoreo||[])].sort((a,b) => a.min-b.min), err = [];
+  let prev = {n:M.length ? M[0].min-1 : 0, p:P.precio};
+  if(P.promo && P.promo.activa){ if(P.promo.p2 >= 2*P.precio) err.push("La promo de 2 no ahorra nada."); if(P.promo.p3 >= 3*P.precio) err.push("La promo de 3 no ahorra nada."); }
+  M.forEach(m => { if(m.min*m.precio < prev.n*prev.p) err.push(`Con ${m.min} pz pagan ${fmt(m.min*m.precio)}, menos que con ${prev.n} pz (${fmt(prev.n*prev.p)}). Al subir de piezas el total no debería bajar.`); if(m.precio >= prev.p) err.push(`El escalón de ${m.min} pz no es más barato que el anterior.`); prev = {n:m.min, p:m.precio}; });
+  if(P.rev && P.rev >= P.precio) err.push("El precio revendedor es igual o mayor que el normal.");
+  if($("#merr")) $("#merr").innerHTML = err.map(esc).join("<br>");
+}
+const finDia = f => { const [y,m,d] = String(f||"").split("-").map(Number); return y ? Date.UTC(y, m-1, d+1, 7, 0) : 0; };
+
+/* ---------- Ajustes ---------- */
+function pintaAjus(){
+  const T = AJ.tienda = AJ.tienda || {};
+  $("#ctienda").innerHTML = `<h3>Tienda</h3>
+    <div class="f"><label>Nombre (encabezado y mensajes)</label><input type="text" id="tn" value="${esc(T.nombre)}"></div>
+    <div class="f"><label>Lema (debajo del nombre; " · " separa renglones)</label><input type="text" id="tl" value="${esc(T.lema)}"></div>
+    <div class="f"><label>Título grande ("|" = segunda línea en naranja)</label><input type="text" id="tt" value="${esc(T.titular)}"></div>
+    <div class="f"><label>Texto debajo del título</label><textarea id="tx">${esc(T.texto)}</textarea></div>
+    <div class="row"><div class="f"><label>WhatsApp de pedidos (52 + 10 dígitos)</label><input type="text" id="tw" inputmode="numeric" value="${esc(T.whatsapp)}"></div>
+    <div class="f"><label>Nuevas desde el # (gorras)</label>${num("tnd", AJ.nuevos_desde)}</div></div>
+    <div class="row"><div class="f"><label>Cierre del pedido: día</label><select id="tcd">${["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"].map((d,i)=>`<option value="${i}" ${AJ.cierre.dia===i?"selected":""}>${d}</option>`).join("")}</select></div>
+    <div class="f"><label>Hora (0–23)</label>${num("tch", AJ.cierre.hora)}</div></div>`;
+  const on = (id, fn) => $(id).oninput = e => { fn(e.target.value); marca("ajustes.json"); anota("ajustes de tienda"); };
+  on("#tn", v => T.nombre = v); on("#tl", v => T.lema = v); on("#tt", v => T.titular = v); on("#tx", v => T.texto = v);
+  on("#tw", v => T.whatsapp = v.replace(/\D/g,"")); on("#tnd", v => AJ.nuevos_desde = Math.round(+v)||0);
+  on("#tcd", v => AJ.cierre.dia = +v); on("#tch", v => AJ.cierre.hora = Math.max(0, Math.min(23, Math.round(+v)||0)));
+  $("#ccats").innerHTML = `<h3>Categorías</h3><p class="hint">Una categoría oculta solo se ve en el catálogo de prueba. Actívala cuando tenga productos con foto y precio.</p>` +
+    AJ.categorias.map((c,ci) => `<hr>
+      <div class="sw"><div><b>${esc(c.n)}</b><small>${CF[c.k].productos.length} productos · clave ${c.prefijo?esc(c.prefijo)+"-001":"#001"}</small></div><label class="tg"><input type="checkbox" data-ca="${ci}" ${c.activa?"checked":""}><span></span></label></div>
+      <div class="row"><div class="f"><label>Nombre</label><input type="text" data-cn="${ci}" value="${esc(c.n)}"></div>
+      <div class="f"><label>${esGorra(c)?"Tallas":"Opciones (separadas por coma)"}</label><input type="text" data-cv="${ci}" value="${esc(VOP(c).join(", "))}" ${esGorra(c)?"readonly":""}></div></div>
+      <div class="f"><label>Nombre de la opción</label><input type="text" data-cvn="${ci}" value="${esc((c.variante||{}).nombre||"")}" placeholder="Talla, Presentación…" ${esGorra(c)?"readonly":""}></div>
+      <b class="hint">Líneas</b>${(c.lineas||[]).map(l => `<div class="hint">· ${esc(l.n||l.k)}${l.sub?" ("+esc(l.sub)+")":""}${l.pool?" — precio "+esc(AJ.pool.nombre):l.precio?" — "+fmt(l.precio):" — sin precio"}</div>`).join("")}
+      ${esGorra(c) ? "" : `<div class="row" style="margin-top:6px"><input type="text" data-nl="${ci}" placeholder="Nueva línea (ej. Camisas Oversize)" style="flex:1"><button class="btn sm" data-nlb="${ci}">+ Línea</button></div>`}`).join("");
+  $$("[data-ca]").forEach(i => i.onchange = () => { const c = AJ.categorias[+i.dataset.ca];
+    if(i.checked && !CF[c.k].productos.some(p => !p.o)){ alert("Esta categoría no tiene productos visibles todavía."); i.checked = false; return; }
+    c.activa = i.checked; marca("ajustes.json"); anota(`${c.n} ${c.activa?"activada":"oculta"}`); pintaAjus(); });
+  $$("[data-cn]").forEach(i => i.oninput = () => { AJ.categorias[+i.dataset.cn].n = i.value; marca("ajustes.json"); });
+  $$("[data-cv]").forEach(i => i.onchange = () => { const c = AJ.categorias[+i.dataset.cv]; c.variante = c.variante || {}; c.variante.opciones = i.value.split(",").map(s => s.trim()).filter(Boolean); marca("ajustes.json"); anota(`opciones de ${c.n}`); });
+  $$("[data-cvn]").forEach(i => i.oninput = () => { const c = AJ.categorias[+i.dataset.cvn]; c.variante = c.variante || {}; c.variante.nombre = i.value; marca("ajustes.json"); });
+  $$("[data-nlb]").forEach(b => b.onclick = () => { const ci = +b.dataset.nlb, c = AJ.categorias[ci], v = $(`[data-nl="${ci}"]`).value.trim(); if(!v) return;
+    if(c.lineas.some(l => l.k === v)){ toast("Ya existe"); return; } c.lineas.push({k:v, n:v, sub:"", precio:0, rev:0}); marca("ajustes.json"); anota(`línea ${v}`); pintaAjus(); });
+}
+
+/* ---------- Publicar ---------- */
+async function calcDiff(){
+  const out = [];
+  try{
+    const a = await leer(PUBLI + "ajustes.json"); PUB["ajustes.json"] = a.txt ? JSON.parse(a.txt) : null;
+    for(const c of AJ.categorias){ const r = await leer(PUBLI + archivo(c)); PUB[archivo(c)] = r.txt ? JSON.parse(r.txt) : {orden:[], productos:[]}; }
+  }catch(e){ $("#diff").textContent = "No se pudo comparar: " + e.message; return; }
+  const pa = PUB["ajustes.json"] || {};
+  const J = JSON.stringify;
+  if(J(pa.pool) !== J(AJ.pool)) out.push("<b>Precios, promo o mayoreo</b> cambiaron");
+  if(J(pa.tienda) !== J(AJ.tienda) || pa.nuevos_desde !== AJ.nuevos_desde || J(pa.cierre) !== J(AJ.cierre)) out.push("<b>Ajustes de tienda</b> cambiaron");
+  AJ.categorias.forEach(c => { const pc = (pa.categorias||[]).find(x => x.k === c.k);
+    if(!pc) out.push(`Categoría nueva <b>${esc(c.n)}</b>`);
+    else { if(!!pc.activa !== !!c.activa) out.push(`<b>${esc(c.n)}</b> pasa a ${c.activa?"VISIBLE":"oculta"}`); if(J({...pc,activa:0}) !== J({...c,activa:0})) out.push(`Configuración de <b>${esc(c.n)}</b> (líneas, precios u opciones)`); }
+    const A = PUB[archivo(c)].productos, B = CF[c.k].productos, mA = {}; A.forEach(p => mA[p.c] = J(p));
+    const nuevos = B.filter(p => !mA[p.c]), camb = B.filter(p => mA[p.c] && mA[p.c] !== J(p));
+    if(nuevos.length) out.push(`${esc(c.n)}: <b>${nuevos.length} nuevo(s)</b> — ${nuevos.slice(0,8).map(p => esc(p.c)).join(", ")}${nuevos.length>8?"…":""}`);
+    if(camb.length) out.push(`${esc(c.n)}: <b>${camb.length} con cambios</b> — ${camb.slice(0,8).map(p => esc(p.c)).join(", ")}${camb.length>8?"…":""}`);
+    if(J(PUB[archivo(c)].orden) !== J(CF[c.k].orden)) out.push(`${esc(c.n)}: cambió el orden`);
+  });
+  HAYDIF = out.length > 0;
+  $("#diff").innerHTML = (dirty.size||FOTOS.length ? `<p style="color:var(--warn);font-weight:700;margin-bottom:6px">Tienes cambios sin guardar: guárdalos en prueba antes de publicar.</p>` : "") +
+    (out.length ? out.map(x => "• " + x).join("<br>") : "El catálogo de prueba es igual al público.");
+  if(VISTA === "pub") pintaPub();
+}
+let HAYDIF = false;
+function pintaPub(){
+  $("#publicar").disabled = !HAYDIF || dirty.size>0 || FOTOS.length>0;
+  $("#descartar").disabled = !HAYDIF;
+  $("#mant").checked = !!EST.mantenimiento; $("#mantmsg").value = EST.mensaje || "Estamos actualizando el catálogo. Vuelve en unos minutos o escríbenos por WhatsApp.";
+  $("#revblq").checked = !!EST.rev_bloqueado;
+}
+function ogTexto(){
+  const P = AJ.pool, M = [...(P.mayoreo||[])].sort((a,b) => a.min-b.min);
+  const esp = []; const g = CAT("gorras"); if(g) (g.lineas||[]).filter(l => !l.pool && l.precio>0).forEach(l => esp.push(l.n));
+  return `${P.nombre} ${fmt(P.precio)} c/u. Entre más llevas, menos pagas: ${M.map(m => m.min+"+ "+fmt(m.precio)).join(" · ")}. ${esp.length ? esp.slice(0,-1).join(", ") + (esp.length>1?" y ":"") + esp.slice(-1) + ". " : ""}Pide por WhatsApp.`;
+}
+$("#publicar").onclick = async () => {
+  if(!confirm("¿Publicar el catálogo de prueba en el catálogo PÚBLICO? Lo verán tus clientes en 1–2 minutos.")) return;
+  busy("Publicando…");
+  try{
+    const files = [];
+    const aj = JSON.parse(JSON.stringify(AJ)); aj.version = (aj.version||50) + 1;
+    files.push({path:PUBLI + "ajustes.json", txt:serAj(aj)}, {path:PRUEBA + "ajustes.json", txt:serAj(aj)});
+    AJ.categorias.forEach(c => files.push({path:PUBLI + archivo(c), txt:serCat(CF[c.k])}));
+    // descripción al compartir el link (WhatsApp/Facebook no leen los datos, solo el index.html)
+    const ix = await leer("index.html");
+    if(ix.txt){ const og = ogTexto().replace(/"/g,"&quot;"); const nx = ix.txt.replace(/(<meta property="og:description" content=")[^"]*(")/, "$1" + og + "$2"); if(nx !== ix.txt) files.push({path:"index.html", txt:nx}); }
+    await commit(files, "Publicar catálogo: " + (resumenCambios()==="cambios" ? "cambios de prueba" : resumenCambios()));
+    AJ.version = aj.version; SHA["ajustes.json"] = (await leer(PRUEBA + "ajustes.json")).sha;
+    toast("🚀 Publicado. Se ve en 1–2 minutos", 3500); calcDiff();
+  }catch(e){ alert("No se pudo publicar: " + e.message); }
+  finally{ busy(""); }
+};
+$("#descartar").onclick = async () => {
+  if(!confirm("¿Borrar los cambios del catálogo de prueba y dejarlo igual que el público?")) return;
+  busy("Restaurando prueba…");
+  try{
+    const files = [];
+    const a = await leer(PUBLI + "ajustes.json"); files.push({path:PRUEBA + "ajustes.json", txt:a.txt});
+    const aj = JSON.parse(a.txt);
+    for(const c of aj.categorias){ const r = await leer(PUBLI + archivo(c)); files.push({path:PRUEBA + archivo(c), txt:r.txt || serCat({orden:[], productos:[]})}); }
+    await commit(files, "Prueba: descartar cambios (igual que el público)");
+    await cargarTodo(); toast("Prueba restaurada");
+  }catch(e){ alert("No se pudo: " + e.message); }
+  finally{ busy(""); }
+};
+$("#mantsave").onclick = async () => {
+  const m = $("#mant").checked, rb = $("#revblq").checked;
+  if(!confirm(`${m ? "Se BLOQUEARÁ el catálogo público con el aviso 'Estamos actualizando'." : "El catálogo público quedará DISPONIBLE."}\n${rb ? "Revendedores: BLOQUEADO." : "Revendedores: disponible."}\n\n¿Aplicar ahora?`)) return;
+  busy("Aplicando…");
+  try{ EST = {mantenimiento:m, mensaje:$("#mantmsg").value.trim(), rev_bloqueado:rb};
+    await commit([{path:PUBLI + "estado.json", txt:JSON.stringify(EST, null, 1) + "\n"}], `Estado: ${m?"catálogo en mantenimiento":"catálogo disponible"}${rb?" · revendedores bloqueado":""}`);
+    toast("✓ Aplicado. Se ve en 1–2 minutos", 3000);
+  }catch(e){ alert("No se pudo: " + e.message); }
+  finally{ busy(""); }
+};
+$("#guardar").onclick = guardar;
+
+/* ---------- Entrada ---------- */
+const ST_K = "casta_admin_llave";
+function pantallaLogin(){
+  const g = localStorage.getItem(ST_K);
+  $("#login").hidden = false; $("#app").hidden = true;
+  $("#lg1").hidden = !!g; $("#lg2").hidden = !g; $("#lgerr").textContent = "";
+  setTimeout(() => (g ? $("#kk") : $("#k1")).focus(), 50);
+}
+async function entrar(tok){
+  TOKEN = tok;
+  const r = await gh("");   // datos del repositorio
+  if(!r.permissions || !r.permissions.push) throw new Error("La llave no tiene permiso de escritura (Contents: Read and write).");
+  $("#login").hidden = true; $("#app").hidden = false;
+  await cargarTodo();
+}
+$("#lgsave").onclick = async () => {
+  const k1 = $("#k1").value, k2 = $("#k2").value, tk = $("#tk").value.trim();
+  if(k1.length < 6){ $("#lgerr").textContent = "La clave debe tener al menos 6 caracteres"; return; }
+  if(k1 !== k2){ $("#lgerr").textContent = "Las claves no coinciden"; return; }
+  if(!/^(github_pat_|ghp_)/.test(tk)){ $("#lgerr").textContent = "Esa no parece una llave de GitHub"; return; }
+  busy("Comprobando la llave…");
+  try{ await entrar(tk); localStorage.setItem(ST_K, JSON.stringify(await cifra(k1, tk))); toast("Listo. Este celular ya queda configurado"); }
+  catch(e){ TOKEN = null; $("#lgerr").textContent = "No funcionó: " + e.message; $("#login").hidden = false; $("#app").hidden = true; }
+  finally{ busy(""); }
+};
+$("#lgin").onclick = async () => {
+  busy("Entrando…");
+  try{ const tk = await descifra($("#kk").value, JSON.parse(localStorage.getItem(ST_K))); await entrar(tk); }
+  catch(e){ TOKEN = null; $("#lgerr").textContent = e.name === "OperationError" ? "Clave incorrecta" : "No se pudo entrar: " + e.message; $("#login").hidden = false; $("#app").hidden = true; }
+  finally{ busy(""); }
+};
+$("#kk").onkeydown = e => { if(e.key === "Enter") $("#lgin").click(); };
+$("#lgreset").onclick = () => { if(confirm("Se borrará la llave guardada en este celular y tendrás que pegarla otra vez. ¿Seguir?")){ localStorage.removeItem(ST_K); pantallaLogin(); } };
+$("#salir").onclick = () => { if((dirty.size || FOTOS.length) && !confirm("Tienes cambios sin guardar. ¿Salir?")) return; dirty.clear(); FOTOS = []; TOKEN = null; pantallaLogin(); };
+pantallaLogin();
+</script>
+</body>
+</html>

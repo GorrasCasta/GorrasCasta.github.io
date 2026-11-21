@@ -1,0 +1,270 @@
+{
+ "version": 50,
+ "tienda": {
+  "nombre": "Casta Caps",
+  "lema": "NEW ERA AA · OBREGÓN · SIRM",
+  "whatsapp": "526624248769",
+  "titular": "Gorras New Era AA,|a tu medida.",
+  "texto": "Elige, arma tu bolsa y pide por WhatsApp. Apartas con 50% y pagas el resto al recibir."
+ },
+ "cierre": {
+  "dia": 1,
+  "hora": 12
+ },
+ "nuevos_desde": 333,
+ "pool": {
+  "nombre": "New Era AA",
+  "precio": 450,
+  "rev": 350,
+  "promo": {
+   "activa": true,
+   "hasta": "2026-12-31",
+   "p2": 750,
+   "p3": 1050
+  },
+  "mayoreo": [
+   {
+    "min": 5,
+    "precio": 320
+   },
+   {
+    "min": 10,
+    "precio": 295
+   },
+   {
+    "min": 15,
+    "precio": 280
+   },
+   {
+    "min": 20,
+    "precio": 270
+   }
+  ]
+ },
+ "categorias": [
+  {
+   "k": "gorras",
+   "n": "Gorras",
+   "activa": true,
+   "prefijo": "",
+   "archivo": "gorras.json",
+   "variante": {
+    "nombre": "Talla",
+    "opciones": [
+     "7",
+     "7 1/8",
+     "7 1/4",
+     "7 3/8",
+     "7 1/2",
+     "7 5/8"
+    ],
+    "extra": {
+     "7": "55.8 cm",
+     "7 1/8": "56.8 cm",
+     "7 1/4": "57.7 cm",
+     "7 3/8": "58.7 cm",
+     "7 1/2": "59.6 cm",
+     "7 5/8": "60.6 cm"
+    },
+    "unica": "Ajustable",
+    "puerta": true
+   },
+   "grupos": [
+    {
+     "k": "newera",
+     "n": "New Era AA",
+     "sub": "59FIFTY · 9FIFTY · 9FORTY"
+    }
+   ],
+   "lineas": [
+    {
+     "k": "59FIFTY cerrada",
+     "n": "59FIFTY",
+     "sub": "cerrada",
+     "grupo": "newera",
+     "pool": true,
+     "porVariante": true
+    },
+    {
+     "k": "9FIFTY snapback",
+     "n": "9FIFTY",
+     "sub": "snapback",
+     "grupo": "newera",
+     "pool": true
+    },
+    {
+     "k": "9FORTY curva",
+     "n": "9FORTY",
+     "sub": "curva",
+     "grupo": "newera",
+     "pool": true
+    },
+    {
+     "k": "Deportiva snapback",
+     "n": "Deportiva",
+     "sub": "snapback",
+     "precio": 570,
+     "rev": 550
+    },
+    {
+     "k": "Nuevo Imperio snapback",
+     "n": "Nuevo Imperio",
+     "sub": "snapback",
+     "precio": 570,
+     "rev": 550
+    },
+    {
+     "k": "Bélicas snapback",
+     "n": "Bélicas",
+     "sub": "snapback",
+     "precio": 650,
+     "rev": 650
+    }
+   ],
+   "colecciones": [
+    {
+     "k": "dodgers",
+     "n": "Dodgers",
+     "re": "dodgers"
+    },
+    {
+     "k": "yankees",
+     "n": "Yankees",
+     "re": "yankees"
+    },
+    {
+     "k": "mx",
+     "n": "México / LMB",
+     "liga": [
+      "México / LMB"
+     ]
+    },
+    {
+     "k": "pastel",
+     "n": "Tonos pastel",
+     "re": "azul-cielo|rosa"
+    },
+    {
+     "k": "aniv",
+     "n": "Aniversarios",
+     "re": "aniversario|temporada|world-series|all-star|champions"
+    },
+    {
+     "k": "arte",
+     "n": "Bordados especiales",
+     "re": "cupidos|cherubs|rosas|looney|ohtani|graffiti|gotica|esqueleto|paper"
+    },
+    {
+     "k": "nba",
+     "n": "NBA",
+     "liga": [
+      "NBA"
+     ]
+    },
+    {
+     "k": "nfl",
+     "n": "NFL / NHL",
+     "liga": [
+      "NFL",
+      "NHL"
+     ]
+    },
+    {
+     "k": "sel",
+     "n": "Selecciones",
+     "liga": [
+      "Selecciones"
+     ]
+    },
+    {
+     "k": "sanjudas",
+     "n": "San Judas",
+     "re": "san-judas"
+    }
+   ]
+  },
+  {
+   "k": "ropa",
+   "n": "Ropa",
+   "activa": false,
+   "prefijo": "R",
+   "archivo": "ropa.json",
+   "variante": {
+    "nombre": "Talla",
+    "opciones": [
+     "CH",
+     "M",
+     "G",
+     "XG",
+     "XXG"
+    ],
+    "unica": "Talla única"
+   },
+   "lineas": [
+    {
+     "k": "Camisas 5G",
+     "n": "Camisas 5G",
+     "sub": "playera",
+     "precio": 0,
+     "rev": 0
+    },
+    {
+     "k": "Pantalones",
+     "n": "Pantalones",
+     "sub": "",
+     "precio": 0,
+     "rev": 0
+    }
+   ],
+   "colecciones": []
+  },
+  {
+   "k": "perfumes",
+   "n": "Perfumes",
+   "activa": false,
+   "prefijo": "P",
+   "archivo": "perfumes.json",
+   "variante": {
+    "nombre": "Presentación",
+    "opciones": [
+     "30 ml",
+     "50 ml",
+     "100 ml"
+    ],
+    "unica": "Única"
+   },
+   "lineas": [
+    {
+     "k": "Perfumes",
+     "n": "Perfumes",
+     "sub": "",
+     "precio": 0,
+     "rev": 0
+    }
+   ],
+   "colecciones": []
+  },
+  {
+   "k": "accesorios",
+   "n": "Accesorios",
+   "activa": false,
+   "prefijo": "A",
+   "archivo": "accesorios.json",
+   "variante": {
+    "nombre": "",
+    "opciones": [],
+    "unica": "Única"
+   },
+   "lineas": [
+    {
+     "k": "Accesorios",
+     "n": "Accesorios",
+     "sub": "",
+     "precio": 0,
+     "rev": 0
+    }
+   ],
+   "colecciones": []
+  }
+ ]
+}

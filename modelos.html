@@ -113,9 +113,10 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 </section>
 <div class="toast" id="toast" hidden></div>
 
+<script src="js/datos.js?v=50"></script>
 <script>
 /* Catálogo de muestra: sin precios y sin datos de la tienda.
-   Lee modelos, ocultos, agotados y orden de index.html, así que se actualiza solo.
+   Lee modelos, ocultos, agotados y orden de datos/gorras.json (js/datos.js), así que se actualiza solo.
    Opcional en el link: ?t=Nombre de la tienda  &w=WhatsApp de 10 dígitos (para que las preguntas lleguen directo). */
 const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
 const ESTILOS = [
@@ -242,8 +243,9 @@ const t0 = mem.get("cat_talla"); if(TALLAS.includes(t0)) talla = t0;
 let visto = mem.get("cat_datos") || "";
 function pintaTodo(){ filtros(); render(); ruta(); }
 if(visto && armar(visto)) pintaTodo();
-fetch("index.html", {cache:"no-cache"}).then(r => { if(!r.ok) throw 0; return r.text(); }).then(html => {
-  const nuevo = recorta(html);
+CASTA.cargar().then(D => {
+  if(CASTA.mantenimiento(D, {neutro:true, wa: WA ? "52" + WA : ""})) return;   // muestra sin marca: la ven los clientes de los revendedores
+  const nuevo = CASTA.legado(D);
   if(nuevo && nuevo !== visto && armar(nuevo)){ mem.set("cat_datos", nuevo); visto = nuevo; const y = scrollY; pintaTodo(); scrollTo(0, y); }
 }).catch(() => { if(!DATA.length) $("#grid").innerHTML = '<div class="msg">No se pudo cargar el catálogo.<br><button onclick="location.reload()">Reintentar</button></div>'; });
 </script>

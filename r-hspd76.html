@@ -249,6 +249,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="js/datos.js?v=50"></script>
 <script>
 /* ===== Categorías y precios del revendedor ===== */
 const CATS = [
@@ -329,7 +330,13 @@ const tallasDe = d => isUni(d) ? (d.out.has(UNI)?[]:[UNI]) : TALLAS.filter(t=>ha
 const sizeOn = () => !!size && (cat==="todas" || (cat==="a" && (!sub || sub==="59FIFTY cerrada")));
 
 async function cargar(){
-  const html = await (await fetch("index.html", {cache:"no-cache"})).text();
+  const D = await CASTA.cargar();
+  const neutro = {neutro:true, wa: modoCliente ? "52" + R.w : ""};   // los clientes del revendedor no ven Casta Caps
+  if(CASTA.mantenimiento(D, neutro)) throw new Error("mantenimiento");
+  if(D.est && D.est.rev_bloqueado && CASTA.MODO !== "prueba"){ D.est = {mantenimiento:true, mensaje:"Por el momento no está disponible. Escríbenos por WhatsApp."}; CASTA.mantenimiento(D, Object.assign({titulo:"Catálogo no disponible"}, neutro)); throw new Error("bloqueado"); }
+  const html = CASTA.legado(D);
+  CATS.forEach(c => { const l = (D.cats.find(x=>x.k==="gorras")||{lineas:[]}).lineas.filter(l=>c.e.includes(l.k)); const r = l.map(x=>x.pool?D.pool.rev:x.rev).filter(v=>v>0); if(r.length) COSTO[c.k] = Math.max(...r); });
+  Object.keys(R.p).forEach(k => { if(R.p[k] < COSTO[k]) delete R.p[k]; });
   const toma = (nom, def) => { const m = html.match(new RegExp("const " + nom + " = (.*?);\\s*(//.*)?$", "m")); if(!m) return def; try{ return JSON.parse(m[1]); }catch(e){ return def; } };
   const all = toma("DATA_ALL", []), ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {});
   all.forEach((d,i) => { d.c = "#" + String(i+1).padStart(3,"0"); });
