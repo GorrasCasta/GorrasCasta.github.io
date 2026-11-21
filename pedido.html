@@ -13,37 +13,42 @@
 <meta name="theme-color" content="#0d0d0d">
 <link rel="icon" href="data:,">
 <style>
-:root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--ok:#3ecf8e}
+:root{--bg:#0d0d0d;--panel:#171717;--panel2:#202020;--line:#2c2c2c;--ink:#f3efe7;--mute:#9a958c;--acc:#ff7a1a;--ok:#3ecf8e;--bad:#ff6b6b}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
 button,a{font:inherit;color:inherit}
 button{background:none;border:none;cursor:pointer}
 [hidden]{display:none!important}
 .wrap{max-width:640px;margin:0 auto;padding:0 14px 40px}
-.top{padding:18px 0 14px;border-bottom:1px solid var(--line)}
-.brand{font-weight:900;font-size:20px;text-transform:uppercase;letter-spacing:-.01em}
-.brand small{display:block;font-size:10px;letter-spacing:.14em;color:var(--mute);font-weight:600;margin-top:3px}
-.ref{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-top:14px}
-.ref h1{font-size:22px;font-weight:800}
-.ref span{font-size:12px;color:var(--mute);text-align:right}
-.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
-.sum div{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
-.sum b{display:block;font-size:20px;font-weight:800}
-.sum i{font-style:normal;font-size:11px;color:var(--mute);font-weight:600}
-.sum .tot b{color:var(--acc)}
-.grp{margin-top:18px}
-.grp h2{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 2px 8px;display:flex;gap:8px;align-items:center}
+.top{padding:18px 0 4px}
+.brand{font-weight:900;font-size:12px;text-transform:uppercase;letter-spacing:.16em;color:var(--acc)}
+.brand small{font-size:10px;letter-spacing:.14em;color:var(--mute);font-weight:600;margin-left:8px}
+.ref{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:10px}
+.ref h1{font-size:30px;font-weight:900;line-height:1;text-transform:uppercase;letter-spacing:-.01em}
+.ref span{font-size:12px;color:var(--mute);text-align:right;line-height:1.35}
+.count{font-size:18px;color:var(--mute);margin:10px 0 16px;font-weight:500}
+.count b{color:var(--ink);font-weight:700}
+.grp{margin-top:14px}
+.grp h2{font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 2px 8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .grp h2 small{color:var(--mute);font-weight:600;text-transform:none;letter-spacing:0}
 .grp.ya h2{color:var(--ok)}
-.item{display:flex;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:10px;margin-bottom:10px;align-items:center}
-.item img{width:96px;height:96px;border-radius:12px;object-fit:cover;flex:none;background:#222;cursor:zoom-in}
+.grp.off h2{color:var(--bad)}
+.item{display:flex;gap:14px;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:12px;margin-bottom:12px;align-items:center}
+.item img{width:112px;height:112px;border-radius:14px;object-fit:cover;flex:none;background:#222;cursor:zoom-in}
 .item .t{flex:1;min-width:0}
-.item .n{font-weight:700;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
-.item .c{font-size:12px;color:var(--mute);margin-top:3px}
-.item .sz{display:inline-block;margin-top:8px;background:var(--ink);color:#111;border-radius:10px;padding:5px 10px;font-weight:800;font-size:14px}
-.item .q{flex:none;text-align:center;min-width:46px}
-.item .q b{display:block;font-size:24px;font-weight:800;line-height:1}
-.item .q i{font-style:normal;font-size:10px;color:var(--mute);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.item .n{font-weight:800;font-size:17px;line-height:1.22;overflow-wrap:anywhere}
+.item .l1{font-size:15.5px;color:var(--mute);margin-top:7px}
+.item .l1 b{color:var(--ink);font-weight:800}
+.item .l1 .qn{color:var(--acc)}
+.item .c{font-size:13px;color:var(--mute);margin-top:5px}
+.item .tag{display:inline-block;margin-top:8px;border-radius:8px;padding:3px 8px;font-size:12px;font-weight:700;background:rgba(255,107,107,.14);color:var(--bad)}
+.item.off img{filter:grayscale(1);opacity:.55}
+.item.off .n{color:var(--mute)}
+.tots{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:6px 16px;margin-top:6px}
+.tots div{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;color:var(--mute)}
+.tots div:last-child{border-bottom:none}
+.tots b{font-size:20px;color:var(--ink);font-weight:800}
+.tots .tt b{color:var(--acc);font-size:24px}
 .note{font-size:12.5px;color:var(--mute);line-height:1.5;margin-top:14px}
 .vend{margin-top:12px;font-size:13px;color:var(--mute)}
 .vend b{color:var(--ink);letter-spacing:.08em}
@@ -66,8 +71,9 @@ button{background:none;border:none;cursor:pointer}
     <div class="ref"><h1>Pedido</h1><span id="ref"></span></div></div>
   <div id="msg" class="msg">Cargando pedido…</div>
   <div id="doc" hidden>
-    <div class="sum"><div><b id="spz">0</b><i>PIEZAS</i></div><div class="tot"><b id="stot">$0</b><i id="stl">TOTAL</i></div><div><b id="sant">$0</b><i>ANTICIPO 50%</i></div></div>
+    <div class="count" id="count"></div>
     <div id="lists"></div>
+    <div class="tots"><div class="tt"><span id="stl">Total</span><b id="stot">$0</b></div><div><span>Anticipo 50%</span><b id="sant">$0</b></div></div>
     <div class="vend" id="vend" hidden>Código de vendedor: <b id="vcode"></b></div>
     <p class="note" id="nota"></p>
     <div class="acts">
@@ -84,6 +90,7 @@ const $ = s => document.querySelector(s);
 const UNI = "Única";
 let DD = null;
 const vtx = it => it.t===UNI ? (it.cat==="gorras" ? "Ajustable" : it.un) : (it.cat==="gorras" ? "Talla " : it.vn + " ") + it.t;
+const vh = it => it.t===UNI ? `<b>${esc(vtx(it).toLowerCase())}</b>` : (it.cat==="gorras" ? `talla <b>${esc(it.t)}</b>` : `<b>${esc(vtx(it))}</b>`);
 const sKey = t => t===UNI ? "U" : t.replace(/[ \/]/g,"-");
 const fmt = n => "$" + Number(n).toLocaleString("es-MX");
 const webp = p => p.replace(/\.jpg$/, ".webp");
@@ -101,27 +108,29 @@ function armar(D, its){
   ITEMS = its.map(x => { const d = D.byKey[x.n]; if(!d) return null; const C = D.cats.find(c => c.k===d.cat) || {}, V = (C.variante||{}).opciones || [];
     const t = x.k==="U" ? UNI : V.find(z => sKey(z)===x.k); if(!t) return null;
     const f = d.f[t] || d.f["*"] || d.f[V.find(z => d.f[z])] || d.f[UNI] || Object.values(d.f)[0] || "og.jpg";
-    const l = (C.lineas||[]).find(l => l.k===d.e);
-    return { n:x.n, c:d.c, name:d.n, e:(l && C.k!=="gorras" ? l.n : d.e), cat:d.cat, vn:(C.variante||{}).nombre||"", un:(C.variante||{}).unica||"Única", t, q:x.q, s:x.s, f }; }).filter(Boolean);
+    const l = (C.lineas||[]).find(l => l.k===d.e), hayYa = (d.s||[]).includes(t);
+    const off = !hayYa && (!!d.o || (d.x||[]).includes(t));
+    return { n:x.n, c:d.c, name:d.n, e:(l && C.k!=="gorras" ? l.n : d.e), cat:d.cat, vn:(C.variante||{}).nombre||"", un:(C.variante||{}).unica||"Única", t, q:x.q, s:x.s, f, off }; }).filter(Boolean);
   return ITEMS.length > 0;
 }
 function grupo(cls, titulo, sub, arr){
   if(!arr.length) return "";
   return `<div class="grp ${cls}"><h2>${titulo} <small>${sub}</small></h2>` + arr.map(it =>
-    `<div class="item"><img src="${webp(it.f.replace('img/','t/'))}" alt="${esc(it.name)}" width="96" height="96" onerror="jpg(this)" data-big="${it.f}" data-cap="${esc(it.name)}">
-      <div class="t"><div class="n">${esc(it.name)}</div><div class="c">${it.c} · ${esc(it.e)}</div><span class="sz">${esc(vtx(it))}</span></div>
-      <div class="q"><b>×${it.q}</b><i>pz</i></div></div>`).join("") + "</div>";
+    `<div class="item${it.off?" off":""}"><img src="${webp(it.f.replace('img/','t/'))}" alt="${esc(it.name)}" width="112" height="112" onerror="jpg(this)" data-big="${it.f}" data-cap="${esc(it.name)}">
+      <div class="t"><div class="n">${esc(it.name)}</div>
+        <div class="l1"><b class="qn">${it.q} pz</b> · ${vh(it)}</div>
+        <div class="c">${it.c} · ${esc(it.e)}</div>${it.off?`<span class="tag">Ya no disponible</span>`:""}</div></div>`).join("") + "</div>";
 }
 function pintar(){
-  const pz = ITEMS.reduce((a,x) => a+x.q, 0);
-  $("#spz").textContent = pz;
-  if(P.t){ $("#stot").textContent = fmt(P.t); $("#sant").textContent = fmt(Math.round(P.t/2)); $("#stl").textContent = P.m ? "TOTAL (MAYOREO)" : "TOTAL"; }
+  const pz = ITEMS.reduce((a,x) => a+x.q, 0), mod = new Set(ITEMS.map(x => x.n)).size;
+  $("#count").innerHTML = `<b>${pz}</b> ${pz===1?"pieza":"piezas"} · <b>${mod}</b> ${mod===1?"modelo":"modelos"}`;
+  if(P.t){ $("#stot").textContent = fmt(P.t); $("#sant").textContent = fmt(Math.round(P.t/2)); $("#stl").textContent = P.m ? "Total (mayoreo)" : "Total"; }
   else { $("#stot").textContent = "—"; $("#sant").textContent = "—"; }
-  const ya = ITEMS.filter(x => x.s), ped = ITEMS.filter(x => !x.s);
-  $("#lists").innerHTML = grupo("ya","⚡ Entrega inmediata en SIRM","Después de las 3 pm", ya) + grupo("ped","📦 Sobre pedido","Pedido del lunes · llega 4 a 7 días después", ped);
+  const ok = ITEMS.filter(x => !x.off), ya = ok.filter(x => x.s), ped = ok.filter(x => !x.s), off = ITEMS.filter(x => x.off);
+  $("#lists").innerHTML = grupo("ya","⚡ Entrega inmediata en SIRM","Después de las 3 pm", ya) + grupo("ped","📦 Sobre pedido","Pedido del lunes · llega 4 a 7 días después", ped) + grupo("off","⚠ Ya no disponible","Confirmar con el cliente", off);
   if(P.v){ $("#vend").hidden = false; $("#vcode").textContent = P.v; }
   $("#nota").textContent = (P.m ? "El precio de mayoreo se confirma por WhatsApp. " : "") + "Total y existencia sujetos a confirmación. Se aparta con 50% y el resto es contra entrega.";
-  $("#editar").href = (CASTA.MODO==="prueba" ? "prueba.html" : "index.html") + "?b=" + ITEMS.map(x => [x.n, sKey(x.t), x.q].join(".")).join("~");
+  $("#editar").href = (CASTA.MODO==="prueba" ? "prueba.html" : "index.html") + "?b=" + ok.map(x => [x.n, sKey(x.t), x.q].join(".")).join("~");
   $("#msg").hidden = true; $("#doc").hidden = false;
   document.querySelectorAll(".item img").forEach(im => im.onclick = () => lightbox(im.dataset.big, im.dataset.cap));
 }
@@ -137,10 +146,11 @@ function ref(){
 function toast(t){ const e = $("#toast"); e.textContent = t; e.classList.add("on"); setTimeout(() => e.classList.remove("on"), 1600); }
 $("#copiar").onclick = () => {
   const ln = it => `• ${it.q} × ${it.c} ${it.name} · ${it.e} · ${vtx(it).toLowerCase()}`;
-  const ya = ITEMS.filter(x => x.s), ped = ITEMS.filter(x => !x.s);
+  const ok = ITEMS.filter(x => !x.off), ya = ok.filter(x => x.s), ped = ok.filter(x => !x.s), off = ITEMS.filter(x => x.off);
   let t = (CASTA.MODO==="prueba" ? "🧪 PRUEBA · " : "") + "Pedido " + ((DD && DD.aj.tienda && DD.aj.tienda.nombre) || "Casta Caps") + (P.r ? " GC-" + P.r.toUpperCase().slice(-5) : "") + "\n";
   if(ya.length) t += "\n⚡ Entrega inmediata SIRM:\n" + ya.map(ln).join("\n") + "\n";
   if(ped.length) t += "\n📦 Sobre pedido:\n" + ped.map(ln).join("\n") + "\n";
+  if(off.length) t += "\n⚠ Ya no disponible:\n" + off.map(ln).join("\n") + "\n";
   t += "\nPiezas: " + ITEMS.reduce((a,x) => a+x.q, 0) + (P.t ? " · Total: " + fmt(P.t) : "") + (P.v ? "\nVendedor: " + P.v : "");
   (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("Lista copiada"), () => { const a = document.createElement("textarea"); a.value = t; document.body.appendChild(a); a.select(); try{ document.execCommand("copy"); toast("Lista copiada"); }catch(e){ toast("No se pudo copiar"); } a.remove(); });
 };
