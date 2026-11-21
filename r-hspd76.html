@@ -288,7 +288,7 @@ function setup(){
     pr.appendChild(r);
     const inp = r.querySelector("input"), g = r.querySelector(".gan");
     const pinta = () => { const v = +inp.value.replace(/\D/g,"");
-      if(!v){ g.style.color="var(--mute)"; g.textContent = `Tu costo: ${fmt(COSTO[c.k])}`; return; }
+      if(!v){ g.style.color="var(--mute)"; g.textContent = `Tu costo: ${fmt(COSTO[c.k])}` + (c.k==="a" ? " · Sugerido: $400 a $500" : ""); return; }
       if(v < COSTO[c.k]){ g.style.color="#ff6b6b"; g.textContent = `Mínimo ${fmt(COSTO[c.k])} (tu costo)`; return; }
       g.style.color="var(--ok)"; g.textContent = `Costo ${fmt(COSTO[c.k])} · ganas ${fmt(v-COSTO[c.k])} c/u`; };
     inp.addEventListener("input", pinta); pinta();
