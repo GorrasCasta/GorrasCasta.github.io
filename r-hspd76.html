@@ -257,9 +257,11 @@ const CATS = [
   {k:"a", n:"New Era AA", s:"59FIFTY · 9FIFTY · 9FORTY", e:["59FIFTY cerrada","9FIFTY snapback","9FORTY curva"], sub:true},
   {k:"b", n:"Deportiva y Nuevo Imperio", s:"snapback", e:["Deportiva snapback","Nuevo Imperio snapback"]},
   {k:"c", n:"Bélicas", s:"snapback", e:["Bélicas snapback"]},
+  {k:"d", n:"Edición Especial", s:"New Era AA", e:["Edición Especial"]},
+  {k:"e", n:"Mitchell & Ness", s:"Original · snapback y cerradas", e:["Mitchell & Ness"]},
 ];
 const CLAVE_H = "1e1787fc4018042743bc0a6adc6c962b0a6f6504dbe0df861a046c0a20f0a013";   // huella de la clave de revendedor (la clave no se guarda en la página)
-const COSTO = {a:350, b:550, c:650};   // lo que el revendedor paga por pieza (precio mínimo de venta)
+const COSTO = {a:350, b:550, c:650, d:395, e:900};   // lo que el revendedor paga por pieza (precio mínimo de venta)
 const NUEVOS_DESDE = 333;
 const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
 const CM = {"7":"55.8 cm","7 1/8":"56.8 cm","7 1/4":"57.7 cm","7 3/8":"58.7 cm","7 1/2":"59.6 cm","7 5/8":"60.6 cm"};
@@ -290,7 +292,7 @@ function setup(){
     pr.appendChild(r);
     const inp = r.querySelector("input"), g = r.querySelector(".gan");
     const pinta = () => { const v = +inp.value.replace(/\D/g,"");
-      if(!v){ g.style.color="var(--mute)"; g.textContent = `Tu costo: ${fmt(COSTO[c.k])}` + (c.k==="a" ? " · Sugerido: $400 a $500" : ""); return; }
+      if(!v){ g.style.color="var(--mute)"; g.textContent = `Tu costo: ${fmt(COSTO[c.k])}` + (c.k==="a" ? " · Sugerido: $400 a $500" : c.k==="d" ? " · Sugerido: $450 a $550" : c.k==="e" ? " · Sugerido: $970" : ""); return; }
       if(v < COSTO[c.k]){ g.style.color="#ff6b6b"; g.textContent = `Mínimo ${fmt(COSTO[c.k])} (tu costo)`; return; }
       g.style.color="var(--ok)"; g.textContent = `Costo ${fmt(COSTO[c.k])} · ganas ${fmt(v-COSTO[c.k])} c/u`; };
     inp.addEventListener("input", pinta); pinta();
