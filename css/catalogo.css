@@ -218,3 +218,13 @@ details.mayo .esct,details.mayo .escs{display:none}
 /* Precio en las categorías del menú */
 #estilos button small b{color:var(--acc);font-weight:800}
 #estilos button[aria-pressed=true] small b{color:#111}
+
+/* Tabla de escala en el catálogo público */
+.esctab{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;max-width:560px}
+.esctab .et{font-family:"Archivo Black";font-size:16px;text-transform:uppercase;line-height:1.1;margin-bottom:6px}
+.esctab .et em{color:var(--acc);font-style:normal}.esctab .et span{display:block;font-family:inherit;font-size:11px;color:var(--mute);text-transform:none;font-weight:600;margin-top:2px;font-family:system-ui,sans-serif}
+.esctab table{width:100%;border-collapse:collapse;font-size:14px}
+.esctab th{font-size:11px;color:var(--mute);text-align:left;font-weight:700;letter-spacing:.05em;padding:4px 6px}
+.esctab td{padding:6px;border-top:1px solid var(--line);vertical-align:top}.esctab td+td{font-weight:800}
+.esctab td small{display:block;font-size:11px;font-weight:600;color:var(--acc)}
+.esctab p{font-size:12px;color:var(--mute);margin:8px 0 0;line-height:1.4}

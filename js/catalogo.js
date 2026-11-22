@@ -463,6 +463,30 @@ function pintaTextos(){
   $("#promofine").textContent = `Aplica en ${NETXT}, puedes combinarlas.` + (MAYOREO.length ? ` Desde ${M1} piezas aplica precio de mayoreo: ${escRango()} c/u.` : "") + (PROMO_ON ? ` Promo válida hasta el ${fin}.` : "");
   $("#infomay").innerHTML = MAYOREO.length ? `Solo ${esc(POOL.nombre)} (${NETXT}), sumando cualquier modelo y talla: <b>${escTxt(" · ", true)}.</b> Se confirma por WhatsApp.` + (ESPN ? ` ${esc(ESPN)} no entran en mayoreo ni en promociones.` : "") : "Pregunta por WhatsApp.";
   if(PRUEBA) document.title = "🧪 PRUEBA · " + document.title;
+  tablaEscala();
+}
+/* Tabla de precios por piezas (como en el catálogo de mayoreo) */
+function tablaEscala(){
+  const box = $("#esctab"); if(!box || !DATA.some(isPool)) return;
+  const esc = s => String(s||"").replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const le = Object.values(LIN).find(l=>l.mayoreoMas);
+  const conEE = le && (PRUEBA || DATA.some(d=>d.e===le.k));
+  const asc = [...MAYOREO].reverse();
+  const cu = (tot,n) => `${fmt(Math.round(tot/n))}${n>1?`<small>${n} × ${fmt(tot/n)}</small>`:""}`;
+  const filas = [];
+  if(PROMO_ON){
+    const tot4 = PROMO[3] + PROMO[1];
+    [[1,PROMO[1],""],[2,PROMO[2],`2 por ${fmt(PROMO[2])}`],[3,PROMO[3],`3 por ${fmt(PROMO[3])}`],[4,tot4,`${fmt(tot4)} las 4`]].filter(r=>r[0]<M1).forEach(r=>
+      filas.push([`${r[0]} ${r[0]===1?"pieza":"piezas"}`, `${fmt(Math.round(r[1]/r[0]))}${r[2]?`<small>${r[2]}</small>`:""}`, conEE?fmt(le.precio):""]));
+  } else if(M1>1) filas.push([M1>2?`1 – ${M1-1}`:"1", fmt(P1), conEE?fmt(le.precio):""]);
+  asc.forEach((m,i)=>{ const nx = asc[i+1]; filas.push([nx?`${m.min} – ${nx.min-1}`:`${m.min} o más`, fmt(m.precio), conEE?fmt(m.precio+le.mayoreoMas):""]); });
+  const lo = Object.values(LIN).find(l=>l.original);
+  const fijos = ESPTXT ? ESPTXT.replace(/ c\/u/g,"") : "";
+  box.innerHTML = `<div class="et">Entre más llevas, <em>menos pagas</em> <span>precio por pieza</span></div>
+    <table><tr><th>Piezas</th><th>${esc(POOL.nombre)}</th>${conEE?`<th>Edición Esp.</th>`:""}</tr>` +
+    filas.map((r,i)=>`<tr${PROMO_ON&&i>0&&i<filas.length-asc.length?' class="pr"':""}><td>${r[0]}</td><td>${r[1]}</td>${conEE?`<td>${r[2]}</td>`:""}</tr>`).join("") + `</table>
+    <p>${PROMO_ON?`Promo 2 y 3 piezas hasta el ${new Date(D.promoFin - 864e5).toLocaleDateString("es-MX",{day:"numeric",month:"long",timeZone:"UTC"})}${conEE?" (no aplica en Edición Especial)":""}. `:""}${asc.length?`Desde ${M1} piezas, precio de mayoreo${conEE?"; New Era AA y Edición Especial cuentan juntas":""}. Combina modelos y tallas. `:""}${fijos?`Precio fijo: ${esc(fijos)}. `:""}${lo&&(PRUEBA||DATA.some(d=>d.e===lo.k))?`${esc(lo.n)} (Original): ${fmt(lo.precio)}, mayoreo por WhatsApp.`:""}</p>`;
+  box.hidden = false;
 }
 pintaTextos();
 buildGate(); buildFilters();
