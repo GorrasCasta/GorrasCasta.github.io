@@ -1,4 +1,4 @@
-const V="gc-v68", FOTOS="gc-fotos";
+const V="gc-v69", FOTOS="gc-fotos";
 const CORE=["./","index.html","css/catalogo.css?v=55","js/datos.js?v=55","js/catalogo.js?v=55","datos/ajustes.json","datos/gorras.json","datos/estado.json"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!==FOTOS).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
@@ -24,7 +24,8 @@ self.addEventListener("fetch",e=>{
   const p=u.pathname;
   if(/\/a-[a-z0-9]+\.html$/.test(p)||p.includes("/datos-prueba/")) return;   // panel y datos de prueba: siempre directo a la red
   if(r.mode==="navigate"){
-    if(p.endsWith("/")||p.endsWith("index.html")){ e.respondWith(red(r,"index.html")); return; }
+    if(p==="/"||p==="/index.html"){ e.respondWith(red(r,"index.html")); return; }
+    if(!p.endsWith(".html")) return;   // links cortos (/mayoreo, /catalogo): directo a la red, sin interceptar
     const name=p.split("/").pop();
     e.respondWith(fetch(u.href,{cache:"no-cache"}).then(res=>{ if(res.ok){const c=res.clone();caches.open(V).then(x=>x.put(name,c));} return res; }).catch(()=>caches.match(name).then(h=>h||caches.match("index.html"))));
     return;
