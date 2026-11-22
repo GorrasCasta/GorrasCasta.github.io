@@ -119,6 +119,8 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .line .t b{display:block;font-size:13px;line-height:1.25}
 .line .t span{font-size:12px;color:var(--mute)}
 .line .q{display:flex;align-items:center;gap:8px}
+.line .pl{display:inline-block;margin-top:6px;border:1px dashed var(--line);border-radius:8px;padding:4px 8px;font-size:12px;font-weight:700;color:var(--mute)}
+.line .pl[aria-pressed=true]{border-style:solid;border-color:var(--acc);color:var(--acc)}
 .line .q button{width:28px;height:28px;border-radius:8px;background:var(--panel2);font-weight:700}
 .sum{background:var(--panel2);border-radius:16px;padding:14px;margin-top:16px}
 .sum .r{display:flex;justify-content:space-between;font-size:14px;padding:3px 0}
@@ -482,7 +484,10 @@ function saveBag(){ store.set(KEY, bag); updBag(); }
 const pieces = () => bag.reduce((a,b)=>a+b.q,0);
 const piezasMay = () => bag.reduce((a,b)=>{ const d=byId(b.id); const k=d&&catDe(d).k; return a + (k==="a"||k==="d" ? b.q : 0); },0);
 const pu = d => { if(!MAY) return precio(d); const k = catDe(d).k, t = tierM(piezasMay()); return t && (k==="a"||k==="d") ? t.p + (k==="d"?45:0) : precio(d); };
-const total = () => bag.reduce((a,b)=>a+b.q*pu(byId(b.id)),0);
+const PLANCHA = 40;   // planchado y hormado por pieza en mayoreo (de 1 a 4 piezas va gratis)
+const plPrecio = () => pieces() >= 5 ? PLANCHA : 0;
+const plPiezas = () => MAY ? bag.reduce((a,b)=>a+(b.pl?b.q:0),0) : 0;
+const total = () => bag.reduce((a,b)=>a+b.q*pu(byId(b.id)),0) + plPiezas()*plPrecio();
 function updBag(){
   bag = bag.filter(it => byId(it.id));
   const n = pieces(); $("#bagn").textContent = n; $("#fbar").hidden = n===0;
@@ -496,23 +501,26 @@ function drawBag(){
     r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${fmt(pu(d))}</span></div>
       <div class="q"><button aria-label="Menos">−</button><b>${it.q}</b><button aria-label="Más">+</button></div>`;
     r.querySelector(".t b").textContent = d.n;
+    if(MAY){ const pb = document.createElement("button"); pb.className = "pl"; pb.setAttribute("aria-pressed", !!it.pl);
+      pb.textContent = it.pl ? "✓ Con planchado" + (plPrecio() ? ` (+${fmt(plPrecio())} c/u)` : " (gratis)") : "+ Planchado y hormado";
+      pb.onclick = () => { it.pl = !it.pl; saveBag(); drawBag(); }; r.querySelector(".t").appendChild(pb); }
     const [m,p] = r.querySelectorAll(".q button");
     m.onclick = () => { it.q--; if(it.q<1) bag.splice(i,1); saveBag(); drawBag(); };
     p.onclick = () => { it.q++; saveBag(); drawBag(); };
     L.appendChild(r);
   });
   const n = pieces();
-  S.innerHTML = `<div class="sum"><div class="r"><span>Piezas</span><span>${n}</span></div><div class="r big"><span>Total</span><span>${fmt(total())}</span></div></div>
+  S.innerHTML = `<div class="sum"><div class="r"><span>Piezas</span><span>${n}</span></div>${plPiezas()?`<div class="r"><span>Planchado y hormado · ${plPiezas()} pz${plPrecio()?` × ${fmt(plPrecio())}`:""}</span><span>${plPrecio()?fmt(plPiezas()*plPrecio()):"Gratis"}</span></div>`:""}<div class="r big"><span>Total</span><span>${fmt(total())}</span></div></div>
     <a class="cta wa" id="send" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
     <button class="cta alt" id="empty">Vaciar bolsa</button>
-    <p class="note">${MAY?"Mayoreo desde 5 pz (New Era AA y Edición Especial cuentan juntas). Mitchell & Ness: mayoreo se cotiza por WhatsApp. Planchado y hormado en mayoreo: $40 por pieza. Entrega a domicilio en SIRM. ":""}Te confirmamos disponibilidad, fecha de entrega y forma de pago por WhatsApp.</p>`;
+    <p class="note">${MAY?"Mayoreo desde 5 pz (New Era AA y Edición Especial cuentan juntas). Mitchell & Ness: mayoreo se cotiza por WhatsApp. Planchado y hormado: gratis de 1 a 4 piezas; desde 5 piezas $40 por gorra. Entrega a domicilio en SIRM. ":""}Te confirmamos disponibilidad, fecha de entrega y forma de pago por WhatsApp.</p>`;
   $("#send").href = "https://wa.me/52" + R.w + "?text=" + encodeURIComponent(msg());
   $("#empty").onclick = () => { bag = []; saveBag(); drawBag(); };
 }
 function msg(){
-  const ln = it => { const d = byId(it.id); return `• ${it.q} × ${d.c} ${d.n} · ${d.e.split(" ")[0]} · ${it.t===UNI?"ajustable":"talla "+it.t} · ${fmt(pu(d))}`; };
+  const ln = it => { const d = byId(it.id); return `• ${it.q} × ${d.c} ${d.n} · ${d.e.split(" ")[0]} · ${it.t===UNI?"ajustable":"talla "+it.t} · ${fmt(pu(d))}${it.pl?" · con planchado":""}`; };
   const n = pieces();
-  return `Hola ${R.t}, quiero hacer este pedido${MAY?" de mayoreo / revendedor":""}:\n\n${bag.map(ln).join("\n")}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(total())}\n\n¿Me confirmas disponibilidad y entrega?`;
+  return `Hola ${R.t}, quiero hacer este pedido${MAY?" de mayoreo / revendedor":""}:\n\n${bag.map(ln).join("\n")}${plPiezas()?`\nPlanchado y hormado: ${plPiezas()} pz${plPrecio()?" × "+fmt(plPrecio()):" (gratis)"}`:""}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(total())}\n\n¿Me confirmas disponibilidad y entrega?`;
 }
 
 /* ===== Arranque ===== */
