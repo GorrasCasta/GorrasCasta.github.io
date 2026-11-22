@@ -103,16 +103,16 @@
      "k": "Edición Especial",
      "n": "Edición Especial",
      "sub": "New Era AA",
-     "precio": 500,
+     "precio": 495,
      "rev": 0,
      "porVariante": true,
-     "mayoreoMas": 50
+     "mayoreoMas": 45
     },
     {
      "k": "Mitchell & Ness",
      "n": "Mitchell & Ness",
      "sub": "Original",
-     "precio": 950,
+     "precio": 970,
      "rev": 0,
      "porVariante": true,
      "original": true

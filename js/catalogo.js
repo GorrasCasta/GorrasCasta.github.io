@@ -123,9 +123,9 @@ const precioDe = (d,t) => isPool(d) ? P1 : CASTA.precioBase(D, d, t);   // preci
 const fmtP = n => n>0 ? fmt(n) : "Precio a consultar";
 const yjunta = a => a.length<2 ? a.join("") : a.slice(0,-1).join(", ")+" y "+a[a.length-1];
 const NETXT = yjunta(NE.map(e=>(LIN[e]||{}).n||e));
-const ESPTXT = (()=>{ const by = {}; D.cats.filter(c=>CPOS[c.k]!==undefined).forEach(c=>(c.lineas||[]).forEach(l=>{ if(!l.pool && !l.mayoreoMas && l.precio>0 && DATA.some(d=>d.e===l.k)) (by[l.precio]=by[l.precio]||[]).push(l.n||l.k); }));
+const ESPTXT = (()=>{ const by = {}; D.cats.filter(c=>CPOS[c.k]!==undefined).forEach(c=>(c.lineas||[]).forEach(l=>{ if(!l.pool && !l.mayoreoMas && !l.original && l.precio>0 && DATA.some(d=>d.e===l.k)) (by[l.precio]=by[l.precio]||[]).push(l.n||l.k); }));
   return Object.keys(by).sort((a,b)=>a-b).map(p=>yjunta(by[p])+" "+fmt(+p)+" c/u").join(", "); })();
-const ESPN = yjunta(D.cats.filter(c=>CPOS[c.k]!==undefined).flatMap(c=>(c.lineas||[]).filter(l=>!l.pool && !l.mayoreoMas && DATA.some(d=>d.e===l.k)).map(l=>l.n||l.k)));
+const ESPN = yjunta(D.cats.filter(c=>CPOS[c.k]!==undefined).flatMap(c=>(c.lineas||[]).filter(l=>!l.pool && !l.mayoreoMas && !l.original && DATA.some(d=>d.e===l.k)).map(l=>l.n||l.k)));
 const ELBL = k => { if(k==="todos") return ["Todas","Todo el catálogo"];
   if(GINFO[k]) return [GINFO[k].n, (GINFO[k].sub||"")+" · <b>"+fmt(P1)+"</b>"];
   const l = LIN[k]; if(!l) return [k.split(" ")[0], k.split(" ").slice(1).join(" ")];
@@ -267,7 +267,7 @@ function openPD(d){
   $("#pmas").hidden = !soloStock || vars(d).length<=ts.length;
   $("#pmas").onclick = ()=>{ col="todo"; render(); openPD(d); };
   $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+(isPool(d)?"New Era AA "+d.e:isEE(d)?"Edición Especial · New Era AA":corto(d.e)+(isOrig(d)?" · Original":"")); $("#qv").textContent = 1;
-  $("#pprecio").innerHTML = `<b>${fmtP(precioDe(d))}</b> c/u` + (isPool(d) ? (PROMO_ON?` · promo 2 × ${fmt(PROMO[2])} · 3 × ${fmt(PROMO[3])}`:"") + ` · mayoreo desde ${M1} pz` : isEE(d) ? ` · mayoreo desde ${M1} pz (cuenta junto con New Era AA)` : " · precio fijo, sin promo ni mayoreo");
+  $("#pprecio").innerHTML = `<b>${fmtP(precioDe(d))}</b> c/u` + (isPool(d) ? (PROMO_ON?` · promo 2 × ${fmt(PROMO[2])} · 3 × ${fmt(PROMO[3])}`:"") + ` · mayoreo desde ${M1} pz` : isEE(d) ? ` · mayoreo desde ${M1} pz (cuenta junto con New Era AA)` : isOrig(d) ? " · sin promo · mayoreo: se cotiza directo por WhatsApp" : " · precio fijo, sin promo ni mayoreo");
   const z = $("#pszs"); z.innerHTML = "";
   ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = (enSirm(d,t)?"⚡ ":"")+(t===UNI?(d.cat==="gorras"?"Única (ajustable)":UTXT(d)):t); b.setAttribute("aria-pressed",t===curT);
     b.onclick=()=>{ curT=t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); updPD(); }; z.appendChild(b); });
@@ -355,7 +355,7 @@ function drawBag(){
     ${nN?`<div class="meter"><i style="width:${Math.min(100,pct)}%"></i></div><div class="hint">${next}</div>`:""}
   </div>
   <div class="snap">📸 <b>Sin capturas:</b> tu mensaje lleva un link con las fotos, tallas y cantidades de tus ${MULTI?"productos":"gorras"}. Solo envíalo.</div>
-  <p class="note">${ESPTXT&&bag.some(it=>{const d=byId(it.id); return d&&d.cat==="gorras"&&!isPool(d)&&!isEE(d);})?ESPTXT+": no entran en promo ni mayoreo. ":""}${c.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás se piden al proveedor el lunes y llegan de 4 a 7 días después.</p>
+  <p class="note">${ESPTXT&&bag.some(it=>{const d=byId(it.id); return d&&d.cat==="gorras"&&!isPool(d)&&!isEE(d)&&!isOrig(d);})?ESPTXT+": no entran en promo ni mayoreo. ":""}${bag.some(it=>{const d=byId(it.id); return d&&isOrig(d);})?"Mitchell & Ness (Original): sin promo; el mayoreo se cotiza directo por WhatsApp. ":""}${c.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás se piden al proveedor el lunes y llegan de 4 a 7 días después.</p>
   <div class="vend"><label for="vcod">Código de vendedor (opcional)</label><input id="vcod" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="Ej. K7MPX" value="${vend?vend.c:""}"><div class="st" id="vst"></div></div>
   <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
   <button class="cta alt" id="empty">Vaciar bolsa</button>
@@ -469,6 +469,7 @@ buildGate(); buildFilters();
 if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#noprom").hidden = false; buildEsc(); }
 $("#espfine").innerHTML = ESPTXT ? ESPTXT.split(", ").map(x=>x.replace(/ (\$[\d,]+ c\/u)$/,": <b>$1</b>")).join(". ") + ". No entran en mayoreo ni en promociones." : "";
 { const le = Object.values(LIN).find(l=>l.mayoreoMas); if(le && (PRUEBA || DATA.some(d=>d.e===le.k))) $("#espfine").innerHTML = `<b>${le.n}: ${fmt(le.precio)} c/u</b>. En mayoreo se suma con New Era AA y cuesta ${fmt(le.mayoreoMas)} más por pieza en cada escalón. Sin promo 2×/3×. ` + $("#espfine").innerHTML; }
+{ const lo = Object.values(LIN).find(l=>l.original); if(lo && (PRUEBA || DATA.some(d=>d.e===lo.k))) $("#espfine").innerHTML += ` <b>${lo.n} (Original): ${fmt(lo.precio)} c/u</b>. Sin promo; el mayoreo se cotiza directo por WhatsApp.`; }
 paintCierre(); setInterval(paintCierre, 60000);
 const irA = c => { col=c; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"start"}); };
 $("#chipsirm").hidden = !Object.keys(STOCK_SIRM).length;
