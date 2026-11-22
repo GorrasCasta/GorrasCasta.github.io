@@ -498,7 +498,7 @@ function msg(){
 if(modoCliente){
   tienda();
   cargar().then(() => { gate(); render(); updBag(); }).catch(() => { $("#grid").innerHTML = `<div class="empty">No se pudo cargar el catálogo. Revisa tu conexión y vuelve a abrir el link.</div>`; });
-} else acceso();
+} else setup();   // sin clave: cualquiera puede armar su catálogo con sus precios
 async function hashClave(k){ const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("gc|"+k)); return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join(""); }
 async function acceso(){
   const ok = async k => { try{ return await hashClave(k) === CLAVE_H; }catch(e){ return false; } };
