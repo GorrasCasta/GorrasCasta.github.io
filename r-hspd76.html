@@ -56,6 +56,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 @media(min-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;position:relative}
 .card .ph{aspect-ratio:1/1;background:#111;cursor:pointer;position:relative}
+.card .now{position:absolute;bottom:8px;left:8px;background:#2fd08a;color:#06241a;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:4px 7px;border-radius:6px}
 .card img{width:100%;height:100%;object-fit:contain;display:block;background:#111}
 .card .tx{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
 .etag{font-size:10px;font-weight:700;letter-spacing:.05em;color:var(--acc);text-transform:uppercase}
@@ -338,10 +339,10 @@ async function cargar(){
   CATS.forEach(c => { const l = (D.cats.find(x=>x.k==="gorras")||{lineas:[]}).lineas.filter(l=>c.e.includes(l.k)); const r = l.map(x=>x.pool?D.pool.rev:x.rev).filter(v=>v>0); if(r.length) COSTO[c.k] = Math.max(...r); });
   Object.keys(R.p).forEach(k => { if(R.p[k] < COSTO[k]) delete R.p[k]; });
   const toma = (nom, def) => { const m = html.match(new RegExp("const " + nom + " = (.*?);\\s*(//.*)?$", "m")); if(!m) return def; try{ return JSON.parse(m[1]); }catch(e){ return def; } };
-  const all = toma("DATA_ALL", []), ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {});
+  const all = toma("DATA_ALL", []), ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {}), stk = toma("STOCK_SIRM", {});
   all.forEach((d,i) => { d.c = "#" + String(i+1).padStart(3,"0"); });
   DATA = all.filter(d => !ocultos.includes(d.c) && catDe(d) && precio(d));
-  DATA.forEach(d => { const a = agot[d.c]; d.out = new Set(a ? (a==="todas" ? Object.keys(d.f) : a) : []); d.s = norm(d.c+" "+d.c.slice(1)+" "+d.n+" "+d.id.replace(/-/g," ")+" "+(d.l||"")+" "+d.e); });
+  DATA.forEach(d => { const k = stk[d.c]; d.st = k ? (Array.isArray(k) ? k : [UNI]) : []; const a = agot[d.c]; d.out = new Set(a ? (a==="todas" ? Object.keys(d.f) : a) : []); d.s = norm(d.c+" "+d.c.slice(1)+" "+d.n+" "+d.id.replace(/-/g," ")+" "+(d.l||"")+" "+d.e); });
   DATA = DATA.filter(d => tallasDe(d).length);
   const n = d => +d.c.slice(1);
   const ORD = toma("ORDEN", []), POS = {}; ORD.forEach((c,i)=>POS[c]=i+1);
@@ -419,7 +420,7 @@ function drawMore(){
   list.slice(shown, shown+24).forEach(d => {
     const ts = tallasDe(d), nuevo = +d.c.slice(1) >= NUEVOS_DESDE;
     const c = document.createElement("article"); c.className = "card";
-    c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt=""></div>
+    c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt="">${d.st.length?`<span class="now">⚡ En stock</span>`:""}</div>
       ${nuevo?`<span class="tag new">Nuevo</span>`:(d.l && d.l!=="MLB"?`<span class="tag">${esc(d.l)}</span>`:"")}
       <div class="tx"><span class="etag">${d.e.replace(" snapback","")}</span><h3></h3>
       <div class="row"><div><div class="pr">${fmt(precio(d))}</div><span class="sz">${d.c} · ${isUni(d)?"Ajustable":sizeOn()?"T. "+size:ts.length+(ts.length===1?" talla":" tallas")}</span></div><button class="add">+ Agregar</button></div></div>`;
@@ -445,7 +446,7 @@ function openPD(d){
   $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo " + d.c + " · " + d.e; $("#ppr").textContent = fmt(precio(d));
   $("#plbl").textContent = isUni(d) ? "Talla" : "Tallas disponibles";
   const z = $("#pszs"); z.innerHTML = "";
-  ts.forEach(t => { const b = document.createElement("button"); b.textContent = t===UNI ? "Única (ajustable)" : t; b.setAttribute("aria-pressed", t===curT);
+  ts.forEach(t => { const b = document.createElement("button"); b.textContent = (d.st.includes(t)?"⚡ ":"") + (t===UNI ? "Única (ajustable)" : t); b.setAttribute("aria-pressed", t===curT);
     b.onclick = () => { curT = t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b)); updPD(); }; z.appendChild(b); });
   updPD(); openSheet("#pd");
 }
