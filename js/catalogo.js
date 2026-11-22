@@ -127,10 +127,9 @@ const ESPTXT = (()=>{ const by = {}; D.cats.filter(c=>CPOS[c.k]!==undefined).for
   return Object.keys(by).sort((a,b)=>a-b).map(p=>yjunta(by[p])+" "+fmt(+p)+" c/u").join(", "); })();
 const ESPN = yjunta(D.cats.filter(c=>CPOS[c.k]!==undefined).flatMap(c=>(c.lineas||[]).filter(l=>!l.pool && !l.mayoreoMas && DATA.some(d=>d.e===l.k)).map(l=>l.n||l.k)));
 const ELBL = k => { if(k==="todos") return ["Todas","Todo el catálogo"];
-  if(k==="sirm") return ["⚡ Entrega hoy","stock en SIRM"];
-  if(GINFO[k]) return [GINFO[k].n, fmt(P1)+" · "+(GINFO[k].sub||"")];
+  if(GINFO[k]) return [GINFO[k].n, (GINFO[k].sub||"")+" · <b>"+fmt(P1)+"</b>"];
   const l = LIN[k]; if(!l) return [k.split(" ")[0], k.split(" ").slice(1).join(" ")];
-  return [l.n||k, [l.pool ? "" : (l.precio>0 ? fmt(l.precio) : ""), l.sub].filter(Boolean).join(" · ")]; };
+  return [l.n||k, [l.sub, l.pool ? "" : (l.precio>0 ? "<b>"+fmt(l.precio)+"</b>" : "")].filter(Boolean).join(" · ")]; };
 const corto = e => ELBL(e)[0];
 const estilosDe = c => { const out = ["todos"]; (c.lineas||[]).forEach(l => { const k = l.grupo || l.k; if(!out.includes(k)) out.push(k); }); return out; };
 const hayEn = (C,e) => DATA.some(d=>d.cat===C.k && (GRP[e]?GRP[e].includes(d.e):d.e===e)) || (PRUEBA && LIN[e]);
@@ -143,15 +142,12 @@ function buildFilters(){
     b.onclick=()=>{ if(cat===c.k) return; cat=c.k; estilo="todos"; col="todo"; color=null; buildFilters(); render(); }; ct.appendChild(b); });
   const et = $("#estilos"); et.innerHTML = "";
   const ES = estilosDe(C).filter(e=>e==="todos"||hayEn(C,e));
-  if(DATA.some(d=>d.cat===C.k && STOCK_SIRM[d.c])) ES.push("sirm");
   et.hidden = ES.length<=2;
   ES.forEach(e=>{
     const b=document.createElement("button"); b.dataset.e=e;
     const [a,c] = ELBL(e);
-    if(e==="todos") b.innerHTML = `<span class="mn">Todo el catálogo</span>`;
-    else { const m = /^(\$[\d,]+)\s*·?\s*(.*)$/.exec(c||""); b.innerHTML = `<span class="mn">${a}</span>${m?`<span class="ms">${m[2]}</span><span class="mp">${m[1]}</span>`:`<span class="ms">${c}</span>`}`; }
-    if(e==="sirm") b.className="sirmt";
-    b.onclick=()=>{ if(e==="sirm"){ estilo="todos"; col="sirm"; } else { estilo=e; col="todo"; } render(); }; et.appendChild(b);
+    b.innerHTML = `${a}<small>${c}</small>`;
+    b.onclick=()=>{ estilo=e; render(); }; et.appendChild(b);
   });
   const sb = $("#subest"); sb.innerHTML = "";
   Object.keys(GRP).forEach(g=>{ if(!(C.lineas||[]).some(l=>l.grupo===g)) return;
@@ -160,10 +156,10 @@ function buildFilters(){
       b.onclick=()=>{ estilo=e; render(); }; sb.appendChild(b);
     }); });
   COLS = colsDe(C);
-  const r = $("#cols"); r.innerHTML = ""; r.style.display = "none";
+  const r = $("#cols"); r.innerHTML = "";
   COLS.filter(c=>c.k!=="sirm"||DATA.some(d=>d.cat===C.k && STOCK_SIRM[d.c])).filter(c=>COLS_BASE.includes(c)||DATA.some(d=>d.cat===C.k&&c.t(d))).forEach(c=>{
     const b = document.createElement("button"); b.className="col"; b.dataset.k=c.k;
-    b.onclick = ()=>{ col=c.k; render(); };
+    b.onclick = ()=>{ col=c.k; if(c.k==="sirm") estilo="todos"; render(); };
     r.appendChild(b);
   });
   if(filtrosUna) return; filtrosUna = true;
@@ -209,7 +205,7 @@ function render(){
   });
   document.querySelectorAll(".dot").forEach(b=>b.setAttribute("aria-pressed", color===b.dataset.k));
   const neOn = estilo==="newera" || NE.includes(estilo);
-  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.e==="sirm" ? col==="sirm" : col!=="sirm" && (b.dataset.e==="newera" ? neOn : estilo===b.dataset.e)));
+  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.e==="newera" ? neOn : estilo===b.dataset.e));
   $("#subest").hidden = !neOn;
   document.querySelectorAll("#subest button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
   const ct = (COLS.find(c=>c.k===col)||COLS[0]).t;
