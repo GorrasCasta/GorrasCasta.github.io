@@ -46,6 +46,11 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .tabs button{flex:1;white-space:nowrap;padding:9px 10px;border-radius:10px;font-weight:700;font-size:13px;color:var(--mute)}
 .tabs button small{display:block;font-size:10px;font-weight:600;opacity:.8}
 .tabs button[aria-pressed=true]{background:var(--ink);color:#111}
+.esc{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px}
+.esc table{width:100%;border-collapse:collapse;font-size:14px}.esc th{font-size:11px;color:var(--mute);text-align:left;font-weight:700;letter-spacing:.05em;padding:4px 6px}
+.esc td{padding:6px;border-top:1px solid var(--line)}.esc td+td{font-weight:800}
+.esc p{font-size:12px;color:var(--mute);margin:8px 0 0}
+.esc .armar{display:block;margin-top:10px;text-align:center;border:1px solid var(--acc);color:var(--acc);border-radius:12px;padding:10px;font-weight:800;font-size:14px;text-decoration:none}
 .tabs{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
 .tabs button{white-space:normal;line-height:1.15;padding:8px 6px}
 .tabs button[data-k="todas"]{grid-column:1/-1}
@@ -281,6 +286,10 @@ const precioOk = v => { const n = Math.round(+v); return n>=50 && n<=5000 ? n : 
 const P = new URLSearchParams(location.search);
 const R = { t:(P.get("t")||"").trim().slice(0,30), w:limpiaTel(P.get("w")), p:{} };
 CATS.forEach(c => { const v = precioOk(P.get(c.k)); if(v && v>=COSTO[c.k]) R.p[c.k] = v; });
+const MAY = !(R.t && R.w.length===10 && Object.keys(R.p).length) && !P.has("armar");   // sin datos en el link: catálogo de mayoreo de Casta Caps
+if(MAY){ R.t = "Casta Caps"; R.w = "6624248769"; R.p = Object.assign({}, COSTO); }
+const ESC = [{min:20,p:270},{min:15,p:280},{min:10,p:295},{min:5,p:320}];   // mayoreo New Era AA (revendedor); Edición Especial +$45
+const tierM = n => ESC.find(x=>n>=x.min);
 const modoCliente = R.t && R.w.length===10 && Object.keys(R.p).length;
 
 /* ===== Configuración (revendedor) ===== */
@@ -337,11 +346,12 @@ const sizeOn = () => !!size && (cat==="todas" || (cat==="a" && (!sub || sub==="5
 
 async function cargar(){
   const D = await CASTA.cargar();
-  const neutro = {neutro:true, wa: modoCliente ? "52" + R.w : ""};   // los clientes del revendedor no ven Casta Caps
+  const neutro = MAY ? {} : {neutro:true, wa: modoCliente ? "52" + R.w : ""};   // los clientes del revendedor no ven Casta Caps
   if(CASTA.mantenimiento(D, neutro)) throw new Error("mantenimiento");
   if(D.est && D.est.rev_bloqueado && CASTA.MODO !== "prueba"){ D.est = {mantenimiento:true, mensaje:"Por el momento no está disponible. Escríbenos por WhatsApp."}; CASTA.mantenimiento(D, Object.assign({titulo:"Catálogo no disponible"}, neutro)); throw new Error("bloqueado"); }
   const html = CASTA.legado(D);
   CATS.forEach(c => { const l = (D.cats.find(x=>x.k==="gorras")||{lineas:[]}).lineas.filter(l=>c.e.includes(l.k)); const r = l.map(x=>x.pool?D.pool.rev:x.rev).filter(v=>v>0); if(r.length) COSTO[c.k] = Math.max(...r); });
+  if(MAY) R.p = Object.assign({}, COSTO);
   Object.keys(R.p).forEach(k => { if(R.p[k] < COSTO[k]) delete R.p[k]; });
   const toma = (nom, def) => { const m = html.match(new RegExp("const " + nom + " = (.*?);\\s*(//.*)?$", "m")); if(!m) return def; try{ return JSON.parse(m[1]); }catch(e){ return def; } };
   const all = toma("DATA_ALL", []), ocultos = toma("OCULTOS", []), agot = toma("AGOTADOS", {}), stk = toma("STOCK_SIRM", {});
@@ -357,7 +367,16 @@ async function cargar(){
 function tienda(){
   $("#shop").hidden = false;
   document.title = R.t + " · Catálogo de gorras";
-  $("#brand").innerHTML = esc(R.t) + "<small>CATÁLOGO DE GORRAS</small>";
+  $("#brand").innerHTML = esc(R.t) + "<small>" + (MAY ? "MAYOREO Y REVENDEDORES" : "CATÁLOGO DE GORRAS") + "</small>";
+  if(MAY){ document.title = "Casta Caps · Precios de mayoreo y revendedor";
+    $(".hero h1").innerHTML = "Precios de mayoreo<br><em>y revendedor.</em>";
+    $(".hero p").innerHTML = "Precio por pieza de 1 a 4. Desde 5 piezas baja con la escala. Agrega tus gorras y manda tu pedido por WhatsApp.";
+    const tb = document.createElement("div"); tb.className = "esc";
+    tb.innerHTML = `<table><tr><th>Piezas</th><th>New Era AA</th><th>Edición Esp.</th></tr>` +
+      [["1 – 4",COSTO.a,COSTO.d],["5 – 9",320,365],["10 – 14",295,340],["15 – 19",280,325],["20 o más",270,315]].map(r=>`<tr><td>${r[0]}</td><td>${fmt(r[1])}</td><td>${fmt(r[2])}</td></tr>`).join("") +
+      `</table><p>Deportiva, Nuevo Imperio y Bélicas: precio fijo. Mitchell & Ness (Original): mayoreo por WhatsApp.</p>
+      <a class="armar" href="r-hspd76.html?armar=1">¿Revendes? Arma tu catálogo con tus precios →</a>`;
+    $("#prices").after(tb); }
   $("#prices").innerHTML = CATS.filter(c=>R.p[c.k]).map(c=>`<span>${c.n} <b>${fmt(R.p[c.k])}</b></span>`).join("");
   const cs = CATS.filter(c=>R.p[c.k]);
   const tb = $("#tabs");
@@ -461,7 +480,9 @@ const byId = id => DATA.find(d=>d.id===id);
 function addBag(id,t,n){ const it = bag.find(x=>x.id===id && x.t===t); it ? it.q+=n : bag.push({id,t,q:n}); saveBag(); toast(t===UNI?"Agregada a la bolsa":`Agregada · talla ${t}`); }
 function saveBag(){ store.set(KEY, bag); updBag(); }
 const pieces = () => bag.reduce((a,b)=>a+b.q,0);
-const total = () => bag.reduce((a,b)=>a+b.q*precio(byId(b.id)),0);
+const piezasMay = () => bag.reduce((a,b)=>{ const d=byId(b.id); const k=d&&catDe(d).k; return a + (k==="a"||k==="d" ? b.q : 0); },0);
+const pu = d => { if(!MAY) return precio(d); const k = catDe(d).k, t = tierM(piezasMay()); return t && (k==="a"||k==="d") ? t.p + (k==="d"?45:0) : precio(d); };
+const total = () => bag.reduce((a,b)=>a+b.q*pu(byId(b.id)),0);
 function updBag(){
   bag = bag.filter(it => byId(it.id));
   const n = pieces(); $("#bagn").textContent = n; $("#fbar").hidden = n===0;
@@ -472,7 +493,7 @@ function drawBag(){
   if(!bag.length){ L.innerHTML = `<p class="note" style="font-size:14px;padding:20px 0">Tu bolsa está vacía. Agrega gorras desde el catálogo.</p>`; S.innerHTML = ""; return; }
   bag.forEach((it,i) => {
     const d = byId(it.id), r = document.createElement("div"); r.className = "line";
-    r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${fmt(precio(d))}</span></div>
+    r.innerHTML = `<img src="${th(d.f[it.t]||foto(d))}" alt=""><div class="t"><b></b><span>${d.c} · ${it.t===UNI?"Ajustable":"Talla "+it.t} · ${fmt(pu(d))}</span></div>
       <div class="q"><button aria-label="Menos">−</button><b>${it.q}</b><button aria-label="Más">+</button></div>`;
     r.querySelector(".t b").textContent = d.n;
     const [m,p] = r.querySelectorAll(".q button");
@@ -484,14 +505,14 @@ function drawBag(){
   S.innerHTML = `<div class="sum"><div class="r"><span>Piezas</span><span>${n}</span></div><div class="r big"><span>Total</span><span>${fmt(total())}</span></div></div>
     <a class="cta wa" id="send" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
     <button class="cta alt" id="empty">Vaciar bolsa</button>
-    <p class="note">Te confirmamos disponibilidad, fecha de entrega y forma de pago por WhatsApp.</p>`;
+    <p class="note">${MAY?"Mayoreo desde 5 pz (New Era AA y Edición Especial cuentan juntas). Mitchell & Ness: mayoreo se cotiza por WhatsApp. Planchado y hormado en mayoreo: $40 por pieza. Entrega a domicilio en SIRM. ":""}Te confirmamos disponibilidad, fecha de entrega y forma de pago por WhatsApp.</p>`;
   $("#send").href = "https://wa.me/52" + R.w + "?text=" + encodeURIComponent(msg());
   $("#empty").onclick = () => { bag = []; saveBag(); drawBag(); };
 }
 function msg(){
-  const ln = it => { const d = byId(it.id); return `• ${it.q} × ${d.c} ${d.n} · ${d.e.split(" ")[0]} · ${it.t===UNI?"ajustable":"talla "+it.t} · ${fmt(precio(d))}`; };
+  const ln = it => { const d = byId(it.id); return `• ${it.q} × ${d.c} ${d.n} · ${d.e.split(" ")[0]} · ${it.t===UNI?"ajustable":"talla "+it.t} · ${fmt(pu(d))}`; };
   const n = pieces();
-  return `Hola ${R.t}, quiero hacer este pedido:\n\n${bag.map(ln).join("\n")}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(total())}\n\n¿Me confirmas disponibilidad y entrega?`;
+  return `Hola ${R.t}, quiero hacer este pedido${MAY?" de mayoreo / revendedor":""}:\n\n${bag.map(ln).join("\n")}\n\nTotal: ${n} ${n===1?"pieza":"piezas"} · ${fmt(total())}\n\n¿Me confirmas disponibilidad y entrega?`;
 }
 
 /* ===== Arranque ===== */
