@@ -206,3 +206,41 @@ details.mayo .esct,details.mayo .escs{display:none}
 .tabs.cats{background:#1a1a1a}
 .tabs.cats button[aria-pressed=true]{background:var(--acc);color:#111}
 
+
+/* Precios claros por categoría */
+.card .pr{font-family:"Archivo Black",Impact,sans-serif;font-size:20px;line-height:1;color:var(--ink)}
+.card .pr small{display:block;font-family:Archivo,system-ui,sans-serif;font-size:11px;font-weight:700;color:var(--acc2);margin-top:3px}
+.etag.ee{color:#ffd166}.etag.og{color:#7fd0ff}
+.tag.orig{background:#0b3a5a;color:#bfe6ff}
+.pprecio{font-size:13px;color:var(--mute);margin:6px 0 2px}.pprecio b{font-family:"Archivo Black",Impact,sans-serif;font-size:24px;color:var(--ink)}
+.tabs button.sirmt{color:#7fe0b4}.tabs button.sirmt[aria-pressed=true]{background:#2fd08a;color:#06241a}
+#estilos{display:grid;grid-template-columns:1fr 1fr;overflow:visible}
+#estilos button{white-space:normal;text-align:left;padding:10px 12px}
+#estilos button[data-e="todos"]{grid-column:1/-1;text-align:center}
+#estilos button small{font-size:11px;margin-top:2px}
+
+/* Menú urbano */
+#estilos{background:none;border:none;padding:0;gap:8px}
+#estilos button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-height:74px;padding:12px 12px 10px;border-radius:14px;background:linear-gradient(160deg,#1c1c1c,#121212);border:1px solid #2a2a2a;color:var(--ink);overflow:hidden;transition:border-color .15s,transform .1s}
+#estilos button::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--acc);opacity:.35}
+#estilos button:active{transform:scale(.98)}
+#estilos .mn{font-family:"Archivo Black",Impact,sans-serif;font-size:15px;line-height:1.05;text-transform:uppercase;letter-spacing:.01em}
+#estilos .ms{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
+#estilos .mp{position:absolute;top:10px;right:10px;background:var(--acc);color:#111;font-family:"Archivo Black",Impact,sans-serif;font-size:13px;padding:3px 8px;border-radius:999px}
+#estilos button[aria-pressed=true]{background:linear-gradient(160deg,#2a1a0c,#161009);border-color:var(--acc);color:var(--ink)}
+#estilos button[aria-pressed=true]::before{opacity:1}
+#estilos button[data-e="todos"]{min-height:46px;align-items:center;justify-content:center}
+#estilos button[data-e="todos"] .mn{font-size:14px;letter-spacing:.08em}
+#estilos button[data-e="Mitchell & Ness"]::before{background:#3aa0ff}
+#estilos button[data-e="Mitchell & Ness"] .mp{background:#3aa0ff}
+#estilos button[data-e="Edición Especial"]::before{background:#ffd166}
+#estilos button[data-e="Edición Especial"] .mp{background:#ffd166}
+#estilos button.sirmt{border-color:#1d5a40;background:linear-gradient(160deg,#0f2a1e,#0b1a13)}
+#estilos button.sirmt::before{background:#2fd08a;opacity:1}
+#estilos button.sirmt .mn{color:#7fe0b4}
+#estilos button.sirmt[aria-pressed=true]{background:#2fd08a;color:#06241a}
+#estilos button.sirmt[aria-pressed=true] .mn,#estilos button.sirmt[aria-pressed=true] .ms{color:#06241a}
+#estilos .mp{position:static;margin-top:auto;align-self:flex-start}
+#estilos button{min-height:96px}
+#estilos button.sirmt{grid-column:1/-1;min-height:56px}
+#estilos .mn{font-size:14px}

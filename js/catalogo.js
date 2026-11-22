@@ -65,13 +65,10 @@ DATA.forEach(d => { const a = AGOTADOS[d.c]; if(a){ const ts = a==="todas"?(d.v?
 /* ---------- Colecciones (por categoría: las fijas + las de datos/ajustes.json) ---------- */
 const COLS_BASE = [
   {k:"todo", n:"Todo", t:()=>true},
-  {k:"nuevos", n:"✨ Nuevos", t:d=>esNuevo(d)},
   {k:"sirm", n:"Entrega inmediata SIRM", t:d=>!!STOCK_SIRM[d.c]},
   {k:"fav", n:"Favoritas ♥", t:d=>favs.has(d.uid)},
 ];
-const colsDe = c => [...COLS_BASE, ...((c && c.colecciones) || []).map(x => {
-  let re = null; try{ re = x.re ? new RegExp(x.re) : null; }catch(e){}
-  return {k:x.k, n:x.n, t:d => (re ? re.test(d.id) : true) && (!x.liga || x.liga.includes(d.l))}; })];
+const colsDe = c => COLS_BASE;
 let COLS = COLS_BASE;
 const COLORS = [
   {k:"negra",c:"#111"},{k:"crema",c:"#efe6cf"},{k:"blanca",c:"#fff"},{k:"azul",c:"#2f5bd3"},{k:"roja",c:"#d4302b"},
@@ -119,19 +116,24 @@ const NE = D.cats.flatMap(c => (c.lineas||[]).filter(l=>l.pool).map(l=>l.k));   
 const grpDe = e => Object.keys(GRP).find(g => GRP[g].includes(e));
 const enEstilo = d => d.cat===cat && (estilo==="todos" || (GRP[estilo] ? GRP[estilo].includes(d.e) : d.e===estilo));
 const isPool = d => CASTA.enPool(D, d);
-const esp = (d,t) => isPool(d) ? null : CASTA.precioBase(D, d, t);   // precio fijo (sin promo ni mayoreo) o null si es New Era AA
+const isEE = d => !isPool(d) && !d.pr && !d.p && !!(LIN[d.e]||{}).mayoreoMas;          // Edición Especial: su precio, mayoreo = escalón New Era AA + extra
+const isOrig = d => !!(LIN[d.e]||{}).original;
+const esp = (d,t) => isPool(d) ? null : CASTA.precioBase(D, d, t);
+const precioDe = (d,t) => isPool(d) ? P1 : CASTA.precioBase(D, d, t);   // precio fijo (sin promo ni mayoreo) o null si es New Era AA
 const fmtP = n => n>0 ? fmt(n) : "Precio a consultar";
 const yjunta = a => a.length<2 ? a.join("") : a.slice(0,-1).join(", ")+" y "+a[a.length-1];
 const NETXT = yjunta(NE.map(e=>(LIN[e]||{}).n||e));
-const ESPTXT = (()=>{ const by = {}; D.cats.filter(c=>CPOS[c.k]!==undefined).forEach(c=>(c.lineas||[]).forEach(l=>{ if(!l.pool && l.precio>0 && DATA.some(d=>d.e===l.k)) (by[l.precio]=by[l.precio]||[]).push(l.n||l.k); }));
+const ESPTXT = (()=>{ const by = {}; D.cats.filter(c=>CPOS[c.k]!==undefined).forEach(c=>(c.lineas||[]).forEach(l=>{ if(!l.pool && !l.mayoreoMas && l.precio>0 && DATA.some(d=>d.e===l.k)) (by[l.precio]=by[l.precio]||[]).push(l.n||l.k); }));
   return Object.keys(by).sort((a,b)=>a-b).map(p=>yjunta(by[p])+" "+fmt(+p)+" c/u").join(", "); })();
-const ESPN = yjunta(D.cats.filter(c=>CPOS[c.k]!==undefined).flatMap(c=>(c.lineas||[]).filter(l=>!l.pool && DATA.some(d=>d.e===l.k)).map(l=>l.n||l.k)));
+const ESPN = yjunta(D.cats.filter(c=>CPOS[c.k]!==undefined).flatMap(c=>(c.lineas||[]).filter(l=>!l.pool && !l.mayoreoMas && DATA.some(d=>d.e===l.k)).map(l=>l.n||l.k)));
 const ELBL = k => { if(k==="todos") return ["Todas","Todo el catálogo"];
-  if(GINFO[k]) return [GINFO[k].n, GINFO[k].sub||""];
+  if(k==="sirm") return ["⚡ Entrega hoy","stock en SIRM"];
+  if(GINFO[k]) return [GINFO[k].n, fmt(P1)+" · "+(GINFO[k].sub||"")];
   const l = LIN[k]; if(!l) return [k.split(" ")[0], k.split(" ").slice(1).join(" ")];
-  return [l.n||k, [l.sub, l.pool ? "" : (l.precio>0 ? fmt(l.precio) : "")].filter(Boolean).join(" · ")]; };
+  return [l.n||k, [l.pool ? "" : (l.precio>0 ? fmt(l.precio) : ""), l.sub].filter(Boolean).join(" · ")]; };
 const corto = e => ELBL(e)[0];
 const estilosDe = c => { const out = ["todos"]; (c.lineas||[]).forEach(l => { const k = l.grupo || l.k; if(!out.includes(k)) out.push(k); }); return out; };
+const hayEn = (C,e) => DATA.some(d=>d.cat===C.k && (GRP[e]?GRP[e].includes(d.e):d.e===e)) || (PRUEBA && LIN[e]);
 let filtrosUna = false;
 function buildFilters(){
   const C = CC();
@@ -140,13 +142,16 @@ function buildFilters(){
     const n = DATA.filter(d=>d.cat===c.k).length; b.innerHTML = `${c.n}<small>${n} ${PRUEBA&&!c.activa?"· oculta en público":"modelos"}</small>`;
     b.onclick=()=>{ if(cat===c.k) return; cat=c.k; estilo="todos"; col="todo"; color=null; buildFilters(); render(); }; ct.appendChild(b); });
   const et = $("#estilos"); et.innerHTML = "";
-  const ES = estilosDe(C).filter(e=>e==="todos"||DATA.some(d=>d.cat===C.k && (GRP[e]?GRP[e].includes(d.e):d.e===e)));
+  const ES = estilosDe(C).filter(e=>e==="todos"||hayEn(C,e));
+  if(DATA.some(d=>d.cat===C.k && STOCK_SIRM[d.c])) ES.push("sirm");
   et.hidden = ES.length<=2;
   ES.forEach(e=>{
     const b=document.createElement("button"); b.dataset.e=e;
     const [a,c] = ELBL(e);
-    b.innerHTML = `${a}<small>${c}</small>`;
-    b.onclick=()=>{ estilo=e; render(); }; et.appendChild(b);
+    if(e==="todos") b.innerHTML = `<span class="mn">Todo el catálogo</span>`;
+    else { const m = /^(\$[\d,]+)\s*·?\s*(.*)$/.exec(c||""); b.innerHTML = `<span class="mn">${a}</span>${m?`<span class="ms">${m[2]}</span><span class="mp">${m[1]}</span>`:`<span class="ms">${c}</span>`}`; }
+    if(e==="sirm") b.className="sirmt";
+    b.onclick=()=>{ if(e==="sirm"){ estilo="todos"; col="sirm"; } else { estilo=e; col="todo"; } render(); }; et.appendChild(b);
   });
   const sb = $("#subest"); sb.innerHTML = "";
   Object.keys(GRP).forEach(g=>{ if(!(C.lineas||[]).some(l=>l.grupo===g)) return;
@@ -155,15 +160,15 @@ function buildFilters(){
       b.onclick=()=>{ estilo=e; render(); }; sb.appendChild(b);
     }); });
   COLS = colsDe(C);
-  const r = $("#cols"); r.innerHTML = "";
+  const r = $("#cols"); r.innerHTML = ""; r.style.display = "none";
   COLS.filter(c=>c.k!=="sirm"||DATA.some(d=>d.cat===C.k && STOCK_SIRM[d.c])).filter(c=>COLS_BASE.includes(c)||DATA.some(d=>d.cat===C.k&&c.t(d))).forEach(c=>{
     const b = document.createElement("button"); b.className="col"; b.dataset.k=c.k;
     b.onclick = ()=>{ col=c.k; render(); };
     r.appendChild(b);
   });
   if(filtrosUna) return; filtrosUna = true;
-  const d = $("#colors");
-  COLORS.forEach(c=>{
+  const d = $("#colors"); d.style.display = "none";
+  [].forEach(c=>{
     const b = document.createElement("button"); b.className="dot";
     b.innerHTML = `<i style="background:${c.c}"></i>${c.k==="cafe"?"café":c.k}`;
     b.onclick = ()=>{ color = color===c.k?null:c.k; render(); };
@@ -204,15 +209,15 @@ function render(){
   });
   document.querySelectorAll(".dot").forEach(b=>b.setAttribute("aria-pressed", color===b.dataset.k));
   const neOn = estilo==="newera" || NE.includes(estilo);
-  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.e==="newera" ? neOn : estilo===b.dataset.e));
+  document.querySelectorAll("#estilos button").forEach(b=>b.setAttribute("aria-pressed", b.dataset.e==="sirm" ? col==="sirm" : col!=="sirm" && (b.dataset.e==="newera" ? neOn : estilo===b.dataset.e)));
   $("#subest").hidden = !neOn;
   document.querySelectorAll("#subest button").forEach(b=>b.setAttribute("aria-pressed", estilo===b.dataset.e));
-  const ct = COLS.find(c=>c.k===col).t;
+  const ct = (COLS.find(c=>c.k===col)||COLS[0]).t;
   list = pool.filter(d => ct(d) && (!color || d.id.includes(color)) && words.every(w=>d.s.includes(w)));
   $("#count").textContent = `${list.length} ${list.length===1?"modelo":"modelos"}` + (col==="sirm"?" en stock · todas las tallas":sizeOn()?` en talla ${size}`:"");
   $("#clear").hidden = (col==="todo" && !color && !q && estilo==="todos");
   const g = $("#grid"); g.innerHTML = "";
-  if(!list.length){ g.innerHTML = `<div class="empty">${col==="fav"?"Aún no marcas favoritas. Toca ♡ en las gorras que te gusten.":"No hay modelos con esos filtros."}</div>`; return; }
+  if(!list.length){ const L0 = LIN[estilo]; g.innerHTML = `<div class="empty">${col==="fav"?"Aún no marcas favoritas. Toca ♡ en las gorras que te gusten.":L0&&!DATA.some(d=>d.e===estilo)?"Próximamente: "+(L0.n||estilo)+" "+fmt(L0.precio)+".":"No hay modelos con esos filtros."}</div>`; return; }
   shown = 0; drawMore();
 }
 let shown = 0;
@@ -230,9 +235,9 @@ function drawMore(){
     const ts = vars(d);
     const c = document.createElement("article"); c.className="card";
     c.innerHTML = `<div class="ph"><img loading="${shown<4?"eager":"lazy"}" decoding="async" src="${th(foto(d))}" alt="">${(col==="sirm"||enSirm(d,sizeOn()?size:null))?`<span class="now">⚡ Inmediata SIRM</span>`:""}</div>
-      ${d.l&&d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
+      ${isOrig(d)?`<span class="tag orig">Original</span>`:d.l&&d.l!=="MLB"?`<span class="tag">${d.l}</span>`:""}
       <button class="fav" aria-label="Favorita" aria-pressed="${favs.has(d.uid)}">${favs.has(d.uid)?"♥":"♡"}</button>
-      <div class="tx"><span class="etag">${esNuevo(d)?`<span class="nw">Nuevo</span>`:""}${esp(d)!=null?corto(d.e)+" · "+fmtP(esp(d)):d.e}</span><h3></h3><div class="row"><span class="sz">${szTxt(d,ts)}</span><button class="add">+ Agregar</button></div></div>`;
+      <div class="tx"><span class="etag${isOrig(d)?" og":isEE(d)?" ee":""}">${isPool(d)?"New Era AA · "+corto(d.e):isEE(d)?"Edición Especial · New Era AA":corto(d.e)+(isOrig(d)?" · Original":"")}</span><h3></h3><div class="pr">${fmtP(precioDe(d))}${isPool(d)&&PROMO_ON?`<small>2 × ${fmt(PROMO[2])}</small>`:""}</div><div class="row"><span class="sz">${szTxt(d,ts)}</span><button class="add">+ Agregar</button></div></div>`;
     c.querySelector("h3").textContent = d.n; c.querySelector("img").alt = d.n;
     c.querySelector(".ph").onclick = ()=>openPD(d);
     c.querySelector("h3").onclick = ()=>openPD(d);
@@ -265,7 +270,8 @@ function openPD(d){
   $("#pley").hidden = soloStock || isUni(d) || !st0.length;
   $("#pmas").hidden = !soloStock || vars(d).length<=ts.length;
   $("#pmas").onclick = ()=>{ col="todo"; render(); openPD(d); };
-  $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+(esp(d)!=null?ELBL(d.e).filter(Boolean)[0]+(LIN[d.e]&&LIN[d.e].sub?" "+LIN[d.e].sub:"")+" · "+fmtP(esp(d)):d.e); $("#qv").textContent = 1;
+  $("#pname").textContent = d.n; $("#pcode").textContent = "Modelo "+d.c+" · "+(isPool(d)?"New Era AA "+d.e:isEE(d)?"Edición Especial · New Era AA":corto(d.e)+(isOrig(d)?" · Original":"")); $("#qv").textContent = 1;
+  $("#pprecio").innerHTML = `<b>${fmtP(precioDe(d))}</b> c/u` + (isPool(d) ? (PROMO_ON?` · promo 2 × ${fmt(PROMO[2])} · 3 × ${fmt(PROMO[3])}`:"") + ` · mayoreo desde ${M1} pz` : isEE(d) ? ` · mayoreo desde ${M1} pz (cuenta junto con New Era AA)` : " · precio fijo, sin promo ni mayoreo");
   const z = $("#pszs"); z.innerHTML = "";
   ts.forEach(t=>{ const b=document.createElement("button"); b.textContent = (enSirm(d,t)?"⚡ ":"")+(t===UNI?(d.cat==="gorras"?"Única (ajustable)":UTXT(d)):t); b.setAttribute("aria-pressed",t===curT);
     b.onclick=()=>{ curT=t; z.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b)); updPD(); }; z.appendChild(b); });
@@ -292,10 +298,14 @@ function addBag(id,t,n){ const it = bag.find(x=>x.id===id&&x.t===t); it? it.q+=n
 function saveBag(){ store.set("bolsa",bag); updBag(); }
 const pieces = () => bag.reduce((a,b)=>a+b.q,0);
 const piecesNE = () => bag.reduce((a,b)=>{ const d=byId(b.id); return a + (d && isPool(d) ? b.q : 0); },0);
-const espTotal = () => bag.reduce((a,b)=>{ const d=byId(b.id); return a + (d && !isPool(d) ? b.q*esp(d,b.t) : 0); },0);
-function cotiza(){ const nN = piecesNE(), ne = nN ? quote(nN) : {total:0,may:false}, e = espTotal(); return {nN, nE: pieces()-nN, ne, esp:e, total: ne.total + e, may: ne.may}; }
-function quote(n){
-  if(n>=M1){ const tier = MAYOREO.find(m=>n>=m.min); return {total:n*tier.precio, per:tier.precio, may:true}; }
+const piecesEE = () => bag.reduce((a,b)=>{ const d=byId(b.id); return a + (d && isEE(d) ? b.q : 0); },0);
+const tierDe = n => n>=M1 ? MAYOREO.find(m=>n>=m.min) : null;
+const precioEE = (d,t,nTot) => { const tr = tierDe(nTot); return tr ? tr.precio + ((LIN[d.e]||{}).mayoreoMas||0) : esp(d,t); };
+const espTotal = nTot => bag.reduce((a,b)=>{ const d=byId(b.id); return a + (d && !isPool(d) ? b.q*(isEE(d)?precioEE(d,b.t,nTot):esp(d,b.t)) : 0); },0);
+function cotiza(){ const nN = piecesNE(), nT = nN + piecesEE(), ne = nN ? quote(nN, nT) : {total:0,may:false}, e = espTotal(nT); return {nN, nT, nE: pieces()-nN, ne, esp:e, total: ne.total + e, may: ne.may || nT>=M1}; }
+function quote(n, nT){
+  nT = nT || n;
+  if(nT>=M1){ const tier = MAYOREO.find(m=>nT>=m.min); return {total:n*tier.precio, per:tier.precio, may:true}; }
   const tres = Math.floor(n/3), r = n%3; return {total: tres*PROMO[3] + (r?PROMO[r]:0), may:false};
 }
 let dealSel = 0;
@@ -340,16 +350,16 @@ function drawBag(){
   const neRows = !nN ? "" : (c.nE?`<div class="r" style="font-weight:700"><span>${POOL.nombre} · ${nN} pz</span><span></span></div>`:"") +
     (qt.may?`<div class="r"><span>Mayoreo · ${fmt(qt.per)} c/u</span><span>${fmt(qt.total)}</span></div>`:`<div class="r"><span>Precio normal</span><span>${fmt(regular)}</span></div>`) +
     (!qt.may && regular>qt.total?`<div class="r save"><span>Ahorras con la promo</span><span>−${fmt(regular-qt.total)}</span></div>`:"");
-  const eg = {}; bag.forEach(it=>{ const d=byId(it.id); if(d&&!isPool(d)){ const p=esp(d,it.t), k=corto(d.e)+(d.p?" "+it.t:""); (eg[k]=eg[k]||{q:0,p}).q+=it.q; } });
+  const eg = {}; bag.forEach(it=>{ const d=byId(it.id); if(d&&!isPool(d)){ const p=isEE(d)?precioEE(d,it.t,c.nT):esp(d,it.t), k=corto(d.e)+(isOrig(d)?" (Original)":"")+(d.p?" "+it.t:""); (eg[k]=eg[k]||{q:0,p}).q+=it.q; } });
   const espRows = Object.entries(eg).map(([k,g])=>`<div class="r"><span>${k} · ${g.q} pz × ${fmt(g.p)}</span><span>${fmt(g.q*g.p)}</span></div>`).join("");
   S.innerHTML = `<div class="sum">
     <div class="r"><span>Piezas</span><span>${n}</span></div>
     ${neRows}${espRows}
-    <div class="r big"><span>Total${qt.may?" estimado":""}</span><span>${fmt(c.total)}</span></div>
+    <div class="r big"><span>Total${c.may?" estimado":""}</span><span>${fmt(c.total)}</span></div>
     ${nN?`<div class="meter"><i style="width:${Math.min(100,pct)}%"></i></div><div class="hint">${next}</div>`:""}
   </div>
   <div class="snap">📸 <b>Sin capturas:</b> tu mensaje lleva un link con las fotos, tallas y cantidades de tus ${MULTI?"productos":"gorras"}. Solo envíalo.</div>
-  <p class="note">${ESPTXT&&bag.some(it=>{const d=byId(it.id); return d&&d.cat==="gorras"&&!isPool(d);})?ESPTXT+": no entran en promo ni mayoreo. ":""}${qt.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás se piden al proveedor el lunes y llegan de 4 a 7 días después.</p>
+  <p class="note">${ESPTXT&&bag.some(it=>{const d=byId(it.id); return d&&d.cat==="gorras"&&!isPool(d)&&!isEE(d);})?ESPTXT+": no entran en promo ni mayoreo. ":""}${c.may?"El precio de mayoreo se confirma por WhatsApp. ":""}Pagas 50% para apartar y el resto contra entrega. Las ⚡ SIRM se entregan de inmediato; las demás se piden al proveedor el lunes y llegan de 4 a 7 días después.</p>
   <div class="vend"><label for="vcod">Código de vendedor (opcional)</label><input id="vcod" maxlength="7" autocomplete="off" autocapitalize="characters" placeholder="Ej. K7MPX" value="${vend?vend.c:""}"><div class="st" id="vst"></div></div>
   <a class="cta" id="send" href="#" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>
   <button class="cta alt" id="empty">Vaciar bolsa</button>
@@ -462,6 +472,7 @@ pintaTextos();
 buildGate(); buildFilters();
 if(!PROMO_ON){ ["#deals","#dealhint","#promofine"].forEach(x=>$(x).style.display="none"); $("#noprom").hidden = false; buildEsc(); }
 $("#espfine").innerHTML = ESPTXT ? ESPTXT.split(", ").map(x=>x.replace(/ (\$[\d,]+ c\/u)$/,": <b>$1</b>")).join(". ") + ". No entran en mayoreo ni en promociones." : "";
+{ const le = Object.values(LIN).find(l=>l.mayoreoMas); if(le && (PRUEBA || DATA.some(d=>d.e===le.k))) $("#espfine").innerHTML = `<b>${le.n}: ${fmt(le.precio)} c/u</b>. En mayoreo se suma con New Era AA y cuesta ${fmt(le.mayoreoMas)} más por pieza en cada escalón. Sin promo 2×/3×. ` + $("#espfine").innerHTML; }
 paintCierre(); setInterval(paintCierre, 60000);
 const irA = c => { col=c; estilo="todos"; render(); $("#cols").scrollIntoView({behavior:"smooth",block:"start"}); };
 $("#chipsirm").hidden = !Object.keys(STOCK_SIRM).length;
@@ -481,7 +492,7 @@ function buildStrip(){
   $("#vernew").textContent = `Ver las ${nv.length} →`; $("#vernew").onclick = ()=>irA("nuevos");
 }
 $("#pill").textContent = "Talla: " + (size || "todas");
-const arranque = () => { buildStrip(); render(); updBag(); };
+const arranque = () => { $("#strip").hidden = true; $(".sech").hidden = true; render(); updBag(); };
 (()=>{ const t = new Image(); let ok = false; const fin = v => { if(ok) return; ok = true; WP = v; try{ localStorage.setItem("wp", v?"1":"0"); }catch(e){} arranque(); };
   t.onload = ()=>fin(t.width===1); t.onerror = ()=>fin(false); setTimeout(()=>fin(WP), 400);
   t.src = "data:image/webp;base64,UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA"; })();

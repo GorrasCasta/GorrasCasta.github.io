@@ -100,6 +100,24 @@
      "pool": true
     },
     {
+     "k": "Edición Especial",
+     "n": "Edición Especial",
+     "sub": "New Era AA",
+     "precio": 500,
+     "rev": 0,
+     "porVariante": true,
+     "mayoreoMas": 50
+    },
+    {
+     "k": "Mitchell & Ness",
+     "n": "Mitchell & Ness",
+     "sub": "Original",
+     "precio": 950,
+     "rev": 0,
+     "porVariante": true,
+     "original": true
+    },
+    {
      "k": "Deportiva snapback",
      "n": "Deportiva",
      "sub": "snapback",
