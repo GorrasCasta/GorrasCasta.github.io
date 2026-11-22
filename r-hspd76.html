@@ -46,6 +46,9 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .tabs button{flex:1;white-space:nowrap;padding:9px 10px;border-radius:10px;font-weight:700;font-size:13px;color:var(--mute)}
 .tabs button small{display:block;font-size:10px;font-weight:600;opacity:.8}
 .tabs button[aria-pressed=true]{background:var(--ink);color:#111}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);overflow:visible}
+.tabs button{white-space:normal;line-height:1.15;padding:8px 6px}
+.tabs button[data-k="todas"]{grid-column:1/-1}
 .subtabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
 .subtabs button{flex:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--mute)}
 .subtabs button[aria-pressed=true]{border-color:var(--acc);color:var(--acc)}
@@ -361,7 +364,7 @@ function tienda(){
   [{k:"todas", n:"Todas", s:"todo el catálogo"}, ...cs].forEach(c => {
     if(c.k!=="todas" && cs.length<2) return;
     const b = document.createElement("button"); b.dataset.k = c.k;
-    b.innerHTML = `${c.k==="b"?"Deportiva / N. Imperio":c.n}<small>${c.k==="todas"?c.s:fmt(R.p[c.k])}</small>`;
+    b.innerHTML = `${c.k==="b"?"Deportiva / N. Imp.":c.k==="d"?"Ed. Especial":c.n}<small>${c.k==="todas"?c.s:fmt(R.p[c.k])}</small>`;
     b.onclick = () => { cat = c.k; sub = null; render(); }; tb.appendChild(b);
   });
   if(cs.length<2) cat = cs[0].k;

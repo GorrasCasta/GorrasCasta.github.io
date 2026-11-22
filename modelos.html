@@ -31,6 +31,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 .row::-webkit-scrollbar{display:none}
 .row button{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:700;color:var(--mute);white-space:nowrap}
 .row button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#111}
+.row.subs button{padding:5px 11px;font-size:12px}
 .row.tallas button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#111}
 .row .lbl{flex:none;align-self:center;font-size:12px;color:var(--mute);font-weight:700;padding-right:2px}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px 0 40px}
@@ -81,6 +82,7 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
     <div class="head"><div class="brand" id="brand">Catálogo de gorras</div><div class="count" id="count"></div></div>
     <label class="search"><input id="q" type="search" placeholder="Buscar equipo, color o número" autocomplete="off" aria-label="Buscar"></label>
     <div class="row" id="estilos"></div>
+    <div class="row subs" id="subs" hidden></div>
     <div class="row tallas" id="tallas" hidden></div>
   </div>
 </header>
@@ -119,17 +121,15 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
    Lee modelos, ocultos, agotados y orden de datos/gorras.json (js/datos.js), así que se actualiza solo.
    Opcional en el link: ?t=Nombre de la tienda  &w=WhatsApp de 10 dígitos (para que las preguntas lleguen directo). */
 const TALLAS = ["7","7 1/8","7 1/4","7 3/8","7 1/2","7 5/8"], UNI = "Única";
-const ESTILOS = [
-  {k:"", n:"Todas"},
-  {k:"59FIFTY cerrada", n:"Cerradas"},
-  {k:"9FIFTY snapback", n:"Snapback"},
-  {k:"9FORTY curva", n:"Curvas"},
-  {k:"Deportiva snapback", n:"Deportiva"},
-  {k:"Nuevo Imperio snapback", n:"Nuevo Imperio"},
-  {k:"Bélicas snapback", n:"Bélicas"},
-  {k:"Edición Especial", n:"Edición Especial"},
-  {k:"Mitchell & Ness", n:"Mitchell & Ness"},
+const GRUPOS = [
+  {k:"", n:"Todas", e:[]},
+  {k:"ne", n:"New Era AA", e:["59FIFTY cerrada","9FIFTY snapback","9FORTY curva"], subs:[["59FIFTY cerrada","Cerradas"],["9FIFTY snapback","Snapback"],["9FORTY curva","Curvas"]]},
+  {k:"ee", n:"Edición Especial", e:["Edición Especial"]},
+  {k:"mn", n:"Mitchell & Ness", e:["Mitchell & Ness"]},
+  {k:"ur", n:"Urbanas", e:["Deportiva snapback","Nuevo Imperio snapback","Bélicas snapback"], subs:[["Deportiva snapback","Deportiva"],["Nuevo Imperio snapback","Nuevo Imperio"],["Bélicas snapback","Bélicas"]]},
 ];
+const G = () => GRUPOS.find(g => g.k===estilo) || GRUPOS[0];
+const enGrupo = d => !estilo || (sub ? d.e===sub : G().e.includes(d.e));
 const $ = s => document.querySelector(s);
 const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -139,7 +139,7 @@ const TIENDA = (P.get("t")||"").trim().slice(0,30);
 let WA = (P.get("w")||"").replace(/\D/g,""); if(WA.length===12 && WA.startsWith("52")) WA = WA.slice(2); if(WA.length!==10) WA = "";
 if(TIENDA){ $("#brand").textContent = TIENDA; document.title = TIENDA + " · Catálogo de gorras"; }
 
-let DATA = [], BY = {}, estilo = "", talla = "", q = "", list = [], shown = 0, cur = null, curT = "";
+let DATA = [], BY = {}, estilo = "", sub = "", talla = "", q = "", list = [], shown = 0, cur = null, curT = "";
 const PASO = 24;
 const isUni = d => !!d.f[UNI];
 const has = (d,t) => (!!d.f[t] || d.sirm.has(t)) && !d.out.has(t);   // incluye tallas que hay en stock
@@ -147,7 +147,8 @@ const tallasDe = d => isUni(d) ? (d.out.has(UNI) ? [] : [UNI]) : TALLAS.filter(t
 const webp = p => p.replace(/\.jpg$/, ".webp");
 const mini = p => webp(p.replace("img/","t/"));
 const foto = (d,t) => { const k = t && has(d,t) ? t : tallasDe(d)[0]; return d.f[k] || d.f[TALLAS.find(x => d.f[x])] || d.f[UNI]; };
-const tallaOn = () => talla && (estilo==="" || estilo==="59FIFTY cerrada");
+const conTallas = () => DATA.some(d => enGrupo(d) && !isUni(d));
+const tallaOn = () => talla && conTallas();
 window.jpg = img => { img.onerror = null; img.src = img.src.replace(/\.webp$/, ".jpg"); };   // respaldo si el celular no abre WebP
 
 /* ----- Datos ----- */
@@ -170,11 +171,17 @@ const recorta = html => (html.match(/^const (DATA_ALL|OCULTOS|AGOTADOS|ORDEN|STO
 /* ----- Filtros ----- */
 function filtros(){
   const e = $("#estilos"); e.innerHTML = "";
-  ESTILOS.filter(x => !x.k || DATA.some(d => d.e===x.k)).forEach(x => {
+  GRUPOS.filter(x => !x.k || DATA.some(d => x.e.includes(d.e))).forEach(x => {
     const b = document.createElement("button"); b.textContent = x.n; b.setAttribute("aria-pressed", estilo===x.k);
-    b.onclick = () => { estilo = x.k; filtros(); render(); }; e.appendChild(b);
+    b.onclick = () => { estilo = x.k; sub = ""; filtros(); render(); }; e.appendChild(b);
   });
-  const t = $("#tallas"); t.hidden = !(estilo==="" || estilo==="59FIFTY cerrada") || !DATA.some(d => !isUni(d));
+  const sb = $("#subs"), g = G(), ss = (g.subs||[]).filter(x => DATA.some(d => d.e===x[0]));
+  sb.hidden = ss.length < 2; sb.innerHTML = "";
+  if(!sb.hidden) [["","Todas"], ...ss].forEach(x => {
+    const b = document.createElement("button"); b.textContent = x[1]; b.setAttribute("aria-pressed", sub===x[0]);
+    b.onclick = () => { sub = x[0]; filtros(); render(); }; sb.appendChild(b);
+  });
+  const t = $("#tallas"); t.hidden = !conTallas();
   if(!t.hidden){
     t.innerHTML = '<span class="lbl">Talla</span>';
     ["", ...TALLAS].forEach(x => {
@@ -201,12 +208,12 @@ function mas(){
 }
 function render(){
   const w = q.split(/\s+/).filter(Boolean);
-  list = DATA.filter(d => (!estilo || d.e===estilo) && (!tallaOn() || isUni(d) || has(d,talla)) && w.every(x => d.s.includes(x)));
+  list = DATA.filter(d => enGrupo(d) && (!tallaOn() || isUni(d) || has(d,talla)) && w.every(x => d.s.includes(x)));
   const g = $("#grid"); g.innerHTML = ""; shown = 0;
   $("#count").textContent = list.length + (list.length===1 ? " modelo" : " modelos");
   $("#foot").hidden = !list.length;
   if(!list.length){ g.innerHTML = '<div class="msg">No hay modelos con esa búsqueda.<br><button id="lim">Ver todo el catálogo</button></div>';
-    $("#lim").onclick = () => { estilo = ""; talla = ""; q = ""; $("#q").value = ""; filtros(); render(); }; return; }
+    $("#lim").onclick = () => { estilo = ""; sub = ""; talla = ""; q = ""; $("#q").value = ""; filtros(); render(); }; return; }
   mas();
 }
 addEventListener("scroll", () => { if(shown < list.length && innerHeight + scrollY > document.body.offsetHeight - 900) mas(); }, {passive:true});
