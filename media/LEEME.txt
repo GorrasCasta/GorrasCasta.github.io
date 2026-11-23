@@ -1,0 +1,8 @@
+Carpeta de videos y fotos para publicar en Instagram (@casta.caps) por Windsor.ai.
+
+- Instagram solo publica desde un link público: https://gorrascasta.github.io/media/<archivo>
+- Nombres: AAAA-MM-DD_tema.mp4 (o .jpg). Ejemplo: 2026-11-24_quien-soy.mp4
+- Video: MP4, vertical 1080 x 1920, menos de 100 MB. Fotos de carrusel: JPG 1080 x 1350, menos de 8 MB.
+- Se publica solo con aprobación de Axel.
+- Después de publicar, se puede borrar el archivo para no llenar el repositorio.
+- Esta carpeta no forma parte del catálogo ni del caché de la página.
