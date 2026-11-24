@@ -482,10 +482,10 @@ function tablaEscala(){
   asc.forEach((m,i)=>{ const nx = asc[i+1]; filas.push([nx?`${m.min} – ${nx.min-1}`:`${m.min} o más`, fmt(m.precio), conEE?fmt(m.precio+le.mayoreoMas):""]); });
   const lo = Object.values(LIN).find(l=>l.original);
   const fijos = ESPTXT ? ESPTXT.replace(/ c\/u/g,"") : "";
-  box.innerHTML = `<div class="et">Entre más llevas, <em>menos pagas</em> <span>precio por pieza</span></div>
+  box.innerHTML = `<details><summary><div class="et">Entre más llevas, <em>menos pagas</em> <span>Mayoreo desde ${fmt(asc.length?asc[asc.length-1].precio:P1)} c/u · toca para ver precios</span></div></summary>
     <table><tr><th>Piezas</th><th>${esc(POOL.nombre)}</th>${conEE?`<th>Edición Esp.</th>`:""}</tr>` +
     filas.map((r,i)=>`<tr${PROMO_ON&&i>0&&i<filas.length-asc.length?' class="pr"':""}><td>${r[0]}</td><td>${r[1]}</td>${conEE?`<td>${r[2]}</td>`:""}</tr>`).join("") + `</table>
-    <p>${PROMO_ON?`Promo 2 y 3 piezas hasta el ${new Date(D.promoFin - 864e5).toLocaleDateString("es-MX",{day:"numeric",month:"long",timeZone:"UTC"})}${conEE?" (no aplica en Edición Especial)":""}. `:""}${asc.length?`Desde ${M1} piezas, precio de mayoreo${conEE?"; New Era AA y Edición Especial cuentan juntas":""}. Combina modelos y tallas. `:""}${fijos?`Precio fijo: ${esc(fijos)}. `:""}${lo&&(PRUEBA||DATA.some(d=>d.e===lo.k))?`${esc(lo.n)} (Original): ${fmt(lo.precio)}, mayoreo por WhatsApp.`:""}</p>`;
+    <p>${PROMO_ON?`Promo 2 y 3 piezas hasta el ${new Date(D.promoFin - 864e5).toLocaleDateString("es-MX",{day:"numeric",month:"long",timeZone:"UTC"})}${conEE?" (no aplica en Edición Especial)":""}. `:""}${asc.length?`Desde ${M1} piezas, precio de mayoreo${conEE?"; New Era AA y Edición Especial cuentan juntas":""}. Combina modelos y tallas. `:""}${fijos?`Precio fijo: ${esc(fijos)}. `:""}${lo&&(PRUEBA||DATA.some(d=>d.e===lo.k))?`${esc(lo.n)} (Original): ${fmt(lo.precio)}, mayoreo por WhatsApp.`:""}</p></details>`;
   box.hidden = false;
 }
 pintaTextos();
@@ -499,7 +499,7 @@ const irA = c => { col=c; estilo="todos"; render(); $("#cols").scrollIntoView({b
 $("#chipsirm").hidden = !Object.keys(STOCK_SIRM).length;
 document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{ const g=b.dataset.go;
   if(g==="sirm") irA("sirm");
-  else if(g==="mayo"){ $("#mayo").open = true; $("#mayo").scrollIntoView({behavior:"smooth",block:"center"}); }
+  else if(g==="mayo"){ const et = $("#esctab"), dt = et && !et.hidden && et.querySelector("details"), m = dt || $("#mayo"); m.open = true; m.scrollIntoView({behavior:"smooth",block:"center"}); }
   else $("#infopago").scrollIntoView({behavior:"smooth",block:"center"}); });
 $("#nmod").textContent = DATA.length;
 if(PROMO_ON){ $("#mayot").textContent = "🔥 Promoción activa"; $("#mayos").textContent = "Toca para ver precios"; }

@@ -228,3 +228,10 @@ details.mayo .esct,details.mayo .escs{display:none}
 .esctab td{padding:6px;border-top:1px solid var(--line);vertical-align:top}.esctab td+td{font-weight:800}
 .esctab td small{display:block;font-size:11px;font-weight:600;color:var(--acc)}
 .esctab p{font-size:12px;color:var(--mute);margin:8px 0 0;line-height:1.4}
+
+.esctab summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.esctab summary::-webkit-details-marker{display:none}
+.esctab summary .et{margin-bottom:0}
+.esctab summary::after{content:"Ver ▾";color:var(--acc);font-size:12px;font-weight:800;white-space:nowrap}
+.esctab details[open] summary::after{content:"Cerrar ▴"}
+.esctab details[open] summary{margin-bottom:8px}
